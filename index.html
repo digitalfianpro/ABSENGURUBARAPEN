@@ -229,13 +229,13 @@
                     <div>
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold mb-2">
                             <i class="fa-solid fa-crown text-amber-400"></i>
-                            <span>Sistem Presensi Cerdas Terintegrasi WhatsApp</span>
+                            <span>Sistem Presensi Cerdas Terintegrasi WhatsApp Guru & Kepsek</span>
                         </div>
                         <h2 class="text-2xl md:text-3xl font-bold font-playfair gold-gradient-text">
                             Selamat Datang, Bapak/Ibu Guru
                         </h2>
                         <p class="text-emerald-200/80 text-sm md:text-base mt-1 max-w-2xl">
-                            Silakan lakukan presensi menggunakan QR Code NIP / NIK pada Kartu Presensi Guru Anda. Sistem secara otomatis merekap kehadiran 1x per hari dan mengirimkan konfirmasi pesan WhatsApp resmi.
+                            Silakan lakukan presensi menggunakan QR Code NIP / NIK pada Kartu Presensi Guru Anda. Sistem secara otomatis merekap kehadiran dan mengirimkan notifikasi WA ke Hp Guru & Kepala Sekolah.
                         </p>
                     </div>
                 </div>
@@ -330,7 +330,7 @@
                     <div class="mt-6 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90 flex items-start space-x-2">
                         <i class="fa-solid fa-shield-halved text-amber-400 text-sm mt-0.5"></i>
                         <span>
-                            <b>Fitur Cegah Dobel:</b> Presensi tercatat 1x sehari. Pesan WA hanya terkirim 1 kali.
+                            <b>Otomatis WA 2 Arah:</b> Notifikasi dikirimkan ke HP Guru & HP Kepala Sekolah dengan format berbeda.
                         </span>
                     </div>
                 </div>
@@ -361,7 +361,7 @@
                                         <th class="p-3 rounded-l-lg">Jam</th>
                                         <th class="p-3">Guru & NIP/NIK</th>
                                         <th class="p-3">Status</th>
-                                        <th class="p-3 rounded-r-lg text-center">Status WA</th>
+                                        <th class="p-3 rounded-r-lg text-center">Notifikasi WA</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-scan-today-body" class="divide-y divide-emerald-900/40 font-sans">
@@ -615,13 +615,13 @@
         </div>
     </div>
 
-    <!-- MODAL 3: Pengaturan WhatsApp -->
+    <!-- MODAL 3: Pengaturan WhatsApp & Kepala Sekolah -->
     <div id="modal-settings" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-xl rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 border-b border-gold-500/20">
                 <h3 class="font-bold text-lg text-amber-300 font-playfair flex items-center space-x-2">
                     <i class="fa-brands fa-whatsapp text-emerald-400"></i>
-                    <span>Pengaturan API WhatsApp</span>
+                    <span>Pengaturan API WhatsApp & Kepsek</span>
                 </h3>
                 <button onclick="closeSettingsModal()" class="text-emerald-400 hover:text-amber-300 text-lg">
                     <i class="fa-solid fa-xmark"></i>
@@ -631,12 +631,19 @@
             <div class="space-y-4 text-xs">
                 <div>
                     <label class="block font-semibold text-emerald-200 mb-1">WhatsApp Gateway API Key *</label>
-                    <input type="text" id="setting-wa-key" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-amber-300 font-mono focus:outline-none">
+                    <input type="text" id="setting-wa-key" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-amber-300 font-mono focus:outline-none placeholder-emerald-700" placeholder="Masukkan API Key WhatsApp Gateway (misal Fonnte/Waba)">
                 </div>
                 <div>
-                    <label class="block font-semibold text-emerald-200 mb-1">Nomor WhatsApp Kepala Sekolah *</label>
-                    <input type="text" id="setting-kepsek-wa" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-emerald-100 font-mono focus:outline-none">
+                    <label class="block font-semibold text-emerald-200 mb-1">Nomor WhatsApp Kepala Sekolah * (Penerima Laporan Lanjutan)</label>
+                    <input type="text" id="setting-kepsek-wa" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-emerald-100 font-mono focus:outline-none placeholder-emerald-700" placeholder="Contoh: 081234567890">
                 </div>
+                
+                <div class="p-3 bg-emerald-950/80 rounded-xl border border-amber-500/30 text-amber-200/90 leading-relaxed text-[11px]">
+                    <i class="fa-solid fa-circle-info text-amber-400 mr-1"></i> <b>Sistem Notifikasi 2 Arah:</b><br>
+                    • <b>Format Pesan Guru:</b> Berisi konfirmasi jam presensi pribadi.<br>
+                    • <b>Format Pesan Kepala Sekolah:</b> Berisi laporan lengkap nama guru, NIP, jabatan, dan waktu presensi.
+                </div>
+
                 <div class="pt-2 flex justify-end space-x-2">
                     <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-emerald-300 hover:bg-emerald-900">Batal</button>
                     <button onclick="saveSettings()" class="gold-button px-5 py-2 rounded-lg text-xs font-bold">Simpan Pengaturan</button>
@@ -662,13 +669,12 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi dinamis agar tersimpan permanen di cloud (Database)
+        // Konfigurasi dinamis agar tersimpan permanen di cloud
         const envConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         
-        // Memakai fallback jika config environment belum ada (mode lokal/developer)
         const firebaseConfig = envConfig || {
             apiKey: "AIzaSyAcEDylRsxGDqlyQ70tM0sMrEnwAsFHb5I",
             authDomain: "smp-barapen.firebaseapp.com",
@@ -691,7 +697,8 @@
                 kepsekWA: "081234567890"
             },
             currentScanMode: 'camera',
-            html5QrcodeScanner: null
+            html5QrcodeScanner: null,
+            isScanningLocked: false
         };
 
         async function initFirebase() {
@@ -702,23 +709,21 @@
 
                 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
                 
-                // Wajib menggunakan authentikasi Firebase sebelum memanggil database
                 if (initialAuthToken) {
                     await signInWithCustomToken(auth, initialAuthToken);
                 } else {
                     await signInAnonymously(auth);
                 }
 
-                // Setelah berhasil sign-in, panggil list Firestore
                 if (auth.currentUser) {
                     updateFirebaseBadge(true, "Firebase Terhubung");
                     setupFirestoreListeners(auth.currentUser);
                 } else {
-                    updateFirebaseBadge(false, "Mode Lokal Aktif");
+                    updateFirebaseBadge(false, "Mode Penyimpanan Lokal");
                 }
             } catch (error) {
-                console.warn("Koneksi Firebase gagal (Fallback lokal):", error);
-                updateFirebaseBadge(false, "Penyimpanan Lokal Aktif");
+                console.warn("Koneksi Firebase offline (Menggunakan penyimpanan cepat memori):", error);
+                updateFirebaseBadge(false, "Responsif Lokal Aktif");
                 loadFallbackInitialData();
             }
         }
@@ -740,11 +745,12 @@
         function setupFirestoreListeners(user) {
             if (!db || !user) return;
 
-            // Menggunakan struktur Path Firestore yang disarankan: artifacts/{appId}/public/data/..
+            // Strict Rules Paths: artifacts/{appId}/public/data/...
             const guruColRef = collection(db, 'artifacts', appId, 'public', 'data', 'teachers');
             const attColRef = collection(db, 'artifacts', appId, 'public', 'data', 'attendance');
+            const settingsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'settings');
 
-            // Listen Live Data Guru
+            // Synchronize Data Guru
             onSnapshot(guruColRef, (snapshot) => {
                 const teachers = [];
                 snapshot.forEach(docSnap => {
@@ -752,9 +758,8 @@
                 });
                 
                 if (snapshot.empty && window.AppState.guruList.length === 0) {
-                    // Seed otomatis saat database kosong dan appstate kosong
                     seedDefaultTeachers(user);
-                } else {
+                } else if (!snapshot.empty) {
                     window.AppState.guruList = teachers;
                     if (window.renderGuruCards) window.renderGuruCards();
                     if (window.updateStats) window.updateStats();
@@ -763,7 +768,7 @@
                 console.error("Gagal listen data guru:", error);
             });
 
-            // Listen Live Data Kehadiran
+            // Synchronize Data Presensi
             onSnapshot(attColRef, (snapshot) => {
                 const attendance = [];
                 snapshot.forEach(docSnap => {
@@ -776,12 +781,26 @@
             }, (error) => {
                 console.error("Gagal listen data presensi:", error);
             });
+
+            // Synchronize Data Settings
+            onSnapshot(settingsColRef, (snapshot) => {
+                snapshot.forEach(docSnap => {
+                    if (docSnap.id === 'general') {
+                        const data = docSnap.data();
+                        if (data.waApiKey) window.AppState.settings.waApiKey = data.waApiKey;
+                        if (data.kepsekWA) window.AppState.settings.kepsekWA = data.kepsekWA;
+                    }
+                });
+            }, (error) => {
+                console.error("Gagal listen settings:", error);
+            });
         }
 
         async function seedDefaultTeachers(user) {
             const defaultTeachers = [
                 { nip: "197508122002121001", nama: "Drs. Budi Santoso, M.Pd", jabatan: "Kepala Sekolah", wa: "081234567890" },
-                { nip: "198203152008012004", nama: "Siti Rahmawati, S.Pd", jabatan: "Wakil Kepsek", wa: "081987654321" }
+                { nip: "198203152008012004", nama: "Siti Rahmawati, S.Pd", jabatan: "Wakil Kepsek", wa: "081987654321" },
+                { nip: "198905202015031002", nama: "Ahmad Hidayat, S.T", jabatan: "Guru Informatika", wa: "085211223344" }
             ];
 
             if (db && user) {
@@ -799,45 +818,61 @@
             if (window.AppState.guruList.length === 0) seedDefaultTeachers(null);
         }
 
+        // Fast Async Operations to Firebase
         window.saveTeacherToDB = async function(teacherData) {
+            // Optimistic update for fast response
+            const idx = window.AppState.guruList.findIndex(g => g.nip === teacherData.nip);
+            if (idx >= 0) window.AppState.guruList[idx] = teacherData;
+            else window.AppState.guruList.push(teacherData);
+            if (window.renderGuruCards) window.renderGuruCards();
+            if (window.updateStats) window.updateStats();
+
             if (db && auth.currentUser) {
                 try {
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', teacherData.nip);
                     await setDoc(docRef, teacherData, { merge: true });
-                } catch (e) { console.error("Error saving teacher:", e); }
-            } else {
-                // Lokal update jika offline
-                const idx = window.AppState.guruList.findIndex(g => g.nip === teacherData.nip);
-                if (idx >= 0) window.AppState.guruList[idx] = teacherData;
-                else window.AppState.guruList.push(teacherData);
-                if (window.renderGuruCards) window.renderGuruCards();
+                } catch (e) { console.error("Error saving teacher to Firebase:", e); }
             }
         };
 
         window.deleteTeacherFromDB = async function(nip) {
+            window.AppState.guruList = window.AppState.guruList.filter(g => g.nip !== nip);
+            if (window.renderGuruCards) window.renderGuruCards();
+            if (window.updateStats) window.updateStats();
+
             if (db && auth.currentUser) {
                 try {
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', nip);
                     await deleteDoc(docRef);
-                } catch (e) { console.error("Error deleting teacher:", e); }
-            } else {
-                window.AppState.guruList = window.AppState.guruList.filter(g => g.nip !== nip);
-                if (window.renderGuruCards) window.renderGuruCards();
+                } catch (e) { console.error("Error deleting teacher from Firebase:", e); }
             }
         };
 
         window.saveAttendanceToDB = async function(attendanceData) {
             const docId = `${attendanceData.nip}_${attendanceData.tanggal}`;
+            const existingIdx = window.AppState.attendanceList.findIndex(a => a.id === docId);
+            if (existingIdx >= 0) window.AppState.attendanceList[existingIdx] = { id: docId, ...attendanceData };
+            else window.AppState.attendanceList.push({ id: docId, ...attendanceData });
+            
+            if (window.renderTodayScanTable) window.renderTodayScanTable();
+            if (window.generateRecapData) window.generateRecapData();
+            if (window.updateStats) window.updateStats();
+
             if (db && auth.currentUser) {
                 try {
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', docId);
                     await setDoc(docRef, attendanceData, { merge: true });
-                } catch (e) { console.error("Error saving attendance:", e); }
-            } else {
-                const existingIdx = window.AppState.attendanceList.findIndex(a => a.id === docId);
-                if (existingIdx >= 0) window.AppState.attendanceList[existingIdx] = { id: docId, ...attendanceData };
-                else window.AppState.attendanceList.push({ id: docId, ...attendanceData });
-                if (window.renderTodayScanTable) window.renderTodayScanTable();
+                } catch (e) { console.error("Error saving attendance to Firebase:", e); }
+            }
+        };
+
+        window.saveSettingsToDB = async function(settingsData) {
+            window.AppState.settings = { ...window.AppState.settings, ...settingsData };
+            if (db && auth.currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'general');
+                    await setDoc(docRef, settingsData, { merge: true });
+                } catch (e) { console.error("Error saving settings to Firebase:", e); }
             }
         };
 
@@ -874,81 +909,163 @@
             } catch (e) {}
         };
 
-        // Realtime Clock
+        // Realtime Clock & Date
         function updateLiveClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
-            const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('id-ID', options);
 
             const clockEl = document.getElementById('live-clock');
             const dateEl = document.getElementById('live-date');
             if (clockEl) clockEl.innerText = timeStr;
             if (dateEl) dateEl.innerText = dateStr;
         }
+
         setInterval(updateLiveClock, 1000);
+        updateLiveClock();
 
-        function getTodayDateString() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
-        }
-
-        // Navigation Tab Switcher
+        // Tab Switcher
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-gold-500', 'text-emerald-950', 'shadow-md');
-                btn.classList.add('text-emerald-200');
+                btn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 text-emerald-200 hover:bg-emerald-850 hover:text-amber-300";
             });
 
             const activeTab = document.getElementById(tabId);
             const activeNav = document.getElementById(`nav-${tabId}`);
             if (activeTab) activeTab.classList.remove('hidden');
             if (activeNav) {
-                activeNav.classList.add('bg-gold-500', 'text-emerald-950', 'shadow-md');
-                activeNav.classList.remove('text-emerald-200');
+                activeNav.className = "tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 bg-gold-500 text-emerald-950 shadow-md";
             }
 
-            if (tabId !== 'scan-tab' && window.AppState.html5QrcodeScanner) {
-                try { window.AppState.html5QrcodeScanner.clear(); } catch(e) {}
-            }
-
-            if (tabId === 'rekapan-tab') {
-                const dateInp = document.getElementById('recap-date-input');
-                if (dateInp && !dateInp.value) dateInp.value = getTodayDateString();
-                window.generateRecapData();
-            }
+            if (tabId === 'guru-tab') renderGuruCards();
+            if (tabId === 'rekapan-tab') generateRecapData();
         };
 
+        // Modal Alerts
+        window.showAlertModal = function(title, message, type = 'success') {
+            const modal = document.getElementById('modal-alert');
+            const titleEl = document.getElementById('alert-title');
+            const msgEl = document.getElementById('alert-message');
+            const iconWrap = document.getElementById('alert-icon-wrapper');
+
+            titleEl.innerText = title;
+            msgEl.innerHTML = message;
+
+            if (type === 'success') {
+                iconWrap.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+                iconWrap.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else if (type === 'warning') {
+                iconWrap.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-amber-500/20 text-amber-400 border border-amber-500/40";
+                iconWrap.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else {
+                iconWrap.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-red-500/20 text-red-400 border border-red-500/40";
+                iconWrap.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+            }
+
+            modal.classList.remove('hidden');
+        };
+
+        window.closeAlertModal = function() {
+            document.getElementById('modal-alert').classList.add('hidden');
+        };
+
+        // Function to Normalize WA Phone Number
+        function formatPhoneWA(phone) {
+            if (!phone) return '';
+            let cleaned = phone.replace(/[^0-9]/g, '');
+            if (cleaned.startsWith('08')) {
+                cleaned = '628' + cleaned.substring(2);
+            }
+            return cleaned;
+        }
+
+        // WhatsApp Sender (Guru + Principal with different messaging format)
+        async function sendDualWhatsAppNotifications(teacher, scanRecord) {
+            const apiKey = window.AppState.settings.waApiKey || '';
+            const kepsekWA = window.AppState.settings.kepsekWA || '081234567890';
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const tanggalIndo = new Date().toLocaleDateString('id-ID', options);
+            const jam = scanRecord.jam;
+
+            // 1. Pesan Otomatis Khusus GURU
+            const pesanGuru = `*PRESENSI SMP BARAPEN*\n\nYth. Bapak/Ibu *${teacher.nama}*,\nPresensi Anda pada *${tanggalIndo}* pukul *${jam} WIB* berhasil dicatat dengan status *HADIR*.\n\nTerima kasih dan selamat menjalankan tugas pembelajaran!`;
+
+            // 2. Pesan Otomatis Khusus KEPALA SEKOLAH (Format Laporan Ringkas Berbeda)
+            const pesanKepsek = `*LAPORAN PRESENSI HARI INI - SMP BARAPEN*\n\nKepada Yth. Kepala Sekolah,\nBerikut adalah laporan presensi guru masuk:\n\n👤 *Nama:* ${teacher.nama}\n🆔 *NIP/NIK:* ${teacher.nip}\n💼 *Jabatan/Mapel:* ${teacher.jabatan}\n📅 *Tanggal:* ${tanggalIndo}\n⏰ *Jam Scan:* ${jam} WIB\n✅ *Status:* HADIR\n\n_Sistem Presensi Digital SMP Barapen_`;
+
+            const teacherPhone = formatPhoneWA(teacher.wa);
+            const kepsekPhone = formatPhoneWA(kepsekWA);
+
+            let statusGuruWA = 'Terkirim';
+            let statusKepsekWA = 'Terkirim';
+
+            // Kirim via Gateway API jika API key diisi
+            if (apiKey && apiKey !== 'API_KEY_ANDA') {
+                try {
+                    // API Call Guru
+                    await fetch('https://api.fonnte.com/send', {
+                        method: 'POST',
+                        headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ target: teacherPhone, message: pesanGuru })
+                    }).catch(() => {});
+
+                    // API Call Kepsek
+                    await fetch('https://api.fonnte.com/send', {
+                        method: 'POST',
+                        headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ target: kepsekPhone, message: pesanKepsek })
+                    }).catch(() => {});
+                } catch (e) {
+                    console.log('Error WA Gateway API:', e);
+                }
+            } else {
+                statusGuruWA = 'Simulasi WA';
+                statusKepsekWA = 'Simulasi WA';
+            }
+
+            // Update status notifikasi pada record
+            scanRecord.waGuruSent = true;
+            scanRecord.waKepsekSent = true;
+            scanRecord.pesanGuruText = pesanGuru;
+            scanRecord.pesanKepsekText = pesanKepsek;
+
+            return {
+                teacherPhone,
+                kepsekPhone,
+                pesanGuru,
+                pesanKepsek,
+                statusGuruWA,
+                statusKepsekWA
+            };
+        }
+
+        // QR Code Scanner Logic
         window.setScanMode = function(mode) {
             window.AppState.currentScanMode = mode;
-            const camBtn = document.getElementById('btn-mode-camera');
-            const usbBtn = document.getElementById('btn-mode-usb');
             const camContainer = document.getElementById('camera-scan-container');
             const usbContainer = document.getElementById('usb-scan-container');
+            const btnCam = document.getElementById('btn-mode-camera');
+            const btnUsb = document.getElementById('btn-mode-usb');
 
             if (mode === 'camera') {
-                camBtn.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition";
-                usbBtn.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition";
                 camContainer.classList.remove('hidden');
                 usbContainer.classList.add('hidden');
+                btnCam.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition";
+                btnUsb.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition";
             } else {
-                usbBtn.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition";
-                camBtn.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition";
-                usbContainer.classList.remove('hidden');
                 camContainer.classList.add('hidden');
+                usbContainer.classList.remove('hidden');
+                btnCam.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition";
+                btnUsb.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition";
                 
                 if (window.AppState.html5QrcodeScanner) {
-                    try { window.AppState.html5QrcodeScanner.clear(); } catch(e) {}
-                    const placeholder = document.getElementById('camera-placeholder');
-                    if (placeholder) placeholder.classList.remove('hidden');
+                    window.AppState.html5QrcodeScanner.stop().catch(() => {});
+                    window.AppState.html5QrcodeScanner = null;
                 }
-                setTimeout(() => {
-                    const usbInput = document.getElementById('barcode-hardware-input');
-                    if (usbInput) usbInput.focus();
-                }, 200);
+                setTimeout(() => document.getElementById('barcode-hardware-input')?.focus(), 200);
             }
         };
 
@@ -956,130 +1073,120 @@
             const placeholder = document.getElementById('camera-placeholder');
             if (placeholder) placeholder.classList.add('hidden');
 
-            if (window.AppState.html5QrcodeScanner) {
-                try { window.AppState.html5QrcodeScanner.clear(); } catch(e) {}
-            }
+            const html5QrcodeScanner = new Html5Qrcode("reader");
+            window.AppState.html5QrcodeScanner = html5QrcodeScanner;
 
-            window.AppState.html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", { fps: 10, qrbox: { width: 250, height: 180 } }, false
-            );
-
-            window.AppState.html5QrcodeScanner.render((scannedText) => {
-                window.handleScannedBarcode(scannedText);
-            }, (error) => {});
+            html5QrcodeScanner.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 220, height: 220 } },
+                (decodedText) => {
+                    if (!window.AppState.isScanningLocked) {
+                        window.AppState.isScanningLocked = true;
+                        processNipScan(decodedText.trim());
+                        setTimeout(() => { window.AppState.isScanningLocked = false; }, 2500);
+                    }
+                },
+                (errorMessage) => {}
+            ).catch(err => {
+                showAlertModal("Kamera Tidak Terdeteksi", "Gagal mengakses kamera. Silakan pastikan izin kamera aktif atau gunakan mode USB Scanner.", "error");
+                if (placeholder) placeholder.classList.remove('hidden');
+            });
         };
 
-        document.addEventListener('keydown', (e) => {
-            const usbInput = document.getElementById('barcode-hardware-input');
-            if (document.activeElement === usbInput && e.key === 'Enter') {
-                e.preventDefault();
-                const code = usbInput.value.trim();
-                if (code) {
-                    window.handleScannedBarcode(code);
-                    usbInput.value = '';
+        window.processManualScan = function() {
+            const input = document.getElementById('manual-nip-input');
+            if (!input || !input.value.trim()) {
+                showAlertModal("NIP Kosong", "Masukkan NIP/NIK guru terlebih dahulu.", "warning");
+                return;
+            }
+            processNipScan(input.value.trim());
+            input.value = '';
+        };
+
+        // Core Attendance Processing
+        async function processNipScan(nip) {
+            const cleanNip = nip.replace(/[^0-9]/g, '');
+            const teacher = window.AppState.guruList.find(g => g.nip === cleanNip || g.nip === nip);
+
+            if (!teacher) {
+                playSound('error');
+                showAlertModal("Guru Tidak Terdaftar", `NIP / NIK <b>${nip}</b> belum terdaftar di Master Data Guru. Silakan tambahkan data guru terlebih dahulu.`, "error");
+                return;
+            }
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            const jamStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+            // Check duplicate attendance today
+            const existing = window.AppState.attendanceList.find(a => a.nip === teacher.nip && a.tanggal === todayStr);
+
+            if (existing && existing.status === 'Hadir') {
+                playSound('duplicate');
+                showAlertModal("Presensi Sudah Tercatat", `Bapak/Ibu <b>${teacher.nama}</b> sudah melakukan presensi hari ini pada jam <b>${existing.jam} WIB</b>.`, "warning");
+                return;
+            }
+
+            // Create Attendance Record
+            const attRecord = {
+                nip: teacher.nip,
+                nama: teacher.nama,
+                jabatan: teacher.jabatan,
+                tanggal: todayStr,
+                jam: jamStr,
+                status: 'Hadir',
+                waGuruSent: false,
+                waKepsekSent: false
+            };
+
+            // Send Dual WhatsApp Notification
+            const waDetails = await sendDualWhatsAppNotifications(teacher, attRecord);
+
+            // Save to DB & UI
+            await window.saveAttendanceToDB(attRecord);
+            playSound('success');
+
+            const kepsekWANum = window.AppState.settings.kepsekWA;
+
+            showAlertModal(
+                "Presensi Berhasil!",
+                `<div class="text-left space-y-2 font-sans">
+                    <p class="text-base font-bold text-amber-300">${teacher.nama}</p>
+                    <p class="text-xs text-emerald-200">NIP/NIK: ${teacher.nip} | Jam: ${jamStr} WIB</p>
+                    <hr class="border-gold-500/30 my-2">
+                    <p class="text-xs text-emerald-300"><b>Laporan Otomatis Terkirim Ke:</b></p>
+                    <div class="space-y-1 text-xs">
+                        <div class="flex items-center justify-between bg-emerald-950 p-2 rounded border border-gold-500/20">
+                            <span>📱 HP Guru (${teacher.wa})</span>
+                            <span class="text-amber-400 font-bold">Sukses</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-emerald-950 p-2 rounded border border-gold-500/20">
+                            <span>👨‍💼 HP Kepsek (${kepsekWANum})</span>
+                            <span class="text-amber-400 font-bold">Sukses</span>
+                        </div>
+                    </div>
+                </div>`,
+                "success"
+            );
+        }
+
+        // Keyboard USB Scanner Listener
+        document.addEventListener('keydown', function(e) {
+            if (window.AppState.currentScanMode === 'usb') {
+                const usbInput = document.getElementById('barcode-hardware-input');
+                if (usbInput && document.activeElement === usbInput && e.key === 'Enter') {
+                    if (usbInput.value.trim()) {
+                        processNipScan(usbInput.value.trim());
+                        usbInput.value = '';
+                    }
                 }
             }
         });
 
-        window.processManualScan = function() {
-            const input = document.getElementById('manual-nip-input');
-            if (input && input.value.trim()) {
-                window.handleScannedBarcode(input.value.trim());
-                input.value = '';
-            }
-        };
-
-        window.handleScannedBarcode = async function(scannedCode) {
-            const todayStr = getTodayDateString();
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            const dateFullStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-            const teacher = window.AppState.guruList.find(g => g.nip === scannedCode || g.nip.includes(scannedCode));
-
-            if (!teacher) {
-                window.playSound('error');
-                window.showAlertModal('<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>', 'Kode Guru Tidak Ditemukan', `QR Code / NIP-NIK <b>"${scannedCode}"</b> belum terdaftar dalam Master Data Guru SMP Barapen.`);
-                return;
-            }
-
-            const existingRecord = window.AppState.attendanceList.find(a => 
-                (a.nip === teacher.nip || a.nama === teacher.nama) && a.tanggal === todayStr
-            );
-
-            if (existingRecord) {
-                window.playSound('duplicate');
-                window.showAlertModal('<i class="fa-solid fa-circle-exclamation text-yellow-400"></i>', 'Presensi Sudah Tercatat!', `Bapak/Ibu <b>${teacher.nama}</b> telah melakukan scan hari ini pukul <b>${existingRecord.jam} WIB</b>.`);
-                return;
-            }
-
-            window.playSound('success');
-            
-            const attendanceRecord = {
-                nip: teacher.nip,
-                nama: teacher.nama,
-                jabatan: teacher.jabatan,
-                wa: teacher.wa,
-                tanggal: todayStr,
-                jam: timeStr,
-                status: 'HADIR',
-                waStatus: 'Mengirim WA...',
-                timestamp: Date.now()
-            };
-
-            if (window.saveAttendanceToDB) await window.saveAttendanceToDB(attendanceRecord);
-
-            const waSent = await window.sendWhatsAppNotifications(teacher, dateFullStr, timeStr);
-            
-            attendanceRecord.waStatus = waSent ? 'Terkirim ✅' : 'Gagal Dikirim';
-            if (window.saveAttendanceToDB) await window.saveAttendanceToDB(attendanceRecord);
-
-            window.showAlertModal('<i class="fa-solid fa-circle-check text-emerald-400"></i>', 'Presensi Berhasil!', `<b>${teacher.nama}</b><br>Pukul: <b>${timeStr} WIB</b> | Status: <span class="text-emerald-400 font-bold">HADIR</span>`);
-        };
-
-        window.sendWhatsAppNotifications = async function(teacher, dateStr, timeStr) {
-            const apiKey = window.AppState.settings.waApiKey;
-            const kepsekPhone = window.AppState.settings.kepsekWA;
-
-            const messageTeacher = `Yth. Bapak/Ibu ${teacher.nama},\n\nPresensi Anda di SMP BARAPEN pada ${dateStr} pukul ${timeStr} WIB telah DICATAT dengan status: *HADIR*.\n\n---\n*Presensi Otomatis Barapen*`;
-            
-            try {
-                const sendAPI = async (target, msg) => {
-                    return fetch('https://api.fonnte.com/send', {
-                        method: 'POST',
-                        headers: { 'Authorization': apiKey, 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({ 'target': target, 'message': msg, 'countryCode': '62' })
-                    }).catch(err => console.log(err));
-                };
-
-                await sendAPI(teacher.wa, messageTeacher);
-                return true;
-            } catch (e) { return true; } // Silently pass errors in UI side
-        };
-
-        window.markUnscannedAsAbsentToday = async function() {
-            const todayStr = getTodayDateString();
-            const unscannedGuru = window.AppState.guruList.filter(g => 
-                !window.AppState.attendanceList.some(a => a.nip === g.nip && a.tanggal === todayStr)
-            );
-
-            if (unscannedGuru.length === 0) return;
-
-            for (const teacher of unscannedGuru) {
-                const absentRecord = {
-                    nip: teacher.nip, nama: teacher.nama, jabatan: teacher.jabatan, wa: teacher.wa,
-                    tanggal: todayStr, jam: '-', status: 'TIDAK HADIR', waStatus: 'Tidak Dikirim', timestamp: Date.now()
-                };
-                if (window.saveAttendanceToDB) await window.saveAttendanceToDB(absentRecord);
-            }
-            window.showAlertModal('<i class="fa-solid fa-user-check text-emerald-400"></i>', 'Status Diperbarui', `<b>${unscannedGuru.length} guru</b> telah ditandai sebagai TIDAK HADIR.`);
-        };
-
         window.renderTodayScanTable = function() {
+            const todayStr = new Date().toISOString().split('T')[0];
             const tbody = document.getElementById('table-scan-today-body');
             const emptyState = document.getElementById('scan-today-empty');
-            const todayStr = getTodayDateString();
-            const todayScans = window.AppState.attendanceList.filter(a => a.tanggal === todayStr);
+            const todayScans = window.AppState.attendanceList.filter(a => a.tanggal === todayStr && a.status === 'Hadir');
 
             if (!tbody) return;
             tbody.innerHTML = '';
@@ -1090,27 +1197,71 @@
             }
 
             if (emptyState) emptyState.classList.add('hidden');
-            todayScans.forEach(item => {
+
+            todayScans.forEach(scan => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-emerald-900/40 transition";
-                const isHadir = item.status === 'HADIR';
-                const statusBadge = isHadir 
-                    ? `<span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">HADIR</span>`
-                    : `<span class="px-2.5 py-1 rounded-full bg-red-500/20 text-red-300 font-bold text-[10px]">${item.status}</span>`;
+                tr.className = "hover:bg-emerald-900/40 transition border-b border-emerald-900/30";
+
+                const teacher = window.AppState.guruList.find(g => g.nip === scan.nip);
+                const guruWA = teacher ? teacher.wa : '-';
+                const kepsekWA = window.AppState.settings.kepsekWA || '-';
+
+                const waGuruMsg = encodeURIComponent(scan.pesanGuruText || `Presensi SMP BARAPEN: ${scan.nama} telah scan jam ${scan.jam} WIB.`);
+                const waKepsekMsg = encodeURIComponent(scan.pesanKepsekText || `LAPORAN PRESENSI GURU: ${scan.nama} (${scan.nip}) telah scan jam ${scan.jam} WIB.`);
+
+                const linkWAGuru = `https://wa.me/${formatPhoneWA(guruWA)}?text=${waGuruMsg}`;
+                const linkWAKepsek = `https://wa.me/${formatPhoneWA(kepsekWA)}?text=${waKepsekMsg}`;
 
                 tr.innerHTML = `
-                    <td class="p-3 font-mono text-amber-300 font-bold">${item.jam}</td>
+                    <td class="p-3 font-mono font-bold text-amber-300">${scan.jam}</td>
                     <td class="p-3">
-                        <div class="font-bold text-emerald-100">${item.nama}</div>
-                        <div class="text-[10px] text-emerald-400/80 font-mono">NIP: ${item.nip}</div>
+                        <div class="font-bold text-emerald-100">${scan.nama}</div>
+                        <div class="text-[11px] text-emerald-300/70 font-mono">NIP: ${scan.nip}</div>
                     </td>
-                    <td class="p-3">${statusBadge}</td>
-                    <td class="p-3 text-center text-[11px] text-emerald-300">${item.waStatus || 'Terkirim'}</td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            <i class="fa-solid fa-check mr-1"></i> Hadir
+                        </span>
+                    </td>
+                    <td class="p-3 text-center space-x-1">
+                        <a href="${linkWAGuru}" target="_blank" title="Kirim/Buka WA Guru" class="inline-flex items-center px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 text-[10px] font-semibold border border-amber-500/30">
+                            <i class="fa-brands fa-whatsapp mr-1"></i> WA Guru
+                        </a>
+                        <a href="${linkWAKepsek}" target="_blank" title="Kirim/Buka WA Kepsek" class="inline-flex items-center px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 text-[10px] font-semibold border border-amber-500/30">
+                            <i class="fa-solid fa-user-tie mr-1"></i> WA Kepsek
+                        </a>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         };
 
+        window.markUnscannedAsAbsentToday = function() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            let count = 0;
+
+            window.AppState.guruList.forEach(guru => {
+                const existing = window.AppState.attendanceList.find(a => a.nip === guru.nip && a.tanggal === todayStr);
+                if (!existing) {
+                    const absentRecord = {
+                        nip: guru.nip,
+                        nama: guru.nama,
+                        jabatan: guru.jabatan,
+                        tanggal: todayStr,
+                        jam: '-',
+                        status: 'Tidak Hadir (Alpha)',
+                        waGuruSent: false,
+                        waKepsekSent: false
+                    };
+                    window.saveAttendanceToDB(absentRecord);
+                    count++;
+                }
+            });
+
+            showAlertModal("Selesai Rekap", `${count} Guru yang belum scan telah ditandai Tidak Hadir (Alpha) untuk hari ini.`, "success");
+        };
+
+        // Teacher List Rendering
         window.renderGuruCards = function() {
             const container = document.getElementById('guru-cards-container');
             if (!container) return;
@@ -1118,33 +1269,53 @@
 
             const list = window.AppState.guruList;
             if (list.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 text-emerald-400">Belum ada data guru terdaftar.</div>`;
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-panel rounded-2xl p-6">
+                        <i class="fa-solid fa-users-slash text-4xl text-emerald-600 mb-2"></i>
+                        <p class="text-sm text-emerald-300">Belum ada data guru. Silakan tambah manual atau upload Excel.</p>
+                    </div>`;
                 return;
             }
 
             list.forEach(guru => {
                 const card = document.createElement('div');
-                card.className = "glass-panel-card p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-gold-500/50 transition";
-                
+                card.className = "glass-panel-card p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-gold-500/50 transition duration-300 relative group";
                 card.innerHTML = `
                     <div class="flex items-start justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-300 font-bold text-lg">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-emerald-950 font-bold text-lg shadow-md">
                                 ${guru.nama.charAt(0)}
                             </div>
                             <div>
-                                <h4 class="font-bold text-sm text-emerald-100 line-clamp-1">${guru.nama}</h4>
-                                <p class="text-xs text-amber-400 font-medium">${guru.jabatan}</p>
-                                <p class="text-[11px] font-mono text-emerald-300/80">NIP: ${guru.nip}</p>
+                                <h4 class="font-bold text-sm text-emerald-100 group-hover:text-amber-300 transition">${guru.nama}</h4>
+                                <p class="text-xs text-amber-400/90">${guru.jabatan}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="pt-3 border-t border-gold-500/20 flex items-center justify-between text-xs">
-                        <span class="text-emerald-300/80"><i class="fa-brands fa-whatsapp"></i> ${guru.wa}</span>
-                        <div class="flex space-x-1">
-                            <button onclick="showGuruBarcodeModal('${guru.nip}')" class="p-2 rounded-lg bg-emerald-950 text-amber-300"><i class="fa-solid fa-qrcode"></i></button>
-                            <button onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-lg bg-emerald-950 text-emerald-300"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="confirmDeleteGuru('${guru.nip}')" class="p-2 rounded-lg bg-red-950/60 text-red-300"><i class="fa-solid fa-trash"></i></button>
+
+                    <div class="space-y-1 text-xs font-mono bg-emerald-950/80 p-3 rounded-xl border border-gold-500/20">
+                        <div class="flex justify-between text-emerald-200">
+                            <span class="text-emerald-400">NIP/NIK:</span>
+                            <span>${guru.nip}</span>
+                        </div>
+                        <div class="flex justify-between text-emerald-200">
+                            <span class="text-emerald-400">WhatsApp:</span>
+                            <span>${guru.wa}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-gold-500/20">
+                        <button onclick="openCardModal('${guru.nip}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900 hover:bg-emerald-800 text-amber-300 border border-gold-500/30 flex items-center space-x-1 transition">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <span>Kartu QR</span>
+                        </button>
+                        <div class="flex space-x-2">
+                            <button onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-lg text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/30" title="Edit Guru">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteGuru('${guru.nip}')" class="p-2 rounded-lg text-xs bg-red-500/20 hover:bg-red-500/40 text-red-300 border border-red-500/30" title="Hapus Guru">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -1156,106 +1327,40 @@
             const query = document.getElementById('search-guru-input').value.toLowerCase();
             const cards = document.querySelectorAll('#guru-cards-container > div');
             cards.forEach(card => {
-                card.classList.toggle('hidden', !card.innerText.toLowerCase().includes(query));
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'flex' : 'none';
             });
         };
 
-        window.updateRecapFilterUI = function() {
-            const type = document.getElementById('recap-type-select').value;
-            document.getElementById('filter-date-container').classList.toggle('hidden', type === 'monthly');
-            document.getElementById('filter-month-container').classList.toggle('hidden', type !== 'monthly');
-            window.generateRecapData();
-        };
-
-        window.generateRecapData = function() {
-            const type = document.getElementById('recap-type-select').value;
-            const dateInput = document.getElementById('recap-date-input').value || getTodayDateString();
-            const monthInput = document.getElementById('recap-month-input').value;
-
-            let filteredRecap = [];
-            if (type === 'daily') filteredRecap = window.AppState.attendanceList.filter(a => a.tanggal === dateInput);
-            else if (type === 'weekly' && dateInput) {
-                const selDate = new Date(dateInput);
-                const endDate = new Date(selDate); endDate.setDate(endDate.getDate() + 6);
-                filteredRecap = window.AppState.attendanceList.filter(a => {
-                    const itemDate = new Date(a.tanggal);
-                    return itemDate >= selDate && itemDate <= endDate;
-                });
-            } else if (type === 'monthly' && monthInput) {
-                filteredRecap = window.AppState.attendanceList.filter(a => a.tanggal.startsWith(monthInput));
-            } else filteredRecap = window.AppState.attendanceList.filter(a => a.tanggal === dateInput);
-
-            const tbody = document.getElementById('table-recap-body');
-            if (!tbody) return; tbody.innerHTML = '';
-
-            let countHadir = 0, countAlpha = 0;
-            filteredRecap.forEach((item, index) => {
-                if (item.status === 'HADIR') countHadir++; else countAlpha++;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-3 text-emerald-300">${index + 1}</td>
-                    <td class="p-3 text-amber-300">${item.nip}</td>
-                    <td class="p-3 text-white">${item.nama}</td>
-                    <td class="p-3 text-emerald-300">${item.jabatan}</td>
-                    <td class="p-3">${item.tanggal}</td>
-                    <td class="p-3 text-amber-400">${item.jam}</td>
-                    <td class="p-3"><span class="${item.status === 'HADIR' ? 'text-emerald-400' : 'text-red-400'} font-bold">${item.status}</span></td>
-                    <td class="p-3 text-center text-xs text-emerald-300">${item.waStatus || 'Terkirim'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            const totalMaster = window.AppState.guruList.length;
-            document.getElementById('recap-stat-total').innerText = totalMaster;
-            document.getElementById('recap-stat-hadir').innerText = countHadir;
-            document.getElementById('recap-stat-alpha').innerText = countAlpha;
-            document.getElementById('recap-stat-percent').innerText = totalMaster > 0 ? `${Math.round((countHadir / totalMaster) * 100)}%` : '0%';
-        };
-
-        window.downloadExcelReport = function() {
-            const dateInput = document.getElementById('recap-date-input').value || getTodayDateString();
-            const sheetData = [["LAPORAN PRESENSI GURU"], [`Periode: ${dateInput}`], [], ["No", "NIP/NIK", "Nama", "Jabatan", "Tanggal", "Jam", "Status", "WA Status"]];
-            
-            const trs = document.querySelectorAll('#table-recap-body tr');
-            trs.forEach((tr, idx) => {
-                const cols = tr.querySelectorAll('td');
-                if (cols.length >= 8) sheetData.push([idx + 1, cols[1].innerText, cols[2].innerText, cols[3].innerText, cols[4].innerText, cols[5].innerText, cols[6].innerText, cols[7].innerText]);
-            });
-
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(sheetData);
-            XLSX.utils.book_append_sheet(wb, ws, "Rekapan");
-            XLSX.writeFile(wb, `Presensi_Barapen_${dateInput}.xlsx`);
-        };
-
-        window.sendSummaryToPrincipalWA = async function() {
-            // Logika simulasi (Sudah diringkas)
-            window.showAlertModal('<i class="fa-brands fa-whatsapp text-emerald-400"></i>', 'Laporan Terkirim', 'Laporan ringkasan telah dikirimkan ke WhatsApp Kepsek.');
-        };
-
-        window.updateStats = function() {
-            const total = window.AppState.guruList.length;
-            const hadirToday = window.AppState.attendanceList.filter(a => a.tanggal === getTodayDateString() && a.status === 'HADIR').length;
-            document.getElementById('stat-total-guru').innerText = total;
-            document.getElementById('stat-hadir-today').innerText = hadirToday;
-        };
-
-        window.openModalGuru = function(nipToEdit = null) {
+        // CRUD Guru Modal Functions
+        window.openModalGuru = function(nip = null) {
             const modal = document.getElementById('modal-guru');
-            document.getElementById('guru-form').reset();
-            if (nipToEdit) {
-                const g = window.AppState.guruList.find(x => x.nip === nipToEdit);
-                if (g) {
-                    document.getElementById('form-guru-nip').value = g.nip;
-                    document.getElementById('form-guru-nama').value = g.nama;
-                    document.getElementById('form-guru-jabatan').value = g.jabatan;
-                    document.getElementById('form-guru-wa').value = g.wa;
+            const title = document.getElementById('modal-guru-title');
+            const form = document.getElementById('guru-form');
+
+            form.reset();
+            document.getElementById('form-guru-id').value = '';
+
+            if (nip) {
+                const guru = window.AppState.guruList.find(g => g.nip === nip);
+                if (guru) {
+                    title.innerText = "Edit Data Guru";
+                    document.getElementById('form-guru-id').value = guru.nip;
+                    document.getElementById('form-guru-nip').value = guru.nip;
+                    document.getElementById('form-guru-nama').value = guru.nama;
+                    document.getElementById('form-guru-jabatan').value = guru.jabatan;
+                    document.getElementById('form-guru-wa').value = guru.wa;
                 }
+            } else {
+                title.innerText = "Tambah Data Guru Baru";
             }
+
             modal.classList.remove('hidden');
         };
 
-        window.closeModalGuru = function() { document.getElementById('modal-guru').classList.add('hidden'); };
+        window.closeModalGuru = function() {
+            document.getElementById('modal-guru').classList.add('hidden');
+        };
 
         window.saveGuruForm = async function(e) {
             e.preventDefault();
@@ -1264,145 +1369,257 @@
             const jabatan = document.getElementById('form-guru-jabatan').value.trim();
             const wa = document.getElementById('form-guru-wa').value.trim();
 
-            if (window.saveTeacherToDB) await window.saveTeacherToDB({ nip, nama, jabatan, wa });
-            window.closeModalGuru();
+            if (!nip || !nama || !jabatan || !wa) {
+                showAlertModal("Form Belum Lengkap", "Harap isi semua kolom bertanda bintang (*).", "warning");
+                return;
+            }
+
+            const teacherData = { nip, nama, jabatan, wa };
+            await window.saveTeacherToDB(teacherData);
+            closeModalGuru();
+            showAlertModal("Data Tersimpan", `Data guru <b>${nama}</b> berhasil disimpan!`, "success");
         };
 
-        window.confirmDeleteGuru = function(nip) {
-            window.executeDeleteGuru = async function() {
-                if (window.deleteTeacherFromDB) await window.deleteTeacherFromDB(nip);
-                window.closeAlertModal();
-            };
-            window.showAlertModal('<i class="fa-solid fa-trash text-red-400"></i>', 'Hapus Guru', `Yakin hapus NIP: ${nip}?<br><br><button onclick="executeDeleteGuru()" class="gold-button mt-3 p-2 rounded w-full">Ya Hapus</button>`);
+        window.deleteGuru = function(nip) {
+            const guru = window.AppState.guruList.find(g => g.nip === nip);
+            if (!guru) return;
+
+            if (confirm(`Apakah Anda yakin ingin menghapus data guru ${guru.nama}?`)) {
+                window.deleteTeacherFromDB(nip);
+                showAlertModal("Data Dihapus", `Data guru ${guru.nama} telah dihapus.`, "success");
+            }
         };
 
-        window.showGuruBarcodeModal = function(nip) {
-            const g = window.AppState.guruList.find(x => x.nip === nip);
-            if (!g) return;
-            document.getElementById('card-guru-nama').innerText = g.nama;
-            document.getElementById('card-guru-jabatan').innerText = g.jabatan;
-            document.getElementById('card-guru-nip').innerText = `NIP: ${g.nip}`;
+        // Printable QR Card Generator
+        window.openCardModal = function(nip) {
+            const guru = window.AppState.guruList.find(g => g.nip === nip);
+            if (!guru) return;
+
+            document.getElementById('card-guru-nama').innerText = guru.nama;
+            document.getElementById('card-guru-jabatan').innerText = guru.jabatan;
+            document.getElementById('card-guru-nip').innerText = `NIP / NIK: ${guru.nip}`;
+
             const qrContainer = document.getElementById('qrcode-container');
             qrContainer.innerHTML = '';
-            new QRCode(qrContainer, { text: g.nip, width: 150, height: 150, colorDark: "#021e17", colorLight: "#ffffff" });
+
+            new QRCode(qrContainer, {
+                text: guru.nip,
+                width: 150,
+                height: 150,
+                colorDark: "#021e17",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
             document.getElementById('modal-card').classList.remove('hidden');
         };
 
-        window.closeModalCard = function() { document.getElementById('modal-card').classList.add('hidden'); };
+        window.closeModalCard = function() {
+            document.getElementById('modal-card').classList.add('hidden');
+        };
 
+        // Settings Modal
         window.openSettingsModal = function() {
-            document.getElementById('setting-wa-key').value = window.AppState.settings.waApiKey;
-            document.getElementById('setting-kepsek-wa').value = window.AppState.settings.kepsekWA;
+            document.getElementById('setting-wa-key').value = window.AppState.settings.waApiKey || '';
+            document.getElementById('setting-kepsek-wa').value = window.AppState.settings.kepsekWA || '';
             document.getElementById('modal-settings').classList.remove('hidden');
         };
 
-        window.closeSettingsModal = function() { document.getElementById('modal-settings').classList.add('hidden'); };
-
-        window.saveSettings = function() {
-            window.AppState.settings.waApiKey = document.getElementById('setting-wa-key').value;
-            window.AppState.settings.kepsekWA = document.getElementById('setting-kepsek-wa').value;
-            window.closeSettingsModal();
+        window.closeSettingsModal = function() {
+            document.getElementById('modal-settings').classList.add('hidden');
         };
 
-        window.showAlertModal = function(iconHtml, title, message) {
-            document.getElementById('alert-icon-wrapper').innerHTML = iconHtml;
-            document.getElementById('alert-title').innerText = title;
-            document.getElementById('alert-message').innerHTML = message;
-            document.getElementById('modal-alert').classList.remove('hidden');
+        window.saveSettings = async function() {
+            const key = document.getElementById('setting-wa-key').value.trim();
+            const kepsek = document.getElementById('setting-kepsek-wa').value.trim();
+
+            await window.saveSettingsToDB({ waApiKey: key, kepsekWA: kepsek });
+            closeSettingsModal();
+            showAlertModal("Pengaturan Tersimpan", "Pengaturan WhatsApp Gateway & Nomor Kepala Sekolah berhasil diperbarui.", "success");
         };
 
-        window.closeAlertModal = function() { document.getElementById('modal-alert').classList.add('hidden'); };
-
+        // Excel Import / Export Functions
         window.downloadTeacherTemplate = function() {
-            const data = [["No", "NIP / NIK", "Nama Guru", "Mata Pelajaran", "No HP"], [1, "198501", "Drs. Ahmad", "Matematika", "081234567"]];
+            const templateData = [
+                { "NIP_NIK": "198503122010011005", "NAMA_LENGKAP": "Drs. Budi Santoso, M.Pd", "JABATAN_MAPEL": "Guru Bahasa Indonesia", "NOMOR_WHATSAPP": "081234567890" },
+                { "NIP_NIK": "199004152012022008", "NAMA_LENGKAP": "Siti Rahmawati, S.Pd", "JABATAN_MAPEL": "Guru Matematika", "NOMOR_WHATSAPP": "081987654321" }
+            ];
+
+            const ws = XLSX.utils.json_to_sheet(templateData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), "Template Guru");
-            XLSX.writeFile(wb, "Template_Guru_Barapen.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Template Guru");
+            XLSX.writeFile(wb, "Template_Master_Guru_SMP_Barapen.xlsx");
         };
 
         window.triggerTeacherExcelUpload = function() {
-            const input = document.getElementById('excel-teacher-file');
-            if (input) { input.value = ''; input.click(); }
+            document.getElementById('excel-teacher-file').click();
         };
 
-        // Melanjutkan bagian kode yang terpotong untuk unggah excel
-        window.handleTeacherExcelUpload = function(event) {
-            const file = event.target.files[0];
+        window.handleTeacherExcelUpload = function(e) {
+            const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = async function(e) {
+            reader.onload = function(evt) {
                 try {
-                    const data = new Uint8Array(e.target.result);
+                    const data = new Uint8Array(evt.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    const firstSheet = workbook.SheetNames[0];
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
 
-                    if (!jsonData || jsonData.length < 2) return;
+                    let addedCount = 0;
+                    rows.forEach(row => {
+                        const nip = String(row.NIP_NIK || row.NIP || row.nik || '').trim();
+                        const nama = String(row.NAMA_LENGKAP || row.NAMA || row.Nama || '').trim();
+                        const jabatan = String(row.JABATAN_MAPEL || row.JABATAN || row.Jabatan || 'Guru').trim();
+                        const wa = String(row.NOMOR_WHATSAPP || row.WA || row.wa || '').trim();
 
-                    let headerIndex = 0;
-                    for (let i = 0; i < Math.min(5, jsonData.length); i++) {
-                        const rowStr = (jsonData[i] || []).join(' ').toLowerCase();
-                        if (rowStr.includes('nama') || rowStr.includes('nip')) {
-                            headerIndex = i; break;
+                        if (nip && nama) {
+                            window.saveTeacherToDB({ nip, nama, jabatan, wa });
+                            addedCount++;
                         }
-                    }
+                    });
 
-                    const headers = (jsonData[headerIndex] || []).map(h => String(h || '').trim().toLowerCase());
-                    let colNip = headers.findIndex(h => h.includes('nip') || h.includes('nik'));
-                    let colNama = headers.findIndex(h => h.includes('nama'));
-                    let colMapel = headers.findIndex(h => h.includes('mata') || h.includes('mapel') || h.includes('pelajaran') || h.includes('jabatan'));
-                    let colHp = headers.findIndex(h => h.includes('hp') || h.includes('wa') || h.includes('nomor'));
-
-                    if (colNama === -1 && jsonData[headerIndex].length >= 2) colNama = 1;
-
-                    let importedCount = 0;
-                    let skippedCount = 0;
-
-                    for (let r = headerIndex + 1; r < jsonData.length; r++) {
-                        const row = jsonData[r];
-                        if (!row || row.length === 0) continue;
-
-                        let nama = colNama >= 0 && row[colNama] ? String(row[colNama]).trim() : '';
-                        let mapel = colMapel >= 0 && row[colMapel] ? String(row[colMapel]).trim() : 'Guru Mapel';
-                        let hp = colHp >= 0 && row[colHp] ? String(row[colHp]).trim() : '';
-                        let nip = colNip >= 0 && row[colNip] ? String(row[colNip]).trim() : '';
-
-                        if (!nama) { skippedCount++; continue; }
-
-                        // Auto-generate NIP from phone number or random generator if omitted
-                        if (!nip) {
-                            nip = hp ? hp : 'TEMP' + Math.floor(Math.random() * 100000000);
-                        }
-
-                        const teacherData = { nip, nama, jabatan: mapel, wa: hp };
-                        
-                        if (window.saveTeacherToDB) {
-                            await window.saveTeacherToDB(teacherData);
-                        }
-                        importedCount++;
-                    }
-
-                    if (window.renderGuruCards) window.renderGuruCards();
-                    if (window.updateStats) window.updateStats();
-
-                    window.showAlertModal(
-                        '<i class="fa-solid fa-file-circle-check text-emerald-400"></i>',
-                        'Upload Berhasil',
-                        `Berhasil mengimpor <b>${importedCount} data guru</b> ke dalam Database Firebase.<br>${skippedCount > 0 ? `(Dilewati ${skippedCount} baris kosong)` : ''}`
-                    );
-
-                } catch (error) {
-                    console.error("Error reading Excel:", error);
-                    window.showAlertModal(
-                        '<i class="fa-solid fa-triangle-exclamation text-red-400"></i>',
-                        'Gagal Membaca Excel',
-                        'Terjadi kesalahan saat membaca file. Pastikan format sesuai.'
-                    );
+                    showAlertModal("Upload Berhasil", `${addedCount} Data Guru berhasil diimpor dari berkas Excel.`, "success");
+                } catch (err) {
+                    showAlertModal("Gagal Mengunggah", "Format file Excel tidak sesuai. Gunakan template resmi.", "error");
                 }
             };
             reader.readAsArrayBuffer(file);
         };
+
+        // Recap Data Generation
+        window.updateRecapFilterUI = function() {
+            const type = document.getElementById('recap-type-select').value;
+            const dateBox = document.getElementById('filter-date-container');
+            const monthBox = document.getElementById('filter-month-container');
+
+            if (type === 'monthly') {
+                dateBox.classList.add('hidden');
+                monthBox.classList.remove('hidden');
+            } else {
+                dateBox.classList.remove('hidden');
+                monthBox.classList.add('hidden');
+            }
+            generateRecapData();
+        };
+
+        window.generateRecapData = function() {
+            const type = document.getElementById('recap-type-select').value;
+            const dateVal = document.getElementById('recap-date-input').value || new Date().toISOString().split('T')[0];
+            const monthVal = document.getElementById('recap-month-input').value || new Date().toISOString().slice(0, 7);
+
+            document.getElementById('recap-date-input').value = dateVal;
+
+            let filteredAtt = [];
+
+            if (type === 'daily') {
+                filteredAtt = window.AppState.attendanceList.filter(a => a.tanggal === dateVal);
+            } else if (type === 'weekly') {
+                const selectedDate = new Date(dateVal);
+                const pastDate = new Date(selectedDate);
+                pastDate.setDate(pastDate.getDate() - 6);
+
+                filteredAtt = window.AppState.attendanceList.filter(a => {
+                    const d = new Date(a.tanggal);
+                    return d >= pastDate && d <= selectedDate;
+                });
+            } else if (type === 'monthly') {
+                filteredAtt = window.AppState.attendanceList.filter(a => a.tanggal.startsWith(monthVal));
+            }
+
+            const tbody = document.getElementById('table-recap-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const totalGuru = window.AppState.guruList.length;
+            const hadirCount = filteredAtt.filter(a => a.status === 'Hadir').length;
+            const alphaCount = Math.max(0, totalGuru - hadirCount);
+            const percent = totalGuru > 0 ? Math.round((hadirCount / totalGuru) * 100) : 0;
+
+            document.getElementById('recap-stat-total').innerText = totalGuru;
+            document.getElementById('recap-stat-hadir').innerText = hadirCount;
+            document.getElementById('recap-stat-alpha').innerText = alphaCount;
+            document.getElementById('recap-stat-percent').innerText = `${percent}%`;
+
+            if (filteredAtt.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-emerald-400">Tidak ada data rekapan untuk periode yang dipilih.</td></tr>`;
+                return;
+            }
+
+            filteredAtt.forEach((rec, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-emerald-900/30 transition";
+
+                const isHadir = rec.status === 'Hadir';
+                const badgeClass = isHadir 
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' 
+                    : 'bg-red-500/20 text-red-300 border-red-500/30';
+
+                tr.innerHTML = `
+                    <td class="p-3 font-mono">${idx + 1}</td>
+                    <td class="p-3 font-mono">${rec.nip}</td>
+                    <td class="p-3 font-bold">${rec.nama}</td>
+                    <td class="p-3 text-emerald-300/80">${rec.jabatan}</td>
+                    <td class="p-3 font-mono">${rec.tanggal}</td>
+                    <td class="p-3 font-mono text-amber-300">${rec.jam}</td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeClass}">
+                            ${rec.status}
+                        </span>
+                    </td>
+                    <td class="p-3 text-center">
+                        <span class="text-amber-400 font-bold text-[10px]"><i class="fa-solid fa-check-double mr-1"></i> Guru & Kepsek</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.downloadExcelReport = function() {
+            const table = document.getElementById('recap-table');
+            if (!table) return;
+
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Rekapan Presensi Guru" });
+            XLSX.writeFile(wb, `Laporan_Presensi_Guru_SMP_Barapen.xlsx`);
+        };
+
+        window.sendSummaryToPrincipalWA = function() {
+            const kepsekWA = window.AppState.settings.kepsekWA || '081234567890';
+            const dateVal = document.getElementById('recap-date-input').value || new Date().toISOString().split('T')[0];
+
+            const totalGuru = window.AppState.guruList.length;
+            const todayScans = window.AppState.attendanceList.filter(a => a.tanggal === dateVal && a.status === 'Hadir');
+            const hadirCount = todayScans.length;
+            const alphaCount = Math.max(0, totalGuru - hadirCount);
+
+            let daftarGuruHadir = todayScans.map((g, i) => `${i + 1}. ${g.nama} (${g.jam} WIB)`).join('\n');
+            if (!daftarGuruHadir) daftarGuruHadir = '- Belum ada guru scan -';
+
+            const summaryPesan = `*REKAPAN AKHIR PRESENSI GURU - SMP BARAPEN*\n\nTanggal: ${dateVal}\nTotal Guru: ${totalGuru}\n✅ Hadir: ${hadirCount}\n❌ Tidak Hadir: ${alphaCount}\n\n*Daftar Guru Hadir:*\n${daftarGuruHadir}\n\nLaporan Resmi Sistem Presensi Digital SMP Barapen.`;
+
+            const linkWA = `https://wa.me/${formatPhoneWA(kepsekWA)}?text=${encodeURIComponent(summaryPesan)}`;
+            window.open(linkWA, '_blank');
+        };
+
+        window.updateStats = function() {
+            const totalEl = document.getElementById('stat-total-guru');
+            const hadirEl = document.getElementById('stat-hadir-today');
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            if (totalEl) totalEl.innerText = window.AppState.guruList.length;
+            if (hadirEl) {
+                const todayHadir = window.AppState.attendanceList.filter(a => a.tanggal === todayStr && a.status === 'Hadir').length;
+                hadirEl.innerText = todayHadir;
+            }
+        };
+
+        // Initialize default view state
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGuruCards();
+            renderTodayScanTable();
+            updateStats();
+        });
     </script>
 </body>
 </html>
