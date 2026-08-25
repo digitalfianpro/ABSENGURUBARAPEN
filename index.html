@@ -13,19 +13,19 @@
                 extend: {
                     colors: {
                         emerald: {
-                            850: '#07382b',
-                            950: '#021e17',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
                         },
                         gold: {
-                            300: '#f6e05e',
-                            400: '#ecc94b',
                             500: '#d4af37',
                             600: '#b78a28',
-                            700: '#997a15',
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
                     }
                 }
             }
@@ -47,765 +47,577 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #03140e;
-            color: #e2e8f0;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(5, 150, 105, 0.1) 0%, transparent 40%);
-            min-height: 100vh;
-        }
-
-        .font-playfair {
-            font-family: 'Playfair Display', serif;
+            background-color: #f8fafc; /* Latar belakang putih/abu sangat muda */
+            color: #1e293b;
         }
 
         .gold-gradient-text {
-            background: linear-gradient(135deg, #fef08a 0%, #d4af37 50%, #997a15 100%);
+            background: linear-gradient(135deg, #b78a28 0%, #d4af37 50%, #997a15 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .gold-border-glow {
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-        }
-
         .gold-button {
             background: linear-gradient(135deg, #d4af37 0%, #b78a28 100%);
-            color: #021e17;
+            color: #ffffff;
             font-weight: 700;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
         }
 
         .gold-button:hover {
-            background: linear-gradient(135deg, #fef08a 0%, #d4af37 100%);
+            background: linear-gradient(135deg, #e4c559 0%, #d4af37 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
         }
 
-        .glass-panel {
-            background: rgba(6, 44, 34, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        .glass-panel-card {
-            background: rgba(11, 70, 54, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+        .white-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         /* Scrollbar customization */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #021e17;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #0b4636;
-            border-radius: 4px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #d4af37;
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Print CSS optimization */
+        @media print {
+            .no-print, aside, header, footer, #modal-guru, #modal-settings, #modal-alert { display: none !important; }
+            body { background: white !important; color: black !important; }
+            #modal-card {
+                position: absolute !important; top: 0 !important; left: 0 !important;
+                width: 100% !important; height: 100% !important; background: white !important;
+                display: flex !important; align-items: center !important; justify-content: center !important;
+            }
+            #printable-card { border: 2px solid #b78a28 !important; border-radius: 16px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
 
-        /* Print CSS optimization for ID Card */
-        @media print {
-            .no-print, header, nav, footer, main, #modal-guru, #modal-settings, #modal-alert {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            #modal-card {
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                background: white !important;
-                backdrop-filter: none !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            }
-            #printable-card {
-                border: 2px solid #b78a28 !important;
-                background: #021e17 !important;
-                color: #ffffff !important;
-                box-shadow: none !important;
-                width: 350px !important;
-                padding: 20px !important;
-                border-radius: 16px !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
+        /* Custom Sidebar Active State */
+        .sidebar-btn.active {
+            background-color: #ecfdf5;
+            color: #059669;
+            border-right: 4px solid #059669;
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex h-screen overflow-hidden">
 
-    <!-- Top Navigation Header -->
-    <header class="no-print glass-panel sticky top-0 z-40 border-b border-gold-500/30 px-4 lg:px-8 py-3">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            
-            <!-- Logo & Title -->
-            <div class="flex items-center space-x-4">
-                <div class="relative group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-amber-400 to-emerald-600 rounded-full blur opacity-50 group-hover:opacity-100 transition duration-300"></div>
-                    <img src="https://i.ibb.co.com/DP2CwH0J/logo-sekolah-png.png" 
-                         onerror="this.onerror=null; this.src='https://placehold.co/100x100/021e17/d4af37?text=BARAPEN';" 
-                         alt="Logo SMP Barapen" 
-                         class="relative w-12 h-12 md:w-14 md:h-14 object-contain rounded-full bg-emerald-950 p-1 border border-gold-500/50 shadow-lg">
-                </div>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-gray-900/50 z-40 hidden md:hidden"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="bg-white w-64 h-full border-r border-gray-200 flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+        <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img src="https://i.ibb.co.com/DP2CwH0J/logo-sekolah-png.png" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/100x100/ffffff/d4af37?text=BARAPEN';" 
+                     alt="Logo SMP Barapen" 
+                     class="w-10 h-10 object-contain rounded-full shadow-sm">
                 <div>
-                    <h1 class="font-playfair text-xl md:text-2xl font-bold tracking-wide gold-gradient-text">
-                        SMP BARAPEN
-                    </h1>
-                    <p class="text-xs text-emerald-300/80 tracking-widest uppercase font-medium">
-                        Sistem Presensi Smart QR Code NIP / NIK Guru
-                    </p>
+                    <h1 class="font-playfair text-lg font-bold text-gray-800">SMP BARAPEN</h1>
+                    <p class="text-[10px] text-gray-500 font-semibold tracking-wider uppercase">Presensi Digital</p>
                 </div>
             </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-gray-500 hover:text-gray-800">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
 
-            <!-- Date, Clock & Firebase Status -->
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+            <button onclick="switchTab('scan-tab')" id="nav-scan-tab" class="sidebar-btn active w-full flex items-center space-x-3 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-qrcode text-lg w-6 text-center"></i>
+                <span>Scan Hari Ini</span>
+            </button>
+            <button onclick="switchTab('guru-tab')" id="nav-guru-tab" class="sidebar-btn w-full flex items-center space-x-3 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-id-card text-lg w-6 text-center"></i>
+                <span>Data Guru</span>
+            </button>
+            <button onclick="switchTab('rekapan-tab')" id="nav-rekapan-tab" class="sidebar-btn w-full flex items-center space-x-3 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-file-excel text-lg w-6 text-center"></i>
+                <span>Rekapan & Excel</span>
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-gray-200">
+            <button onclick="openSettingsModal()" class="w-full px-4 py-2 rounded-lg text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-gears"></i> <span>Pengaturan Sistem</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+        
+        <!-- Top Header -->
+        <header class="white-panel sticky top-0 z-30 px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="md:hidden mr-4 text-gray-600 hover:text-emerald-600">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 class="hidden sm:block text-lg font-bold text-gray-800 font-playfair">Dasbor Presensi</h2>
+            </div>
+
+            <!-- Date, Clock (WIT) & Firebase Status -->
             <div class="flex items-center space-x-4">
-                <div class="hidden sm:flex flex-col items-end text-right px-3 py-1.5 rounded-lg bg-emerald-950/80 border border-gold-500/20">
-                    <span id="live-clock" class="text-base font-bold text-amber-300 tracking-wider font-mono">00:00:00 WIB</span>
-                    <span id="live-date" class="text-xs text-emerald-200/70">Kamis, 1 Januari 2026</span>
+                <div id="firebase-status-badge" class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-300 text-gray-600 text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                    <span id="firebase-status-text">Memuat...</span>
                 </div>
-                <div id="firebase-status-badge" class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                    <span id="firebase-status-text">Menghubungkan Firebase...</span>
+                <div class="flex flex-col items-end text-right px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100 shadow-sm">
+                    <span id="live-clock" class="text-base font-bold text-emerald-700 tracking-wider font-mono">00:00:00 WIT</span>
+                    <span id="live-date" class="text-xs text-gray-500 font-medium">Memuat Tanggal...</span>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="no-print glass-panel bg-emerald-950/90 border-b border-gold-500/20 px-4 py-2 sticky top-[73px] z-30">
-        <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-2 no-scrollbar">
-            <div class="flex items-center space-x-2">
-                <button onclick="switchTab('scan-tab')" id="nav-scan-tab" class="tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 bg-gold-500 text-emerald-950 shadow-md">
-                    <i class="fa-solid fa-qrcode text-base"></i>
-                    <span>Scan Hari Ini</span>
-                </button>
-                <button onclick="switchTab('guru-tab')" id="nav-guru-tab" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 text-emerald-200 hover:bg-emerald-850 hover:text-amber-300">
-                    <i class="fa-solid fa-id-card text-base"></i>
-                    <span>Data Guru</span>
-                </button>
-                <button onclick="switchTab('rekapan-tab')" id="nav-rekapan-tab" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 text-emerald-200 hover:bg-emerald-850 hover:text-amber-300">
-                    <i class="fa-solid fa-file-excel text-base"></i>
-                    <span>Rekapan & Excel</span>
-                </button>
-            </div>
+        <!-- Dynamic Tabs Container -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50 no-scrollbar">
             
-            <div class="flex items-center space-x-2">
-                <button onclick="openSettingsModal()" class="px-3 py-2 rounded-lg text-xs font-medium text-amber-300/80 hover:text-amber-300 hover:bg-emerald-850 border border-gold-500/30 transition flex items-center">
-                    <i class="fa-solid fa-gears text-sm mr-1.5"></i> Pengaturan WA & Kepsek
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Dynamic Content Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 space-y-6">
-
-        <!-- Welcome Banner -->
-        <section class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden gold-border-glow">
-            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-                <div class="flex items-center space-x-5">
-                    <img src="https://i.ibb.co.com/DP2CwH0J/logo-sekolah-png.png" 
-                         onerror="this.onerror=null; this.src='https://placehold.co/120x120/021e17/d4af37?text=BARAPEN';" 
-                         alt="Logo SMP Barapen" 
-                         class="w-20 h-20 md:w-24 md:h-24 object-contain rounded-2xl bg-emerald-950/80 p-2 border-2 border-gold-500/40 shadow-xl">
-                    <div>
-                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold mb-2">
-                            <i class="fa-solid fa-crown text-amber-400"></i>
-                            <span>Sistem Presensi Cerdas Terintegrasi WhatsApp Guru & Kepsek</span>
-                        </div>
-                        <h2 class="text-2xl md:text-3xl font-bold font-playfair gold-gradient-text">
-                            Selamat Datang, Bapak/Ibu Guru
-                        </h2>
-                        <p class="text-emerald-200/80 text-sm md:text-base mt-1 max-w-2xl">
-                            Silakan lakukan presensi menggunakan QR Code NIP / NIK pada Kartu Presensi Guru Anda. Sistem secara otomatis merekap kehadiran dan mengirimkan notifikasi WA ke Hp Guru & Kepala Sekolah.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Quick Summary Badges -->
-                <div class="grid grid-cols-2 gap-3 w-full md:w-auto">
-                    <div class="bg-emerald-950/90 border border-gold-500/30 p-3 rounded-xl text-center min-w-[120px]">
-                        <span class="text-xs text-emerald-300/70 block uppercase font-medium">Total Guru</span>
-                        <span id="stat-total-guru" class="text-2xl font-bold text-amber-400 font-mono">0</span>
-                    </div>
-                    <div class="bg-emerald-950/90 border border-emerald-500/30 p-3 rounded-xl text-center min-w-[120px]">
-                        <span class="text-xs text-emerald-300/70 block uppercase font-medium">Hadir Hari Ini</span>
-                        <span id="stat-hadir-today" class="text-2xl font-bold text-emerald-400 font-mono">0</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= TAB 1: SCAN HARI INI ================= -->
-        <section id="scan-tab" class="tab-content space-y-6">
-            
-            <!-- Prominent Last Scanned Teacher Display -->
-            <div id="last-scanned-container" class="glass-panel p-6 rounded-2xl border-2 border-gold-500/40 shadow-2xl relative overflow-hidden transition-all duration-300">
-                <div class="absolute -right-16 -top-16 w-56 h-56 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="flex flex-col md:flex-row items-center gap-6">
+            <section id="scan-tab" class="tab-content space-y-6 max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     
-                    <!-- Large Foto Guru -->
-                    <div class="relative group flex-shrink-0">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-amber-400 to-emerald-500 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                        <div class="relative w-36 h-44 md:w-44 md:h-52 rounded-2xl overflow-hidden bg-emerald-950 border-2 border-gold-400 flex items-center justify-center shadow-2xl">
-                            <img id="last-scan-photo" src="https://placehold.co/300x400/021e17/d4af37?text=Scan+Guru" 
-                                 alt="Foto Guru Scanned" 
-                                 class="w-full h-full object-cover">
-                        </div>
-                    </div>
-
-                    <!-- Detail Info Last Scanned -->
-                    <div class="flex-grow space-y-3 text-center md:text-left">
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                            <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                                <i class="fa-solid fa-circle-check"></i> SCAN TERAKHIR BERHASIL
-                            </span>
-                            <span id="last-scan-badge-time" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
-                                --:--:-- WIB
-                            </span>
-                        </div>
-
+                    <!-- Kiri: Alat Scan -->
+                    <div class="lg:col-span-4 white-panel p-6 rounded-2xl flex flex-col justify-between">
                         <div>
-                            <h2 id="last-scan-nama" class="text-2xl md:text-3xl font-bold font-playfair gold-gradient-text tracking-wide">
-                                Belum Ada Presensi Hari Ini
-                            </h2>
-                            <p id="last-scan-jabatan" class="text-emerald-300 text-sm md:text-base font-semibold mt-0.5">
-                                Silakan arahkan QR Code NIP / NIK ke Scanner
-                            </p>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-xs max-w-xl">
-                            <div class="bg-emerald-950/80 p-2.5 rounded-xl border border-gold-500/20 flex justify-between items-center">
-                                <span class="text-emerald-400 font-sans text-[11px]">NIP / NIK:</span>
-                                <span id="last-scan-nip" class="text-amber-300 font-bold tracking-wider">-</span>
-                            </div>
-                            <div class="bg-emerald-950/80 p-2.5 rounded-xl border border-gold-500/20 flex justify-between items-center">
-                                <span class="text-emerald-400 font-sans text-[11px]">Status Hadir:</span>
-                                <span id="last-scan-status" class="text-emerald-400 font-bold">STANDBY</span>
-                            </div>
-                        </div>
-
-                        <!-- WA Status Indicator Bar -->
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1">
-                            <div id="last-scan-wa-guru" class="px-3 py-1.5 rounded-lg bg-emerald-950 border border-gold-500/20 text-[11px] text-emerald-300 flex items-center space-x-1.5">
-                                <i class="fa-brands fa-whatsapp text-amber-400"></i>
-                                <span>WA Guru: Standby</span>
-                            </div>
-                            <div id="last-scan-wa-kepsek" class="px-3 py-1.5 rounded-lg bg-emerald-950 border border-gold-500/20 text-[11px] text-emerald-300 flex items-center space-x-1.5">
-                                <i class="fa-solid fa-user-tie text-amber-400"></i>
-                                <span>WA Kepsek: Standby</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <!-- Left: Smart Scan Scanner Panel -->
-                <div class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col justify-between border border-gold-500/30 shadow-2xl relative">
-                    <div>
-                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-gold-500/20">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/30">
-                                    <i class="fa-solid fa-qrcode text-xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-lg text-emerald-100">Alat Scan QR Code</h3>
-                                    <p class="text-xs text-emerald-300/70">Kamera Web / Scanner Keystroke</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Mode Toggle -->
-                            <div class="flex rounded-lg bg-emerald-950 p-1 border border-gold-500/30">
-                                <button onclick="setScanMode('camera')" id="btn-mode-camera" class="px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition">
-                                    <i class="fa-solid fa-camera mr-1"></i> Kamera
-                                </button>
-                                <button onclick="setScanMode('usb')" id="btn-mode-usb" class="px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition">
-                                    <i class="fa-solid fa-keyboard mr-1"></i> USB Scan
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Camera Scanner Container -->
-                        <div id="camera-scan-container" class="relative rounded-xl overflow-hidden border-2 border-dashed border-gold-500/40 bg-emerald-950 min-h-[260px] flex flex-col items-center justify-center">
-                            <div id="reader" class="w-full h-full"></div>
-                            <div id="camera-placeholder" class="text-center p-6 space-y-3">
-                                <i class="fa-solid fa-qrcode text-4xl text-amber-400/60 animate-bounce"></i>
-                                <p class="text-xs text-emerald-200/70 max-w-xs">Arahkan QR Code NIP/NIK Guru ke depan Kamera Scanner</p>
-                                <button onclick="startCameraScanner()" id="btn-start-camera" class="gold-button text-xs px-4 py-2 rounded-lg inline-flex items-center space-x-2">
-                                    <i class="fa-solid fa-play"></i>
-                                    <span>Aktifkan Kamera Scan</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- USB Hardware Scanner Box -->
-                        <div id="usb-scan-container" class="hidden space-y-4 bg-emerald-950/80 p-5 rounded-xl border border-gold-500/30">
-                            <div class="text-center space-y-2">
-                                <i class="fa-solid fa-bolt text-3xl text-amber-400"></i>
-                                <h4 class="font-semibold text-sm text-emerald-100">Standby Alat QR Reader</h4>
-                                <p class="text-xs text-emerald-300/70">Gunakan scanner 2D QR Code genggam / tembak</p>
-                            </div>
-                            <div class="relative">
-                                <input type="text" id="barcode-hardware-input" placeholder="Ketik NIP/NIK lalu Enter..." 
-                                       class="w-full bg-emerald-900/90 text-amber-300 placeholder-emerald-500 border-2 border-gold-500/50 rounded-xl px-4 py-3 text-center text-lg font-mono tracking-wider focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30">
-                            </div>
-                            <p class="text-[11px] text-emerald-400/80 text-center italic">
-                                *Sistem otomatis membaca NIP / NIK dari QR Code.
-                            </p>
-                        </div>
-
-                        <!-- Manual NIP Quick Input -->
-                        <div class="mt-4 pt-4 border-t border-gold-500/20">
-                            <label class="block text-xs font-semibold text-emerald-200 mb-1">
-                                <i class="fa-solid fa-keyboard text-amber-400 mr-1"></i> Alternatif Manual (NIP / NIK Guru):
-                            </label>
-                            <div class="flex space-x-2">
-                                <input type="text" id="manual-nip-input" onkeydown="if(event.key==='Enter') processManualScan()" placeholder="Masukkan NIP / NIK..." class="flex-grow bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-sm text-emerald-100 placeholder-emerald-600 focus:outline-none focus:border-amber-400 font-mono">
-                                <button onclick="processManualScan()" class="gold-button px-4 py-2 rounded-lg text-xs font-bold">
-                                    Proses
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Scanning Tips -->
-                    <div class="mt-6 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90 flex items-start space-x-2">
-                        <i class="fa-solid fa-shield-halved text-amber-400 text-sm mt-0.5"></i>
-                        <span>
-                            <b>Otomatis WA 2 Arah:</b> Notifikasi dikirimkan ke HP Guru & HP Kepala Sekolah dengan format berbeda.
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Right: Scan Live Feed Table Hari Ini -->
-                <div class="lg:col-span-7 glass-panel p-6 rounded-2xl border border-gold-500/30 flex flex-col justify-between">
-                    <div>
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 mb-4 border-b border-gold-500/20 gap-2">
-                            <div>
-                                <h3 class="font-bold text-lg text-emerald-100 flex items-center space-x-2">
-                                    <i class="fa-solid fa-clock-rotate-left text-amber-400"></i>
-                                    <span>Riwayat Presensi Hari Ini</span>
+                            <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
+                                <h3 class="font-bold text-lg text-gray-800 flex items-center space-x-2">
+                                    <i class="fa-solid fa-qrcode text-emerald-600"></i>
+                                    <span>Alat Scan</span>
                                 </h3>
-                                <p class="text-xs text-emerald-300/70" id="scan-today-subtitle">
-                                    Otomatis reset setiap 24 Jam (Hari Baru)
-                                </p>
+                                <div class="flex rounded-lg bg-gray-100 p-1 border border-gray-200">
+                                    <button onclick="setScanMode('camera')" id="btn-mode-camera" class="px-2 py-1 rounded text-[11px] font-semibold text-white bg-emerald-600 transition shadow-sm">Kamera</button>
+                                    <button onclick="setScanMode('usb')" id="btn-mode-usb" class="px-2 py-1 rounded text-[11px] font-semibold text-gray-600 hover:text-emerald-700 transition">USB</button>
+                                </div>
                             </div>
-                            <button onclick="markUnscannedAsAbsentToday()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-500/40 transition">
-                                <i class="fa-solid fa-user-xmark mr-1"></i> Tandai Yg Belum Hadir
+
+                            <!-- Camera Scanner Container -->
+                            <div id="camera-scan-container" class="relative rounded-xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 min-h-[220px] flex flex-col items-center justify-center">
+                                <div id="reader" class="w-full h-full"></div>
+                                <div id="camera-placeholder" class="text-center p-4 space-y-2">
+                                    <i class="fa-solid fa-camera text-3xl text-gray-400"></i>
+                                    <p class="text-xs text-gray-500">Arahkan QR Code NIP</p>
+                                    <button onclick="startCameraScanner()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-lg font-semibold shadow-md transition">Aktifkan Kamera</button>
+                                </div>
+                            </div>
+
+                            <!-- USB Hardware Scanner Box -->
+                            <div id="usb-scan-container" class="hidden space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <div class="text-center">
+                                    <i class="fa-solid fa-bolt text-2xl text-emerald-600 mb-1"></i>
+                                    <h4 class="font-semibold text-sm text-gray-700">Scanner Standby</h4>
+                                </div>
+                                <input type="text" id="barcode-hardware-input" placeholder="Scan/Ketik NIP & Enter" 
+                                       class="w-full bg-white border border-gray-300 rounded-xl px-4 py-2 text-center text-sm font-mono focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                            </div>
+
+                            <!-- Manual Input -->
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <label class="block text-[11px] font-semibold text-gray-500 mb-1">Input Manual NIP:</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="manual-nip-input" onkeydown="if(event.key==='Enter') processManualScan()" placeholder="Masukkan NIP..." class="flex-grow bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500 font-mono">
+                                    <button onclick="processManualScan()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Proses</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tengah: Profil Scan Terakhir (Besar) -->
+                    <div class="lg:col-span-8 white-panel p-6 rounded-2xl relative overflow-hidden flex flex-col justify-center items-center text-center min-h-[300px] border-2 border-emerald-100 bg-gradient-to-br from-white to-emerald-50/50">
+                        <!-- Tampilan Default Sebelum Ada Scan -->
+                        <div id="last-scan-empty" class="space-y-4">
+                            <div class="w-32 h-32 mx-auto rounded-full bg-gray-100 border-4 border-white shadow-lg flex items-center justify-center">
+                                <i class="fa-solid fa-user-clock text-5xl text-gray-300"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-400 font-playfair">Menunggu Scan...</h2>
+                                <p class="text-sm text-gray-400">Profil guru akan muncul di sini setelah melakukan scan presensi.</p>
+                            </div>
+                        </div>
+
+                        <!-- Tampilan Profil Guru Setelah Scan -->
+                        <div id="last-scan-profile" class="hidden space-y-4 w-full animate-fade-in-up">
+                            <div class="relative inline-block">
+                                <img id="last-scan-foto" src="" onerror="this.src='https://placehold.co/300x300/e2e8f0/64748b?text=Foto';" class="w-40 h-40 object-cover rounded-full border-4 border-white shadow-xl mx-auto">
+                                <div class="absolute bottom-0 right-0 bg-emerald-500 text-white w-10 h-10 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-800 rounded-full font-bold text-sm mb-2 shadow-sm border border-emerald-200">
+                                    HADIR HARI INI - <span id="last-scan-time">00:00 WIT</span>
+                                </div>
+                                <h2 id="last-scan-nama" class="text-3xl font-bold text-gray-800 font-playfair">Nama Guru</h2>
+                                <p id="last-scan-jabatan" class="text-base text-gray-600 mt-1">Jabatan / Mapel</p>
+                                <p id="last-scan-nip" class="text-sm text-gray-500 font-mono mt-1">NIP: -</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bawah: Tabel Riwayat Hari Ini -->
+                <div class="white-panel p-6 rounded-2xl">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 mb-4 border-b border-gray-200 gap-3">
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-800 flex items-center space-x-2">
+                                <i class="fa-solid fa-list-check text-emerald-600"></i>
+                                <span>Riwayat Kehadiran Hari Ini</span>
+                            </h3>
+                            <p class="text-xs text-gray-500">Daftar presensi yang tercatat pada tanggal <span id="text-today-date" class="font-semibold">...</span></p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="markUnscannedAsAbsentToday()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 transition shadow-sm">
+                                <i class="fa-solid fa-user-xmark mr-1"></i> Tandai Yg Belum
+                            </button>
+                            <button onclick="clearTodayHistory()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition shadow-sm">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Hapus Riwayat
                             </button>
                         </div>
-
-                        <!-- Table Container -->
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs text-emerald-100">
-                                <thead>
-                                    <tr class="border-b border-gold-500/20 text-amber-300 uppercase tracking-wider bg-emerald-950/60">
-                                        <th class="p-3 rounded-l-lg">Jam</th>
-                                        <th class="p-3">Guru & NIP/NIK</th>
-                                        <th class="p-3">Status</th>
-                                        <th class="p-3 rounded-r-lg text-center">Notifikasi WA</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-scan-today-body" class="divide-y divide-emerald-900/40 font-sans">
-                                    <!-- Dynamic rows loaded here -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Empty State -->
-                        <div id="scan-today-empty" class="hidden text-center py-12 space-y-3">
-                            <i class="fa-solid fa-folder-open text-4xl text-emerald-600/50"></i>
-                            <p class="text-sm text-emerald-400/80">Belum ada guru yang melakukan scan presensi hari ini.</p>
-                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- ================= TAB 2: DATA GURU ================= -->
-        <section id="guru-tab" class="tab-content hidden space-y-6">
-            <div class="glass-panel p-6 rounded-2xl border border-gold-500/30">
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between pb-4 mb-6 border-b border-gold-500/20 gap-4">
-                    <div>
-                        <h3 class="font-bold text-xl text-emerald-100 flex items-center space-x-2 font-playfair">
-                            <i class="fa-solid fa-users text-amber-400"></i>
-                            <span>Master Data Guru</span>
-                        </h3>
-                        <p class="text-xs text-emerald-300/70">Kelola informasi guru, NIP/NIK, nomor WhatsApp, dan cetak Kartu QR Code</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-700">
+                            <thead>
+                                <tr class="border-b-2 border-gray-200 text-gray-500 uppercase tracking-wider text-[11px] bg-gray-50">
+                                    <th class="p-3 rounded-tl-lg">Jam (WIT)</th>
+                                    <th class="p-3">Guru & NIP/NIK</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3 rounded-tr-lg text-center">Notifikasi WA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-scan-today-body" class="divide-y divide-gray-100">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
                     </div>
                     
-                    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                        <button onclick="downloadTeacherTemplate()" class="bg-emerald-950 hover:bg-emerald-900 text-amber-300 border border-gold-500/40 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition shadow-md">
-                            <i class="fa-solid fa-file-arrow-down text-sm"></i>
-                            <span>Download Template</span>
-                        </button>
+                    <div id="scan-today-empty" class="hidden text-center py-8 space-y-2">
+                        <i class="fa-solid fa-clipboard-list text-3xl text-gray-300"></i>
+                        <p class="text-sm text-gray-500">Belum ada riwayat presensi hari ini.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="guru-tab" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+                <div class="white-panel p-6 rounded-2xl">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between pb-4 mb-6 border-b border-gray-200 gap-4">
+                        <div>
+                            <h3 class="font-bold text-xl text-gray-800 flex items-center space-x-2 font-playfair">
+                                <i class="fa-solid fa-users text-emerald-600"></i>
+                                <span>Master Data Guru</span>
+                            </h3>
+                            <p class="text-xs text-gray-500">Kelola informasi guru, NIP/NIK, nomor WhatsApp, dan Foto</p>
+                        </div>
                         
-                        <!-- Upload Excel Button & Hidden File Input -->
-                        <button onclick="triggerTeacherExcelUpload()" class="bg-gradient-to-r from-emerald-700 to-green-700 hover:from-emerald-600 hover:to-green-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-md transition border border-green-400/30">
-                            <i class="fa-solid fa-file-excel text-sm"></i>
-                            <span>Upload Excel Guru</span>
-                        </button>
-                        <input type="file" id="excel-teacher-file" accept=".xlsx, .xls, .csv" onchange="handleTeacherExcelUpload(event)" class="hidden">
-                        
-                        <!-- Batch Upload Foto NIP/NIK -->
-                        <button onclick="triggerBatchPhotoUpload()" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-emerald-950 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-md transition border border-amber-400/40">
-                            <i class="fa-solid fa-image-portrait text-sm"></i>
-                            <span>Upload Batch Foto (NIP/NIK)</span>
-                        </button>
-                        <input type="file" id="batch-photo-file-input" accept="image/png, image/jpeg, image/jpg, image/webp" multiple onchange="handleBatchPhotoUpload(event)" class="hidden">
+                        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                            <!-- Upload Foto Massal berdasarkan Nama File -->
+                            <div class="relative group">
+                                <button class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition shadow-sm">
+                                    <i class="fa-regular fa-images text-sm text-emerald-600"></i>
+                                    <span>Upload Foto (Sesuai NIP)</span>
+                                </button>
+                                <input type="file" id="bulk-photo-upload" multiple accept="image/png, image/jpeg, image/jpg" onchange="handleBulkPhotoUpload(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
+                            
+                            <button onclick="triggerTeacherExcelUpload()" class="bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-sm transition">
+                                <i class="fa-solid fa-file-excel text-sm"></i>
+                                <span>Upload Excel</span>
+                            </button>
+                            <input type="file" id="excel-teacher-file" accept=".xlsx, .xls, .csv" onchange="handleTeacherExcelUpload(event)" class="hidden">
+                            
+                            <button onclick="openModalGuru()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-sm">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Tambah Guru</span>
+                            </button>
+                        </div>
+                    </div>
 
-                        <button onclick="openModalGuru()" class="gold-button px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Tambah Guru Baru</span>
-                        </button>
+                    <div class="mb-4">
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="search-guru-input" onkeyup="filterGuruList()" placeholder="Cari Nama atau NIP..." class="w-full md:w-80 bg-white border border-gray-300 rounded-xl pl-10 pr-4 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500 font-mono shadow-sm">
+                        </div>
+                    </div>
+
+                    <div id="guru-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Dynamic teacher cards rendered here -->
                     </div>
                 </div>
+            </section>
 
-                <!-- Teacher Cards Container -->
-                <div id="guru-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic teacher cards rendered here -->
+            <section id="rekapan-tab" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+                <div class="white-panel p-6 rounded-2xl space-y-6">
+                    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between pb-4 border-b border-gray-200 gap-4">
+                        <div>
+                            <h3 class="font-bold text-xl text-gray-800 font-playfair flex items-center space-x-2">
+                                <i class="fa-solid fa-file-export text-emerald-600"></i>
+                                <span>Rekapan Kehadiran (WIT)</span>
+                            </h3>
+                            <p class="text-xs text-gray-500">Filter Laporan Presensi & Unduh Excel</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button onclick="downloadExcelReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 shadow-sm transition">
+                                <i class="fa-solid fa-file-excel"></i> <span>Download Excel</span>
+                            </button>
+                            <button onclick="sendSummaryToPrincipalWA()" class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 shadow-sm transition">
+                                <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i> <span>Kirim ke Kepsek</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Tipe Rekapan:</label>
+                            <select id="recap-type-select" onchange="updateRecapFilterUI()" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
+                                <option value="daily">Harian</option>
+                                <option value="weekly">Mingguan (7 Hari)</option>
+                                <option value="monthly">Bulanan</option>
+                            </select>
+                        </div>
+
+                        <div id="filter-date-container">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Pilih Tanggal (WIT):</label>
+                            <input type="date" id="recap-date-input" onchange="generateRecapData()" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
+                        </div>
+
+                        <div id="filter-month-container" class="hidden">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Pilih Bulan & Tahun:</label>
+                            <input type="month" id="recap-month-input" onchange="generateRecapData()" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
+                        </div>
+
+                        <div class="flex items-end">
+                            <button onclick="generateRecapData()" class="bg-gray-800 text-white hover:bg-gray-900 w-full py-2 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 shadow-sm transition">
+                                <i class="fa-solid fa-filter"></i> <span>Tampilkan</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Stat Badges -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white p-3 rounded-xl border border-gray-200 text-center shadow-sm">
+                            <span class="text-[10px] text-gray-500 block uppercase font-bold">Total Guru</span>
+                            <span id="recap-stat-total" class="text-xl font-bold text-gray-800">0</span>
+                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-center shadow-sm">
+                            <span class="text-[10px] text-emerald-600 block uppercase font-bold">Total Hadir</span>
+                            <span id="recap-stat-hadir" class="text-xl font-bold text-emerald-700">0</span>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded-xl border border-red-100 text-center shadow-sm">
+                            <span class="text-[10px] text-red-600 block uppercase font-bold">Tidak Hadir</span>
+                            <span id="recap-stat-alpha" class="text-xl font-bold text-red-700">0</span>
+                        </div>
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-100 text-center shadow-sm">
+                            <span class="text-[10px] text-amber-600 block uppercase font-bold">Persentase</span>
+                            <span id="recap-stat-percent" class="text-xl font-bold text-amber-700">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Recap Table -->
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                        <table id="recap-table" class="w-full text-left text-sm text-gray-700">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 uppercase tracking-wider text-[11px] border-b border-gray-200">
+                                    <th class="p-3">No</th>
+                                    <th class="p-3">NIP / NIK</th>
+                                    <th class="p-3">Nama Guru</th>
+                                    <th class="p-3">Jabatan</th>
+                                    <th class="p-3">Tanggal (WIT)</th>
+                                    <th class="p-3">Jam Masuk</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-recap-body" class="divide-y divide-gray-100 bg-white">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- ================= TAB 3: REKAPAN & DOWNLOAD EXCEL ================= -->
-        <section id="rekapan-tab" class="tab-content hidden space-y-6">
-            <div class="glass-panel p-6 rounded-2xl border border-gold-500/30 space-y-6">
-                
-                <!-- Filter Header -->
-                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between pb-4 border-b border-gold-500/20 gap-4">
-                    <div>
-                        <h3 class="font-bold text-xl text-emerald-100 font-playfair flex items-center space-x-2">
-                            <i class="fa-solid fa-file-excel text-emerald-400"></i>
-                            <span>Rekapan Kehadiran Guru</span>
-                        </h3>
-                        <p class="text-xs text-emerald-300/70">Filter Laporan Presensi & Unduh Excel Rapi</p>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-3">
-                        <button onclick="downloadExcelReport()" class="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-lg transition border border-green-400/30">
-                            <i class="fa-solid fa-file-excel text-base"></i>
-                            <span>Download Laporan Excel (.xlsx)</span>
-                        </button>
-                        <button onclick="sendSummaryToPrincipalWA()" class="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-emerald-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-lg transition">
-                            <i class="fa-brands fa-whatsapp text-base"></i>
-                            <span>Kirim Rekapan ke Kepsek</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Filter Mode Switcher -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-emerald-950/80 p-4 rounded-xl border border-gold-500/20">
-                    <div>
-                        <label class="block text-xs font-semibold text-amber-300 mb-1">Tipe Rekapan:</label>
-                        <select id="recap-type-select" onchange="updateRecapFilterUI()" class="w-full bg-emerald-900 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none">
-                            <option value="daily">Harian (Per Hari)</option>
-                            <option value="weekly">Mingguan (7 Hari)</option>
-                            <option value="monthly">Bulanan (Per Bulan)</option>
-                        </select>
-                    </div>
-
-                    <div id="filter-date-container">
-                        <label class="block text-xs font-semibold text-amber-300 mb-1">Pilih Tanggal:</label>
-                        <input type="date" id="recap-date-input" onchange="generateRecapData()" class="w-full bg-emerald-900 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none">
-                    </div>
-
-                    <div id="filter-month-container" class="hidden">
-                        <label class="block text-xs font-semibold text-amber-300 mb-1">Pilih Bulan & Tahun:</label>
-                        <input type="month" id="recap-month-input" onchange="generateRecapData()" class="w-full bg-emerald-900 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none">
-                    </div>
-
-                    <div class="flex items-end">
-                        <button onclick="generateRecapData()" class="gold-button w-full py-2 rounded-lg text-xs font-bold flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-filter"></i>
-                            <span>Tampilkan Rekapan</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Summary Stat Badges -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div class="bg-emerald-950/70 p-3 rounded-xl border border-gold-500/20 text-center">
-                        <span class="text-[11px] text-emerald-300/70 block uppercase">Total Guru Master</span>
-                        <span id="recap-stat-total" class="text-xl font-bold text-amber-300">0</span>
-                    </div>
-                    <div class="bg-emerald-950/70 p-3 rounded-xl border border-emerald-500/20 text-center">
-                        <span class="text-[11px] text-emerald-300/70 block uppercase">Total Hadir</span>
-                        <span id="recap-stat-hadir" class="text-xl font-bold text-emerald-400">0</span>
-                    </div>
-                    <div class="bg-emerald-950/70 p-3 rounded-xl border border-red-500/20 text-center">
-                        <span class="text-[11px] text-emerald-300/70 block uppercase">Total Tidak Hadir</span>
-                        <span id="recap-stat-alpha" class="text-xl font-bold text-red-400">0</span>
-                    </div>
-                    <div class="bg-emerald-950/70 p-3 rounded-xl border border-yellow-500/20 text-center">
-                        <span class="text-[11px] text-emerald-300/70 block uppercase">Persentase Kehadiran</span>
-                        <span id="recap-stat-percent" class="text-xl font-bold text-amber-400">0%</span>
-                    </div>
-                </div>
-
-                <!-- Recap Table -->
-                <div class="overflow-x-auto rounded-xl border border-gold-500/20">
-                    <table id="recap-table" class="w-full text-left text-xs text-emerald-100">
-                        <thead>
-                            <tr class="bg-emerald-950 text-amber-300 uppercase tracking-wider border-b border-gold-500/30">
-                                <th class="p-3">No</th>
-                                <th class="p-3">NIP / NIK</th>
-                                <th class="p-3">Nama Guru</th>
-                                <th class="p-3">Jabatan / Mapel</th>
-                                <th class="p-3">Tanggal</th>
-                                <th class="p-3">Jam Masuk</th>
-                                <th class="p-3">Keterangan</th>
-                                <th class="p-3 text-center">Notifikasi WA</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-recap-body" class="divide-y divide-emerald-900/50 bg-emerald-950/40">
-                            <!-- Dynamic rows -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="no-print glass-panel mt-12 border-t border-gold-500/20 py-4 text-center text-xs text-emerald-300/60">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="flex items-center space-x-2">
-                <span class="text-amber-400 font-bold">SMP BARAPEN</span>
-                <span>&copy; 2026 Presensi Barcode & QR Digital Guru</span>
-            </div>
-            <div>
-                <span>Database: Firebase Firestore Live</span> | <span>WhatsApp API Key: Active</span>
-            </div>
-        </div>
-    </footer>
+            </section>
+        </main>
+    </div>
 
     <!-- MODAL 1: Tambah / Edit Guru -->
-    <div id="modal-guru" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-gold-500/20">
-                <h3 id="modal-guru-title" class="font-bold text-lg text-amber-300 font-playfair">Tambah Data Guru Baru</h3>
-                <button onclick="closeModalGuru()" class="text-emerald-400 hover:text-amber-300 text-lg">
+    <div id="modal-guru" class="fixed inset-0 z-50 hidden bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="white-panel w-full max-w-lg rounded-2xl p-6 relative space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 id="modal-guru-title" class="font-bold text-lg text-gray-800 font-playfair">Tambah Data Guru Baru</h3>
+                <button onclick="closeModalGuru()" class="text-gray-400 hover:text-gray-600 text-lg">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <form id="guru-form" onsubmit="saveGuruForm(event)" class="space-y-3">
+            <form id="guru-form" onsubmit="saveGuruForm(event)" class="space-y-4">
                 <input type="hidden" id="form-guru-id">
                 
-                <div>
-                    <label class="block text-xs font-semibold text-emerald-200 mb-1">NIP / NIK Guru * (Sumber QR Code & Nama File Foto)</label>
-                    <input type="text" id="form-guru-nip" required placeholder="Contoh NIP: 198503122010011005" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-400 font-mono">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-emerald-200 mb-1">Nama Lengkap & Gelar *</label>
-                    <input type="text" id="form-guru-nama" required placeholder="Contoh: Drs. Ahmad Subagyo, M.Pd" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-emerald-200 mb-1">Jabatan / Mata Pelajaran *</label>
-                    <input type="text" id="form-guru-jabatan" required placeholder="Contoh: Guru Matematika" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-emerald-200 mb-1">Nomor WhatsApp Guru * (Awal 08 atau 62)</label>
-                    <input type="text" id="form-guru-wa" required placeholder="Contoh: 081234567890" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-400 font-mono">
-                </div>
-
-                <!-- Foto Guru Upload Input -->
-                <div>
-                    <label class="block text-xs font-semibold text-emerald-200 mb-1">Foto Guru (JPG / PNG):</label>
-                    <div class="flex items-center space-x-3 bg-emerald-950 p-2 rounded-lg border border-gold-500/30">
-                        <img id="form-guru-foto-preview" src="https://placehold.co/100x120/021e17/d4af37?text=Foto" alt="Preview" class="w-12 h-14 object-cover rounded border border-gold-500/40">
-                        <div class="flex-grow">
-                            <input type="file" id="form-guru-foto-file" accept="image/png, image/jpeg, image/jpg, image/webp" onchange="previewGuruFotoForm(event)" class="text-xs text-emerald-200 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-400 file:text-emerald-950 hover:file:bg-amber-300">
-                            <p class="text-[10px] text-emerald-400/70 mt-1">Saran: Nama file foto bisa menggunakan NIP/NIK (misal: 19850312...jpg)</p>
-                        </div>
+                <!-- Single Photo Upload in form -->
+                <div class="flex items-center space-x-4">
+                    <img id="form-guru-foto-preview" src="https://placehold.co/100x100/e2e8f0/64748b?text=Foto" class="w-16 h-16 rounded-full object-cover border border-gray-300">
+                    <div class="flex-1">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Foto Guru (Opsional)</label>
+                        <input type="file" id="form-guru-foto" accept="image/png, image/jpeg, image/jpg" class="w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                     </div>
                 </div>
 
-                <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" onclick="closeModalGuru()" class="px-4 py-2 rounded-lg text-xs font-semibold text-emerald-300 hover:bg-emerald-900">Batal</button>
-                    <button type="submit" class="gold-button px-5 py-2 rounded-lg text-xs font-bold">Simpan Data</button>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">NIP / NIK *</label>
+                    <input type="text" id="form-guru-nip" required placeholder="Contoh: 198503122010011005" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500 font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Lengkap & Gelar *</label>
+                    <input type="text" id="form-guru-nama" required placeholder="Contoh: Drs. Ahmad Subagyo, M.Pd" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Jabatan / Mata Pelajaran *</label>
+                    <input type="text" id="form-guru-jabatan" required placeholder="Contoh: Guru Matematika" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nomor WhatsApp * (Awal 08 atau 62)</label>
+                    <input type="text" id="form-guru-wa" required placeholder="Contoh: 081234567890" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-emerald-500 font-mono">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2 border-t border-gray-100">
+                    <button type="button" onclick="closeModalGuru()" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-500 hover:bg-gray-100 border border-transparent">Batal</button>
+                    <button type="submit" class="bg-emerald-600 text-white hover:bg-emerald-700 px-5 py-2 rounded-lg text-sm font-bold shadow-sm">Simpan Data</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL 2: ID Card / Cetak QR Code Guru -->
-    <div id="modal-card" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative space-y-4">
-            <div class="flex items-center justify-between pb-2 border-b border-gold-500/20 no-print">
-                <h3 class="font-bold text-base text-amber-300">Kartu Presensi QR Code Guru</h3>
-                <button onclick="closeModalCard()" class="text-emerald-400 hover:text-amber-300 text-lg">
+    <div id="modal-card" class="fixed inset-0 z-50 hidden bg-gray-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="white-panel w-full max-w-md rounded-2xl p-6 shadow-2xl relative space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-gray-100 no-print">
+                <h3 class="font-bold text-base text-gray-800">Kartu Presensi QR Code</h3>
+                <button onclick="closeModalCard()" class="text-gray-400 hover:text-gray-600 text-lg">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Printable ID Card with QR Code & Foto -->
-            <div id="printable-card" class="bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 border-2 border-gold-500 p-6 rounded-2xl text-center space-y-4 relative overflow-hidden shadow-2xl">
-                <div class="flex items-center justify-center space-x-3 pb-3 border-b border-gold-500/30">
-                    <img src="https://i.ibb.co.com/DP2CwH0J/logo-sekolah-png.png" onerror="this.src='https://placehold.co/80x80/021e17/d4af37?text=BARAPEN';" class="w-10 h-10 object-contain">
+            <div id="printable-card" class="bg-white border-2 border-emerald-600 p-6 rounded-2xl text-center space-y-4 relative overflow-hidden shadow-lg">
+                <div class="flex items-center justify-center space-x-3 pb-3 border-b border-gray-200">
+                    <img src="https://i.ibb.co.com/DP2CwH0J/logo-sekolah-png.png" onerror="this.src='https://placehold.co/80x80/ffffff/d4af37?text=B';" class="w-10 h-10 object-contain">
                     <div class="text-left">
-                        <h4 class="font-bold text-amber-300 font-playfair text-sm leading-tight">SMP BARAPEN</h4>
-                        <p class="text-[10px] text-emerald-200/80 uppercase tracking-widest">KARTU PRESENSI DIGITAL GURU</p>
+                        <h4 class="font-bold text-emerald-800 font-playfair text-sm leading-tight">SMP BARAPEN</h4>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">KARTU PRESENSI DIGITAL</p>
                     </div>
                 </div>
 
-                <div class="flex justify-center my-2">
-                    <img id="card-guru-foto" src="https://placehold.co/120x150/021e17/d4af37?text=Foto+Guru" alt="Foto Kartu" class="w-24 h-32 object-cover rounded-xl border-2 border-gold-500/60 shadow-md">
-                </div>
+                <img id="card-guru-foto" src="" class="w-20 h-20 object-cover rounded-full mx-auto border-2 border-emerald-100 shadow-sm" onerror="this.style.display='none'">
 
                 <div class="space-y-1">
-                    <h3 id="card-guru-nama" class="font-bold text-lg text-white">Nama Guru</h3>
-                    <p id="card-guru-jabatan" class="text-xs text-amber-400">Jabatan Guru</p>
-                    <p id="card-guru-nip" class="text-xs font-mono text-emerald-300">NIP / NIK: -</p>
+                    <h3 id="card-guru-nama" class="font-bold text-lg text-gray-800">Nama Guru</h3>
+                    <p id="card-guru-jabatan" class="text-xs text-gray-500 font-medium">Jabatan Guru</p>
+                    <p id="card-guru-nip" class="text-xs font-mono text-emerald-600 font-bold mt-1">NIP: -</p>
                 </div>
 
-                <div class="flex flex-col items-center justify-center space-y-2">
-                    <div class="bg-white p-3 rounded-2xl inline-block border-2 border-gold-500/60 shadow-xl">
+                <div class="flex flex-col items-center justify-center space-y-2 pt-2">
+                    <div class="p-2 bg-white rounded-xl border border-gray-200 shadow-sm inline-block">
                         <div id="qrcode-container" class="flex justify-center items-center"></div>
                     </div>
-                    <span class="text-[10px] text-amber-300 font-mono font-bold tracking-wider">QR CODE NIP / NIK</span>
                 </div>
             </div>
 
-            <div class="flex justify-end space-x-2 pt-2 no-print">
-                <button onclick="window.print()" class="gold-button px-4 py-2 rounded-lg text-xs font-bold flex items-center space-x-2">
-                    <i class="fa-solid fa-print"></i> <span>Cetak Kartu QR</span>
+            <div class="flex justify-end pt-2 no-print">
+                <button onclick="window.print()" class="bg-gray-800 text-white hover:bg-gray-900 px-4 py-2 rounded-lg text-sm font-bold flex items-center space-x-2 shadow-sm">
+                    <i class="fa-solid fa-print"></i> <span>Cetak Kartu</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 3: Pengaturan WhatsApp & Kepala Sekolah -->
-    <div id="modal-settings" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-xl rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between pb-3 border-b border-gold-500/20">
-                <h3 class="font-bold text-lg text-amber-300 font-playfair flex items-center space-x-2">
-                    <i class="fa-brands fa-whatsapp text-emerald-400"></i>
-                    <span>Pengaturan API WhatsApp & Kepsek</span>
+    <!-- MODAL 3: Pengaturan -->
+    <div id="modal-settings" class="fixed inset-0 z-50 hidden bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="white-panel w-full max-w-xl rounded-2xl p-6 shadow-2xl relative space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 class="font-bold text-lg text-gray-800 font-playfair flex items-center space-x-2">
+                    <i class="fa-solid fa-gears text-emerald-600"></i>
+                    <span>Pengaturan Sistem</span>
                 </h3>
-                <button onclick="closeSettingsModal()" class="text-emerald-400 hover:text-amber-300 text-lg">
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-gray-600 text-lg">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="space-y-4 text-xs">
+            <div class="space-y-4 text-sm">
                 <div>
-                    <label class="block font-semibold text-emerald-200 mb-1">WhatsApp Gateway API Key *</label>
-                    <input type="text" id="setting-wa-key" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-amber-300 font-mono focus:outline-none placeholder-emerald-700" placeholder="Masukkan API Key WhatsApp Gateway (misal Fonnte/Waba)">
+                    <label class="block font-semibold text-gray-700 mb-1">WhatsApp Gateway API Key *</label>
+                    <input type="text" id="setting-wa-key" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-800 font-mono focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
-                    <label class="block font-semibold text-emerald-200 mb-1">Nomor WhatsApp Kepala Sekolah * (Penerima Laporan Lanjutan)</label>
-                    <input type="text" id="setting-kepsek-wa" class="w-full bg-emerald-950 border border-gold-500/30 rounded-lg px-3 py-2 text-emerald-100 font-mono focus:outline-none placeholder-emerald-700" placeholder="Contoh: 081234567890">
+                    <label class="block font-semibold text-gray-700 mb-1">Nomor WA Kepala Sekolah *</label>
+                    <input type="text" id="setting-kepsek-wa" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-800 font-mono focus:outline-none focus:border-emerald-500">
                 </div>
-                
-                <div class="p-3 bg-emerald-950/80 rounded-xl border border-amber-500/30 text-amber-200/90 leading-relaxed text-[11px]">
-                    <i class="fa-solid fa-circle-info text-amber-400 mr-1"></i> <b>Sistem Notifikasi 2 Arah:</b><br>
-                    • <b>Format Pesan Guru:</b> Berisi konfirmasi jam presensi pribadi.<br>
-                    • <b>Format Pesan Kepala Sekolah:</b> Berisi laporan lengkap nama guru, NIP, jabatan, dan waktu presensi.
-                </div>
-
-                <div class="pt-2 flex justify-end space-x-2">
-                    <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-emerald-300 hover:bg-emerald-900">Batal</button>
-                    <button onclick="saveSettings()" class="gold-button px-5 py-2 rounded-lg text-xs font-bold">Simpan Pengaturan</button>
+                <div class="pt-4 flex justify-end space-x-2 border-t border-gray-100">
+                    <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-500 hover:bg-gray-100 border border-transparent">Batal</button>
+                    <button onclick="saveSettings()" class="bg-emerald-600 text-white hover:bg-emerald-700 px-5 py-2 rounded-lg text-sm font-bold shadow-sm">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 4: Custom Notification -->
-    <div id="modal-alert" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div id="alert-card" class="glass-panel w-full max-w-md rounded-2xl p-6 border-2 border-gold-500 text-center space-y-4 shadow-2xl">
+    <!-- MODAL 4: Custom Alert -->
+    <div id="modal-alert" class="fixed inset-0 z-50 hidden bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="white-panel w-full max-w-sm rounded-2xl p-6 text-center space-y-4 shadow-2xl">
             <div id="alert-icon-wrapper" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl"></div>
             <div>
-                <h3 id="alert-title" class="font-bold text-xl text-amber-300 font-playfair">Pemberitahuan</h3>
-                <div id="alert-message" class="text-sm text-emerald-100 mt-2 leading-relaxed">Pesan alert di sini</div>
+                <h3 id="alert-title" class="font-bold text-lg text-gray-800 font-playfair">Pemberitahuan</h3>
+                <div id="alert-message" class="text-sm text-gray-600 mt-2 leading-relaxed">Pesan alert di sini</div>
             </div>
-            <button id="alert-close-btn" onclick="closeAlertModal()" class="gold-button w-full py-2.5 rounded-xl font-bold text-xs">
-                Mengerti & Tutup
+            <button onclick="closeAlertModal()" class="bg-gray-800 text-white hover:bg-gray-900 w-full py-2 rounded-lg font-bold text-sm shadow-sm">
+                Tutup
             </button>
         </div>
     </div>
 
-    <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const envConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        
         const firebaseConfig = envConfig || {
             apiKey: "AIzaSyAcEDylRsxGDqlyQ70tM0sMrEnwAsFHb5I",
             authDomain: "smp-barapen.firebaseapp.com",
             projectId: "smp-barapen",
             storageBucket: "smp-barapen.firebasestorage.app",
             messagingSenderId: "330897999670",
-            appId: "1:330897999670:web:baf70a0bb02448328e9597",
-            measurementId: "G-849L9YY6B3"
+            appId: "1:330897999670:web:baf70a0bb02448328e9597"
         };
-
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'smp-barapen-app';
-
         let app, db, auth;
 
         window.AppState = {
             guruList: [],
             attendanceList: [],
-            settings: {
-                waApiKey: "hYTQuJfWP5fKHaywnx1K",
-                kepsekWA: "081234567890"
-            },
+            settings: { waApiKey: "hYTQuJfWP5fKHaywnx1K", kepsekWA: "081234567890" },
             currentScanMode: 'camera',
             html5QrcodeScanner: null,
             isScanningLocked: false
         };
 
+        // Firebase Init
         async function initFirebase() {
             try {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-
                 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
                 
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                if (initialAuthToken) await signInWithCustomToken(auth, initialAuthToken);
+                else await signInAnonymously(auth);
 
                 if (auth.currentUser) {
-                    updateFirebaseBadge(true, "Firebase Terhubung");
+                    updateFirebaseBadge(true, "Cloud Tersambung");
                     setupFirestoreListeners(auth.currentUser);
                 } else {
-                    updateFirebaseBadge(false, "Mode Penyimpanan Lokal");
+                    updateFirebaseBadge(false, "Mode Lokal");
                 }
             } catch (error) {
                 console.warn("Koneksi Firebase offline:", error);
-                updateFirebaseBadge(false, "Responsif Lokal Aktif");
-                loadFallbackInitialData();
+                updateFirebaseBadge(false, "Offline/Lokal");
             }
         }
 
@@ -813,86 +625,40 @@
             const badge = document.getElementById('firebase-status-badge');
             const badgeText = document.getElementById('firebase-status-text');
             if (badge && badgeText) {
-                if (connected) {
-                    badge.className = "flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold";
-                    badgeText.innerText = text;
-                } else {
-                    badge.className = "flex items-center space-x-2 px-3 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold";
-                    badgeText.innerText = text;
-                }
+                badge.className = connected 
+                    ? "hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-semibold"
+                    : "hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-semibold";
+                badgeText.innerText = text;
             }
         }
 
         function setupFirestoreListeners(user) {
             if (!db || !user) return;
-
             const guruColRef = collection(db, 'artifacts', appId, 'public', 'data', 'teachers');
             const attColRef = collection(db, 'artifacts', appId, 'public', 'data', 'attendance');
             const settingsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'settings');
 
             onSnapshot(guruColRef, (snapshot) => {
                 const teachers = [];
-                snapshot.forEach(docSnap => {
-                    teachers.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                
-                if (snapshot.empty && window.AppState.guruList.length === 0) {
-                    seedDefaultTeachers(user);
-                } else if (!snapshot.empty) {
-                    window.AppState.guruList = teachers;
-                    if (window.renderGuruCards) window.renderGuruCards();
-                    if (window.updateStats) window.updateStats();
-                }
-            }, (error) => {
-                console.error("Gagal listen data guru:", error);
-            });
+                snapshot.forEach(docSnap => teachers.push({ id: docSnap.id, ...docSnap.data() }));
+                window.AppState.guruList = teachers;
+                if (window.renderGuruCards) window.renderGuruCards();
+            }, (err) => console.error(err));
 
             onSnapshot(attColRef, (snapshot) => {
                 const attendance = [];
-                snapshot.forEach(docSnap => {
-                    attendance.push({ id: docSnap.id, ...docSnap.data() });
-                });
+                snapshot.forEach(docSnap => attendance.push({ id: docSnap.id, ...docSnap.data() }));
                 window.AppState.attendanceList = attendance;
                 if (window.renderTodayScanTable) window.renderTodayScanTable();
-                if (window.generateRecapData) window.generateRecapData();
-                if (window.updateStats) window.updateStats();
-            }, (error) => {
-                console.error("Gagal listen data presensi:", error);
-            });
+            }, (err) => console.error(err));
 
             onSnapshot(settingsColRef, (snapshot) => {
                 snapshot.forEach(docSnap => {
                     if (docSnap.id === 'general') {
-                        const data = docSnap.data();
-                        if (data.waApiKey) window.AppState.settings.waApiKey = data.waApiKey;
-                        if (data.kepsekWA) window.AppState.settings.kepsekWA = data.kepsekWA;
+                        window.AppState.settings = { ...window.AppState.settings, ...docSnap.data() };
                     }
                 });
-            }, (error) => {
-                console.error("Gagal listen settings:", error);
-            });
-        }
-
-        async function seedDefaultTeachers(user) {
-            const defaultTeachers = [
-                { nip: "197508122002121001", nama: "Drs. Budi Santoso, M.Pd", jabatan: "Kepala Sekolah", wa: "081234567890", fotoUrl: "https://placehold.co/300x400/021e17/d4af37?text=Drs.+Budi" },
-                { nip: "198203152008012004", nama: "Siti Rahmawati, S.Pd", jabatan: "Wakil Kepsek", wa: "081987654321", fotoUrl: "https://placehold.co/300x400/021e17/d4af37?text=Siti+Rahmawati" },
-                { nip: "198905202015031002", nama: "Ahmad Hidayat, S.T", jabatan: "Guru Informatika", wa: "085211223344", fotoUrl: "https://placehold.co/300x400/021e17/d4af37?text=Ahmad+Hidayat" }
-            ];
-
-            if (db && user) {
-                for (const teacher of defaultTeachers) {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', teacher.nip);
-                    await setDoc(docRef, teacher);
-                }
-            } else {
-                window.AppState.guruList = defaultTeachers;
-                if (window.renderGuruCards) window.renderGuruCards();
-            }
-        }
-
-        function loadFallbackInitialData() {
-            if (window.AppState.guruList.length === 0) seedDefaultTeachers(null);
+            }, (err) => console.error(err));
         }
 
         window.saveTeacherToDB = async function(teacherData) {
@@ -900,26 +666,20 @@
             if (idx >= 0) window.AppState.guruList[idx] = teacherData;
             else window.AppState.guruList.push(teacherData);
             if (window.renderGuruCards) window.renderGuruCards();
-            if (window.updateStats) window.updateStats();
 
             if (db && auth.currentUser) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', teacherData.nip);
-                    await setDoc(docRef, teacherData, { merge: true });
-                } catch (e) { console.error("Error saving teacher to Firebase:", e); }
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', teacherData.nip);
+                await setDoc(docRef, teacherData, { merge: true }).catch(e => console.error(e));
             }
         };
 
         window.deleteTeacherFromDB = async function(nip) {
             window.AppState.guruList = window.AppState.guruList.filter(g => g.nip !== nip);
             if (window.renderGuruCards) window.renderGuruCards();
-            if (window.updateStats) window.updateStats();
 
             if (db && auth.currentUser) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', nip);
-                    await deleteDoc(docRef);
-                } catch (e) { console.error("Error deleting teacher from Firebase:", e); }
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', nip);
+                await deleteDoc(docRef).catch(e => console.error(e));
             }
         };
 
@@ -930,448 +690,430 @@
             else window.AppState.attendanceList.push({ id: docId, ...attendanceData });
             
             if (window.renderTodayScanTable) window.renderTodayScanTable();
-            if (window.generateRecapData) window.generateRecapData();
-            if (window.updateStats) window.updateStats();
 
             if (db && auth.currentUser) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', docId);
-                    await setDoc(docRef, attendanceData, { merge: true });
-                } catch (e) { console.error("Error saving attendance to Firebase:", e); }
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', docId);
+                await setDoc(docRef, attendanceData, { merge: true }).catch(e => console.error(e));
             }
         };
 
         window.saveSettingsToDB = async function(settingsData) {
             window.AppState.settings = { ...window.AppState.settings, ...settingsData };
             if (db && auth.currentUser) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'general');
-                    await setDoc(docRef, settingsData, { merge: true });
-                } catch (e) { console.error("Error saving settings to Firebase:", e); }
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'general');
+                await setDoc(docRef, settingsData, { merge: true }).catch(e => console.error(e));
             }
+        };
+
+        // Fungsi khusus hapus riwayat HARI INI
+        window.executeClearTodayHistory = async function() {
+            const todayStr = getWITDateString();
+            const toDelete = window.AppState.attendanceList.filter(a => a.tanggal === todayStr);
+            
+            // Hapus dari UI Array
+            window.AppState.attendanceList = window.AppState.attendanceList.filter(a => a.tanggal !== todayStr);
+            if (window.renderTodayScanTable) window.renderTodayScanTable();
+
+            // Hapus dari Firestore
+            if (db && auth.currentUser) {
+                try {
+                    const promises = toDelete.map(record => {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', record.id);
+                        return deleteDoc(docRef);
+                    });
+                    await Promise.all(promises);
+                    showAlertModal("Berhasil", "Riwayat presensi hari ini telah dibersihkan.", "success");
+                } catch (e) {
+                    console.error("Gagal menghapus beberapa data di server:", e);
+                }
+            } else {
+                showAlertModal("Berhasil", "Riwayat lokal hari ini telah dibersihkan.", "success");
+            }
+
+            // Kosongkan Profil Scan Terakhir
+            document.getElementById('last-scan-profile').classList.add('hidden');
+            document.getElementById('last-scan-empty').classList.remove('hidden');
         };
 
         document.addEventListener('DOMContentLoaded', initFirebase);
     </script>
 
     <script>
-        // Tab switching function exposed globally
+        let currentDayTracker = ""; // Untuk logika auto-refresh beda hari
+
+        // Fungsi Waktu WIT (Jayapura)
+        function getWITDate() {
+            return new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Jayapura" }));
+        }
+
+        function getWITDateString() {
+            const wit = getWITDate();
+            const yyyy = wit.getFullYear();
+            const mm = String(wit.getMonth() + 1).padStart(2, '0');
+            const dd = String(wit.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function updateLiveClock() {
+            const now = new Date();
+            const optTime = { timeZone: 'Asia/Jayapura', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const timeStr = now.toLocaleTimeString('id-ID', optTime) + ' WIT';
+            
+            const optDate = { timeZone: 'Asia/Jayapura', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('id-ID', optDate);
+
+            const clockEl = document.getElementById('live-clock');
+            const dateEl = document.getElementById('live-date');
+            if (clockEl) clockEl.innerText = timeStr;
+            if (dateEl) dateEl.innerText = dateStr;
+            
+            const txtToday = document.getElementById('text-today-date');
+            if (txtToday) txtToday.innerText = dateStr;
+
+            // Logika Auto-Refresh Beda Hari (24 Jam)
+            const newDayStr = getWITDateString();
+            if (currentDayTracker && currentDayTracker !== newDayStr) {
+                // Hari berganti! Refresh tabel hari ini otomatis.
+                console.log("Hari berganti. Auto refresh riwayat presensi hari ini.");
+                if (window.renderTodayScanTable) window.renderTodayScanTable();
+                
+                // Reset foto profil terakhir karena sudah beda hari
+                const profile = document.getElementById('last-scan-profile');
+                const empty = document.getElementById('last-scan-empty');
+                if (profile && empty) {
+                    profile.classList.add('hidden');
+                    empty.classList.remove('hidden');
+                }
+            }
+            currentDayTracker = newDayStr;
+        }
+
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        // Audio
+        window.playSound = function(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                if (type === 'success') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                } else {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, ctx.currentTime);
+                    osc.frequency.setValueAtTime(150, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+                }
+                osc.start(); osc.stop(ctx.currentTime + (type === 'success' ? 0.3 : 0.35));
+            } catch (e) {}
+        };
+
+        // Navigation
+        window.toggleSidebar = function() {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            if(sb.classList.contains('-translate-x-full')) {
+                sb.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sb.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        };
+
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.className = "sidebar-btn w-full flex items-center space-x-3 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition";
+            });
+
+            document.getElementById(tabId)?.classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = "sidebar-btn active w-full flex items-center space-x-3 px-6 py-3 text-sm font-semibold text-emerald-700 bg-emerald-50 border-r-4 border-emerald-600 transition";
+            }
+            if(window.innerWidth < 768) toggleSidebar();
+            if (tabId === 'guru-tab' && window.renderGuruCards) renderGuruCards();
+            if (tabId === 'rekapan-tab' && window.generateRecapData) {
+                document.getElementById('recap-date-input').value = getWITDateString();
+                generateRecapData();
+            }
+        };
+
+        // Modals
+        window.showAlertModal = function(title, message, type = 'success') {
+            const modal = document.getElementById('modal-alert');
+            const iconWrap = document.getElementById('alert-icon-wrapper');
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-message').innerHTML = message;
             
-            const selectedTab = document.getElementById(tabId);
-            if (selectedTab) selectedTab.classList.remove('hidden');
-
-            const tabs = ['scan-tab', 'guru-tab', 'rekapan-tab'];
-            tabs.forEach(t => {
-                const btn = document.getElementById(`nav-${t}`);
-                if (btn) {
-                    if (t === tabId) {
-                        btn.className = "tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 bg-gold-500 text-emerald-950 shadow-md";
-                    } else {
-                        btn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all duration-200 text-emerald-200 hover:bg-emerald-850 hover:text-amber-300";
-                    }
-                }
-            });
-
-            if (tabId === 'guru-tab' && window.renderGuruCards) {
-                window.renderGuruCards();
-            } else if (tabId === 'rekapan-tab' && window.generateRecapData) {
-                window.generateRecapData();
+            if (type === 'success') {
+                iconWrap.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-emerald-50 text-emerald-600 border border-emerald-200";
+                iconWrap.innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else if (type === 'warning') {
+                iconWrap.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-amber-50 text-amber-600 border border-amber-200";
+                iconWrap.innerHTML = '<i class="fa-solid fa-exclamation"></i>';
+            } else {
+                iconWrap.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-red-50 text-red-600 border border-red-200";
+                iconWrap.innerHTML = '<i class="fa-solid fa-xmark"></i>';
             }
+            modal.classList.remove('hidden');
         };
+        window.closeAlertModal = () => document.getElementById('modal-alert').classList.add('hidden');
 
-        // 24-Hour Automatic Reset Check Function
-        let currentActiveDate = new Date().toISOString().split('T')[0];
-
-        function checkAutomatic24hReset() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            if (todayStr !== currentActiveDate) {
-                currentActiveDate = todayStr;
-                if (window.renderTodayScanTable) window.renderTodayScanTable();
-                if (window.updateStats) window.updateStats();
-                
-                const lastPhoto = document.getElementById('last-scan-photo');
-                const lastNama = document.getElementById('last-scan-nama');
-                const lastJabatan = document.getElementById('last-scan-jabatan');
-                const lastNip = document.getElementById('last-scan-nip');
-                const lastStatus = document.getElementById('last-scan-status');
-                const lastTime = document.getElementById('last-scan-badge-time');
-
-                if (lastPhoto) lastPhoto.src = "https://placehold.co/300x400/021e17/d4af37?text=Hari+Baru";
-                if (lastNama) lastNama.innerText = "Hari Baru - Belum Ada Presensi";
-                if (lastJabatan) lastJabatan.innerText = "Silakan Scan QR Code NIP / NIK";
-                if (lastNip) lastNip.innerText = "-";
-                if (lastStatus) lastStatus.innerText = "STANDBY";
-                if (lastTime) lastTime.innerText = "--:--:-- WIB";
-            }
+        // Utilities
+        function formatPhoneWA(phone) {
+            if (!phone) return '';
+            let cleaned = phone.replace(/[^0-9]/g, '');
+            if (cleaned.startsWith('08')) cleaned = '628' + cleaned.substring(2);
+            return cleaned;
         }
-        setInterval(checkAutomatic24hReset, 10000);
 
-        // Preview single photo in teacher form modal
-        let tempFormFotoBase64 = null;
-        window.previewGuruFotoForm = function(event) {
-            const file = event.target.files[0];
-            if (file) {
+        // Image Compression (Max ~300px for Base64 Firestore rules)
+        window.compressImage = function(file) {
+            return new Promise((resolve) => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    tempFormFotoBase64 = e.target.result;
-                    document.getElementById('form-guru-foto-preview').src = tempFormFotoBase64;
-                };
                 reader.readAsDataURL(file);
-            }
-        };
-
-        // Batch Photo Upload based on NIP or NIK Filenames
-        window.triggerBatchPhotoUpload = function() {
-            document.getElementById('batch-photo-file-input').click();
-        };
-
-        window.handleBatchPhotoUpload = function(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-
-            let updatedCount = 0;
-            let totalProcessed = 0;
-
-            Array.from(files).forEach(file => {
-                const filenameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.')).trim();
-                const cleanNipKey = filenameWithoutExt.replace(/[^0-9]/g, '');
-
-                const teacher = window.AppState.guruList.find(g => g.nip === filenameWithoutExt || g.nip === cleanNipKey);
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    totalProcessed++;
-                    if (teacher) {
-                        teacher.fotoUrl = e.target.result;
-                        window.saveTeacherToDB(teacher);
-                        updatedCount++;
-                    }
-
-                    if (totalProcessed === files.length) {
-                        showAlertModal(
-                            "Upload Foto Batch Selesai",
-                            `Berhasil mensinkronkan <b>${updatedCount}</b> foto guru berdasarkan nama file NIP/NIK.`,
-                            updatedCount > 0 ? "success" : "warning"
-                        );
+                reader.onload = event => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 300;
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7)); // Compress to 70% quality JPEG
                     }
                 };
-                reader.readAsDataURL(file);
             });
         };
 
-        // Core Attendance Processing
+        window.setScanMode = function(mode) {
+            window.AppState.currentScanMode = mode;
+            const cam = document.getElementById('camera-scan-container');
+            const usb = document.getElementById('usb-scan-container');
+            const btnCam = document.getElementById('btn-mode-camera');
+            const btnUsb = document.getElementById('btn-mode-usb');
+
+            if (mode === 'camera') {
+                cam.classList.remove('hidden'); usb.classList.add('hidden');
+                btnCam.className = "px-2 py-1 rounded text-[11px] font-semibold text-white bg-emerald-600 transition shadow-sm";
+                btnUsb.className = "px-2 py-1 rounded text-[11px] font-semibold text-gray-600 hover:text-emerald-700 transition";
+            } else {
+                cam.classList.add('hidden'); usb.classList.remove('hidden');
+                btnCam.className = "px-2 py-1 rounded text-[11px] font-semibold text-gray-600 hover:text-emerald-700 transition";
+                btnUsb.className = "px-2 py-1 rounded text-[11px] font-semibold text-white bg-emerald-600 transition shadow-sm";
+                if (window.AppState.html5QrcodeScanner) {
+                    window.AppState.html5QrcodeScanner.stop().catch(()=>{});
+                    window.AppState.html5QrcodeScanner = null;
+                }
+                setTimeout(() => document.getElementById('barcode-hardware-input')?.focus(), 200);
+            }
+        };
+
+        window.startCameraScanner = function() {
+            document.getElementById('camera-placeholder')?.classList.add('hidden');
+            const scanner = new Html5Qrcode("reader");
+            window.AppState.html5QrcodeScanner = scanner;
+            scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 220, height: 220 } },
+                (decodedText) => {
+                    if (!window.AppState.isScanningLocked) {
+                        window.AppState.isScanningLocked = true;
+                        processNipScan(decodedText.trim());
+                        setTimeout(() => { window.AppState.isScanningLocked = false; }, 2500);
+                    }
+                }, () => {}
+            ).catch(() => showAlertModal("Error", "Gagal mengakses kamera.", "error"));
+        };
+
+        window.processManualScan = function() {
+            const input = document.getElementById('manual-nip-input');
+            if (input?.value.trim()) {
+                processNipScan(input.value.trim());
+                input.value = '';
+            }
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (window.AppState.currentScanMode === 'usb') {
+                const usbInput = document.getElementById('barcode-hardware-input');
+                if (usbInput && document.activeElement === usbInput && e.key === 'Enter' && usbInput.value.trim()) {
+                    processNipScan(usbInput.value.trim());
+                    usbInput.value = '';
+                }
+            }
+        });
+
+        // Core Process Scan
         async function processNipScan(nip) {
             const cleanNip = nip.replace(/[^0-9]/g, '');
             const teacher = window.AppState.guruList.find(g => g.nip === cleanNip || g.nip === nip);
 
             if (!teacher) {
                 playSound('error');
-                showAlertModal("Guru Tidak Terdaftar", `NIP / NIK <b>${nip}</b> belum terdaftar di Master Data Guru. Silakan tambahkan data guru terlebih dahulu.`, "error");
+                showAlertModal("Gagal", `NIP <b>${nip}</b> tidak ditemukan.`, "error");
                 return;
             }
 
-            const todayStr = new Date().toISOString().split('T')[0];
-            const jamStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const todayStr = getWITDateString();
+            const jamStr = new Date().toLocaleTimeString('id-ID', { timeZone: 'Asia/Jayapura', hour: '2-digit', minute: '2-digit' });
 
             const existing = window.AppState.attendanceList.find(a => a.nip === teacher.nip && a.tanggal === todayStr);
-
             if (existing && existing.status === 'Hadir') {
                 playSound('duplicate');
-                updateLastScannedView(teacher, existing.jam, "SUDAH HADIR SEBELUMNYA", true);
-                showAlertModal("Presensi Sudah Tercatat", `Bapak/Ibu <b>${teacher.nama}</b> sudah melakukan presensi hari ini pada jam <b>${existing.jam} WIB</b>.`, "warning");
+                showLastScannedProfile(teacher, existing.jam);
+                showAlertModal("Sudah Scan", `${teacher.nama} sudah presensi pukul ${existing.jam} WIT.`, "warning");
                 return;
             }
 
             const attRecord = {
-                nip: teacher.nip,
-                nama: teacher.nama,
-                jabatan: teacher.jabatan,
-                tanggal: todayStr,
-                jam: jamStr,
-                status: 'Hadir',
-                waGuruSent: false,
-                waKepsekSent: false
+                nip: teacher.nip, nama: teacher.nama, jabatan: teacher.jabatan,
+                tanggal: todayStr, jam: jamStr, status: 'Hadir'
             };
 
-            const waDetails = await sendDualWhatsAppNotifications(teacher, attRecord);
-            await window.saveAttendanceToDB(attRecord);
+            // UI Feedback Langsung (Optimistic)
             playSound('success');
-
-            updateLastScannedView(teacher, jamStr, "HADIR", false, waDetails);
-
-            showAlertModal(
-                "Presensi Berhasil!",
-                `<div class="text-left space-y-2 font-sans">
-                    <p class="text-base font-bold text-amber-300">${teacher.nama}</p>
-                    <p class="text-xs text-emerald-200">NIP/NIK: ${teacher.nip} | Jam: ${jamStr} WIB</p>
-                    <hr class="border-gold-500/30 my-2">
-                    <p class="text-xs text-emerald-300"><b>Laporan Otomatis Terkirim Ke:</b></p>
-                    <div class="space-y-1 text-xs">
-                        <div class="flex items-center justify-between bg-emerald-950 p-2 rounded border border-gold-500/20">
-                            <span>📱 HP Guru (${teacher.wa})</span>
-                            <span class="text-amber-400 font-bold">Sukses</span>
-                        </div>
-                        <div class="flex items-center justify-between bg-emerald-950 p-2 rounded border border-gold-500/20">
-                            <span>👨‍💼 HP Kepsek (${window.AppState.settings.kepsekWA})</span>
-                            <span class="text-amber-400 font-bold">Sukses</span>
-                        </div>
-                    </div>
-                </div>`,
-                "success"
-            );
+            showLastScannedProfile(teacher, jamStr);
+            
+            // Simpan Data
+            await window.saveAttendanceToDB(attRecord);
         }
 
-        function updateLastScannedView(teacher, jamStr, statusText, isDuplicate = false, waDetails = null) {
-            const container = document.getElementById('last-scanned-container');
-            const photoEl = document.getElementById('last-scan-photo');
-            const namaEl = document.getElementById('last-scan-nama');
-            const jabatanEl = document.getElementById('last-scan-jabatan');
-            const nipEl = document.getElementById('last-scan-nip');
-            const statusEl = document.getElementById('last-scan-status');
-            const timeEl = document.getElementById('last-scan-badge-time');
-            const waGuruEl = document.getElementById('last-scan-wa-guru');
-            const waKepsekEl = document.getElementById('last-scan-wa-kepsek');
-
-            const teacherPhoto = teacher.fotoUrl || `https://placehold.co/300x400/021e17/d4af37?text=${encodeURIComponent(teacher.nama)}`;
-
-            if (photoEl) photoEl.src = teacherPhoto;
-            if (namaEl) namaEl.innerText = teacher.nama;
-            if (jabatanEl) jabatanEl.innerText = teacher.jabatan;
-            if (nipEl) nipEl.innerText = teacher.nip;
-            if (timeEl) timeEl.innerText = `${jamStr} WIB`;
-
-            if (statusEl) {
-                statusEl.innerText = statusText;
-                statusEl.className = isDuplicate ? "text-amber-400 font-bold" : "text-emerald-400 font-bold";
-            }
-
-            if (waGuruEl) {
-                waGuruEl.innerHTML = `<i class="fa-brands fa-whatsapp text-amber-400"></i> <span>WA Guru: ${teacher.wa} (Terkirim)</span>`;
-            }
-            if (waKepsekEl) {
-                waKepsekEl.innerHTML = `<i class="fa-solid fa-user-tie text-amber-400"></i> <span>WA Kepsek: ${window.AppState.settings.kepsekWA} (Terkirim)</span>`;
-            }
-
-            if (container) {
-                container.classList.add('ring-4', 'ring-amber-400/60');
-                setTimeout(() => container.classList.remove('ring-4', 'ring-amber-400/60'), 1500);
-            }
-        }
-
-        window.setScanMode = function(mode) {
-            window.AppState.currentScanMode = mode;
-            const cameraBox = document.getElementById('camera-scan-container');
-            const usbBox = document.getElementById('usb-scan-container');
-            const btnCamera = document.getElementById('btn-mode-camera');
-            const btnUsb = document.getElementById('btn-mode-usb');
-
-            if (mode === 'camera') {
-                cameraBox.classList.remove('hidden');
-                usbBox.classList.add('hidden');
-                btnCamera.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition";
-                btnUsb.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition";
+        // Tampilkan Profil Terakhir di Halaman Scan (Design Baru)
+        function showLastScannedProfile(teacher, jam) {
+            document.getElementById('last-scan-empty').classList.add('hidden');
+            const profileArea = document.getElementById('last-scan-profile');
+            
+            const imgEl = document.getElementById('last-scan-foto');
+            if (teacher.foto) {
+                imgEl.src = teacher.foto;
             } else {
-                cameraBox.classList.add('hidden');
-                usbBox.classList.remove('hidden');
-                btnUsb.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-950 bg-amber-400 transition";
-                btnCamera.className = "px-3 py-1 rounded text-xs font-semibold text-emerald-300 hover:text-amber-300 transition";
-                
-                if (window.AppState.html5QrcodeScanner) {
-                    try { window.AppState.html5QrcodeScanner.clear(); } catch(e){}
-                    window.AppState.html5QrcodeScanner = null;
-                }
-                
-                const hwInput = document.getElementById('barcode-hardware-input');
-                if (hwInput) hwInput.focus();
-            }
-        };
-
-        window.startCameraScanner = function() {
-            const placeholder = document.getElementById('camera-placeholder');
-            if (placeholder) placeholder.classList.add('hidden');
-
-            if (window.AppState.html5QrcodeScanner) {
-                try { window.AppState.html5QrcodeScanner.clear(); } catch(e){}
+                imgEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.nama)}&background=059669&color=fff&size=200`;
             }
 
-            const html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader",
-                { fps: 10, qrbox: { width: 220, height: 220 } },
-                false
-            );
+            document.getElementById('last-scan-time').innerText = jam + ' WIT';
+            document.getElementById('last-scan-nama').innerText = teacher.nama;
+            document.getElementById('last-scan-jabatan').innerText = teacher.jabatan;
+            document.getElementById('last-scan-nip').innerText = 'NIP: ' + teacher.nip;
+            
+            profileArea.classList.remove('hidden');
+            
+            // Re-trigger animation
+            profileArea.classList.remove('animate-fade-in-up');
+            void profileArea.offsetWidth; // trigger reflow
+            profileArea.classList.add('animate-fade-in-up');
+        }
 
-            html5QrcodeScanner.render((decodedText) => {
-                if (window.AppState.isScanningLocked) return;
-                window.AppState.isScanningLocked = true;
-                
-                processNipScan(decodedText);
-                
-                setTimeout(() => {
-                    window.AppState.isScanningLocked = false;
-                }, 3000);
-            }, () => {});
-
-            window.AppState.html5QrcodeScanner = html5QrcodeScanner;
-        };
-
-        window.processManualScan = function() {
-            const input = document.getElementById('manual-nip-input');
-            if (!input) return;
-            const nip = input.value.trim();
-            if (!nip) {
-                showAlertModal("Input Kosong", "Masukkan NIP atau NIK guru terlebih dahulu.", "warning");
-                return;
+        window.clearTodayHistory = function() {
+            if (confirm("Yakin ingin menghapus SEMUA riwayat presensi hari ini? Data tidak dapat dikembalikan.")) {
+                window.executeClearTodayHistory();
             }
-            processNipScan(nip);
-            input.value = '';
-        };
-
-        window.markUnscannedAsAbsentToday = async function() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            let markedCount = 0;
-
-            for (const guru of window.AppState.guruList) {
-                const existing = window.AppState.attendanceList.find(a => a.nip === guru.nip && a.tanggal === todayStr);
-                if (!existing) {
-                    const attRecord = {
-                        nip: guru.nip,
-                        nama: guru.nama,
-                        jabatan: guru.jabatan,
-                        tanggal: todayStr,
-                        jam: "-",
-                        status: 'Alpha',
-                        waGuruSent: false,
-                        waKepsekSent: false
-                    };
-                    await window.saveAttendanceToDB(attRecord);
-                    markedCount++;
-                }
-            }
-
-            showAlertModal(
-                "Selesai Tandai Presensi",
-                `Berhasil menandai <b>${markedCount}</b> guru yang belum scan sebagai <b>Tidak Hadir (Alpha)</b> hari ini.`,
-                "info"
-            );
         };
 
         window.renderTodayScanTable = function() {
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = getWITDateString();
             const tbody = document.getElementById('table-scan-today-body');
             const emptyState = document.getElementById('scan-today-empty');
+            
+            // Update statistic totals as well
+            const totalGuru = window.AppState.guruList.length;
             const todayScans = window.AppState.attendanceList.filter(a => a.tanggal === todayStr && a.status === 'Hadir');
 
             if (!tbody) return;
             tbody.innerHTML = '';
 
             if (todayScans.length === 0) {
-                if (emptyState) emptyState.classList.remove('hidden');
+                emptyState?.classList.remove('hidden');
                 return;
             }
 
-            if (emptyState) emptyState.classList.add('hidden');
+            emptyState?.classList.add('hidden');
+
+            // Sort by jam descending (terbaru di atas)
+            todayScans.sort((a, b) => (b.jam || "").localeCompare(a.jam || ""));
 
             todayScans.forEach(scan => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-emerald-900/40 transition border-b border-emerald-900/30";
-
+                tr.className = "hover:bg-gray-50 transition";
                 const teacher = window.AppState.guruList.find(g => g.nip === scan.nip);
-                const guruFoto = (teacher && teacher.fotoUrl) ? teacher.fotoUrl : `https://placehold.co/100x100/021e17/d4af37?text=${encodeURIComponent(scan.nama.charAt(0))}`;
                 const guruWA = teacher ? teacher.wa : '-';
                 const kepsekWA = window.AppState.settings.kepsekWA || '-';
-
-                const waGuruMsg = encodeURIComponent(scan.pesanGuruText || `Presensi SMP BARAPEN: ${scan.nama} telah scan jam ${scan.jam} WIB.`);
-                const waKepsekMsg = encodeURIComponent(scan.pesanKepsekText || `LAPORAN PRESENSI GURU: ${scan.nama} (${scan.nip}) telah scan jam ${scan.jam} WIB.`);
-
-                const linkWAGuru = `https://wa.me/${formatPhoneWA(guruWA)}?text=${waGuruMsg}`;
-                const linkWAKepsek = `https://wa.me/${formatPhoneWA(kepsekWA)}?text=${waKepsekMsg}`;
+                
+                const linkWAGuru = `https://wa.me/${formatPhoneWA(guruWA)}`;
+                const linkWAKepsek = `https://wa.me/${formatPhoneWA(kepsekWA)}`;
 
                 tr.innerHTML = `
-                    <td class="p-3 font-mono font-bold text-amber-300">${scan.jam}</td>
+                    <td class="p-3 font-mono font-bold text-gray-800">${scan.jam}</td>
                     <td class="p-3">
-                        <div class="flex items-center space-x-2">
-                            <img src="${guruFoto}" class="w-8 h-8 rounded-full object-cover border border-gold-500/40">
-                            <div>
-                                <div class="font-bold text-emerald-100">${scan.nama}</div>
-                                <div class="text-[11px] text-emerald-300/70 font-mono">NIP: ${scan.nip}</div>
-                            </div>
-                        </div>
+                        <div class="font-bold text-gray-800">${scan.nama}</div>
+                        <div class="text-[11px] text-gray-500 font-mono">NIP: ${scan.nip}</div>
                     </td>
                     <td class="p-3">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                            <i class="fa-solid fa-check mr-1"></i> Hadir
-                        </span>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Hadir</span>
                     </td>
                     <td class="p-3 text-center space-x-1">
-                        <a href="${linkWAGuru}" target="_blank" title="Kirim/Buka WA Guru" class="inline-flex items-center px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 text-[10px] font-semibold border border-amber-500/30">
-                            <i class="fa-brands fa-whatsapp mr-1"></i> WA Guru
-                        </a>
-                        <a href="${linkWAKepsek}" target="_blank" title="Kirim/Buka WA Kepsek" class="inline-flex items-center px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 text-[10px] font-semibold border border-amber-500/30">
-                            <i class="fa-solid fa-user-tie mr-1"></i> WA Kepsek
-                        </a>
+                        <a href="${linkWAGuru}" target="_blank" class="inline-flex px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-semibold transition"><i class="fa-brands fa-whatsapp mr-1"></i> Guru</a>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         };
 
+        window.markUnscannedAsAbsentToday = function() {
+            const todayStr = getWITDateString();
+            let count = 0;
+            window.AppState.guruList.forEach(guru => {
+                const existing = window.AppState.attendanceList.find(a => a.nip === guru.nip && a.tanggal === todayStr);
+                if (!existing) {
+                    window.saveAttendanceToDB({
+                        nip: guru.nip, nama: guru.nama, jabatan: guru.jabatan,
+                        tanggal: todayStr, jam: '-', status: 'Tidak Hadir (Alpha)'
+                    });
+                    count++;
+                }
+            });
+            showAlertModal("Selesai", `${count} Guru ditandai Tidak Hadir untuk hari ini.`, "success");
+        };
+
         window.renderGuruCards = function() {
             const container = document.getElementById('guru-cards-container');
             if (!container) return;
             container.innerHTML = '';
-
             const list = window.AppState.guruList;
-            if (list.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-12 glass-panel rounded-2xl p-6">
-                        <i class="fa-solid fa-users-slash text-4xl text-emerald-600 mb-2"></i>
-                        <p class="text-sm text-emerald-300">Belum ada data guru. Silakan tambah manual atau upload Excel.</p>
-                    </div>`;
-                return;
-            }
 
             list.forEach(guru => {
                 const card = document.createElement('div');
-                card.className = "glass-panel-card p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-gold-500/50 transition duration-300 relative group";
+                card.className = "bg-white p-5 rounded-2xl flex flex-col justify-between space-y-4 border border-gray-200 shadow-sm hover:border-emerald-300 transition";
                 
-                const fotoUrl = guru.fotoUrl || `https://placehold.co/150x200/021e17/d4af37?text=${encodeURIComponent(guru.nama.charAt(0))}`;
+                const imgSrc = guru.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(guru.nama)}&background=059669&color=fff`;
 
                 card.innerHTML = `
                     <div class="flex items-start justify-between">
                         <div class="flex items-center space-x-3">
-                            <img src="${fotoUrl}" alt="${guru.nama}" class="w-12 h-14 rounded-xl object-cover border-2 border-gold-500/50 shadow-md">
+                            <img src="${imgSrc}" class="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
                             <div>
-                                <h4 class="font-bold text-sm text-emerald-100 group-hover:text-amber-300 transition">${guru.nama}</h4>
-                                <p class="text-xs text-amber-400/90">${guru.jabatan}</p>
+                                <h4 class="font-bold text-sm text-gray-800">${guru.nama}</h4>
+                                <p class="text-xs text-emerald-600 font-medium">${guru.jabatan}</p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="space-y-1 text-xs font-mono bg-emerald-950/80 p-3 rounded-xl border border-gold-500/20">
-                        <div class="flex justify-between text-emerald-200">
-                            <span class="text-emerald-400">NIP/NIK:</span>
-                            <span>${guru.nip}</span>
-                        </div>
-                        <div class="flex justify-between text-emerald-200">
-                            <span class="text-emerald-400">WhatsApp:</span>
-                            <span>${guru.wa}</span>
-                        </div>
+                    <div class="space-y-1 text-[11px] font-mono bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                        <div class="flex justify-between text-gray-600"><span>NIP:</span><span class="font-semibold text-gray-800">${guru.nip}</span></div>
+                        <div class="flex justify-between text-gray-600"><span>WA:</span><span class="font-semibold text-gray-800">${guru.wa}</span></div>
                     </div>
-
-                    <div class="flex items-center justify-between pt-2 border-t border-gold-500/20">
-                        <button onclick="openCardModal('${guru.nip}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900 hover:bg-emerald-800 text-amber-300 border border-gold-500/30 flex items-center space-x-1 transition">
-                            <i class="fa-solid fa-qrcode"></i>
-                            <span>Kartu QR</span>
-                        </button>
-                        <div class="flex space-x-2">
-                            <button onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-lg text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/30" title="Edit Guru">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button onclick="deleteGuru('${guru.nip}')" class="p-2 rounded-lg text-xs bg-red-500/20 hover:bg-red-500/40 text-red-300 border border-red-500/30" title="Hapus Guru">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                    <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+                        <button onclick="openCardModal('${guru.nip}')" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition"><i class="fa-solid fa-qrcode mr-1"></i> Kartu QR</button>
+                        <div class="flex space-x-1">
+                            <button onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-lg text-xs bg-gray-100 hover:bg-gray-200 text-gray-600"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteGuru('${guru.nip}')" class="p-2 rounded-lg text-xs bg-red-50 hover:bg-red-100 text-red-500"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -1379,41 +1121,44 @@
             });
         };
 
+        window.filterGuruList = function() {
+            const query = document.getElementById('search-guru-input').value.toLowerCase();
+            document.querySelectorAll('#guru-cards-container > div').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
+        };
+
         window.openModalGuru = function(nip = null) {
-            const modal = document.getElementById('modal-guru');
-            const title = document.getElementById('modal-guru-title');
-            const form = document.getElementById('guru-form');
-
-            form.reset();
-            tempFormFotoBase64 = null;
+            document.getElementById('guru-form').reset();
             document.getElementById('form-guru-id').value = '';
-            document.getElementById('form-guru-foto-preview').src = 'https://placehold.co/100x120/021e17/d4af37?text=Foto';
-
+            document.getElementById('form-guru-foto-preview').src = 'https://placehold.co/100x100/e2e8f0/64748b?text=Foto';
+            
             if (nip) {
                 const guru = window.AppState.guruList.find(g => g.nip === nip);
                 if (guru) {
-                    title.innerText = "Edit Data Guru";
+                    document.getElementById('modal-guru-title').innerText = "Edit Data Guru";
                     document.getElementById('form-guru-id').value = guru.nip;
                     document.getElementById('form-guru-nip').value = guru.nip;
                     document.getElementById('form-guru-nama').value = guru.nama;
                     document.getElementById('form-guru-jabatan').value = guru.jabatan;
                     document.getElementById('form-guru-wa').value = guru.wa;
-                    if (guru.fotoUrl) {
-                        tempFormFotoBase64 = guru.fotoUrl;
-                        document.getElementById('form-guru-foto-preview').src = guru.fotoUrl;
-                    }
+                    if(guru.foto) document.getElementById('form-guru-foto-preview').src = guru.foto;
                 }
             } else {
-                title.innerText = "Tambah Data Guru Baru";
+                document.getElementById('modal-guru-title').innerText = "Tambah Guru Baru";
             }
-
-            modal.classList.remove('hidden');
+            document.getElementById('modal-guru').classList.remove('hidden');
         };
 
-        window.closeModalGuru = function() {
-            const modal = document.getElementById('modal-guru');
-            if (modal) modal.classList.add('hidden');
-        };
+        window.closeModalGuru = () => document.getElementById('modal-guru').classList.add('hidden');
+
+        // Form Foto Preview
+        document.getElementById('form-guru-foto').addEventListener('change', async function(e) {
+            if(e.target.files[0]) {
+                const base64 = await window.compressImage(e.target.files[0]);
+                document.getElementById('form-guru-foto-preview').src = base64;
+            }
+        });
 
         window.saveGuruForm = async function(e) {
             e.preventDefault();
@@ -1421,431 +1166,179 @@
             const nama = document.getElementById('form-guru-nama').value.trim();
             const jabatan = document.getElementById('form-guru-jabatan').value.trim();
             const wa = document.getElementById('form-guru-wa').value.trim();
-
-            if (!nip || !nama || !jabatan || !wa) {
-                showAlertModal("Form Belum Lengkap", "Harap isi semua kolom bertanda bintang (*).", "warning");
-                return;
-            }
-
-            const existing = window.AppState.guruList.find(g => g.nip === nip);
-            const fotoUrl = tempFormFotoBase64 || (existing ? existing.fotoUrl : `https://placehold.co/300x400/021e17/d4af37?text=${encodeURIComponent(nama)}`);
-
-            const teacherData = { nip, nama, jabatan, wa, fotoUrl };
-            await window.saveTeacherToDB(teacherData);
-            closeModalGuru();
-            showAlertModal("Data Tersimpan", `Data guru <b>${nama}</b> berhasil disimpan!`, "success");
-        };
-
-        window.deleteGuru = async function(nip) {
-            const guru = window.AppState.guruList.find(g => g.nip === nip);
-            const nama = guru ? guru.nama : nip;
-            await window.deleteTeacherFromDB(nip);
-            showAlertModal("Data Dihapus", `Data guru <b>${nama}</b> berhasil dihapus dari sistem.`, "info");
-        };
-
-        window.openCardModal = function(nip) {
-            const guru = window.AppState.guruList.find(g => g.nip === nip);
-            if (!guru) return;
-
-            document.getElementById('card-guru-nama').innerText = guru.nama;
-            document.getElementById('card-guru-jabatan').innerText = guru.jabatan;
-            document.getElementById('card-guru-nip').innerText = `NIP / NIK: ${guru.nip}`;
             
-            const fotoEl = document.getElementById('card-guru-foto');
-            if (fotoEl) {
-                fotoEl.src = guru.fotoUrl || `https://placehold.co/120x150/021e17/d4af37?text=${encodeURIComponent(guru.nama)}`;
-            }
-
-            const qrContainer = document.getElementById('qrcode-container');
-            qrContainer.innerHTML = '';
-
-            new QRCode(qrContainer, {
-                text: guru.nip,
-                width: 150,
-                height: 150,
-                colorDark: "#021e17",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-
-            document.getElementById('modal-card').classList.remove('hidden');
-        };
-
-        window.closeModalCard = function() {
-            const modal = document.getElementById('modal-card');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.openSettingsModal = function() {
-            document.getElementById('setting-wa-key').value = window.AppState.settings.waApiKey || '';
-            document.getElementById('setting-kepsek-wa').value = window.AppState.settings.kepsekWA || '';
-            document.getElementById('modal-settings').classList.remove('hidden');
-        };
-
-        window.closeSettingsModal = function() {
-            document.getElementById('modal-settings').classList.add('hidden');
-        };
-
-        window.saveSettings = async function() {
-            const waKey = document.getElementById('setting-wa-key').value.trim();
-            const kepsekWA = document.getElementById('setting-kepsek-wa').value.trim();
-
-            const newSettings = { waApiKey: waKey, kepsekWA: kepsekWA };
-            await window.saveSettingsToDB(newSettings);
-            closeSettingsModal();
-            showAlertModal("Pengaturan Disimpan", "API Key WhatsApp Gateway dan Nomor HP Kepsek berhasil diperbarui.", "success");
-        };
-
-        window.showAlertModal = function(title, message, type = 'info') {
-            const modal = document.getElementById('modal-alert');
-            const titleEl = document.getElementById('alert-title');
-            const msgEl = document.getElementById('alert-message');
-            const iconWrapper = document.getElementById('alert-icon-wrapper');
-
-            if (!modal || !titleEl || !msgEl || !iconWrapper) return;
-
-            titleEl.innerText = title;
-            msgEl.innerHTML = message;
-
-            if (type === 'success') {
-                iconWrapper.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
-                iconWrapper.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-            } else if (type === 'warning') {
-                iconWrapper.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-amber-500/20 text-amber-400 border border-amber-500/40";
-                iconWrapper.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-            } else if (type === 'error') {
-                iconWrapper.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-red-500/20 text-red-400 border border-red-500/40";
-                iconWrapper.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+            let foto = null;
+            const fotoInput = document.getElementById('form-guru-foto');
+            if (fotoInput.files.length > 0) {
+                foto = await window.compressImage(fotoInput.files[0]);
             } else {
-                iconWrapper.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-blue-500/20 text-blue-400 border border-blue-500/40";
-                iconWrapper.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+                // Keep existing photo if editing and no new photo uploaded
+                const existing = window.AppState.guruList.find(g => g.nip === nip);
+                if (existing && existing.foto) foto = existing.foto;
             }
 
-            modal.classList.remove('hidden');
+            if (!nip || !nama) return;
+            await window.saveTeacherToDB({ nip, nama, jabatan, wa, foto });
+            closeModalGuru();
+            showAlertModal("Tersimpan", "Data guru berhasil disimpan.", "success");
         };
 
-        window.closeAlertModal = function() {
-            const modal = document.getElementById('modal-alert');
-            if (modal) modal.classList.add('hidden');
+        window.deleteGuru = function(nip) {
+            if (confirm("Yakin hapus guru ini?")) {
+                window.deleteTeacherFromDB(nip);
+            }
         };
 
-        window.downloadTeacherTemplate = function() {
-            const data = [
-                ["NIP", "Nama", "Jabatan", "NoWhatsApp"],
-                ["198503122010011005", "Drs. Ahmad Subagyo, M.Pd", "Guru Matematika", "081234567890"],
-                ["199002152019032010", "Dewi Lestari, S.Pd", "Guru Bahasa Indonesia", "081987654321"]
-            ];
-            const ws = XLSX.utils.aoa_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Data Guru");
-            XLSX.writeFile(wb, "Template_Data_Guru_SMP_Barapen.xlsx");
-        };
+        // Upload Foto Massal Berdasarkan Nama File (Sinkron otomatis ke NIP)
+        window.handleBulkPhotoUpload = async function(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
 
-        window.triggerTeacherExcelUpload = function() {
-            document.getElementById('excel-teacher-file').click();
-        };
+            let successCount = 0;
+            let failedCount = 0;
 
-        window.handleTeacherExcelUpload = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            // Show loading modal text
+            showAlertModal("Memproses", "Sedang menyinkronkan foto...", "success");
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const json = XLSX.utils.sheet_to_json(worksheet);
-
-                    let addedCount = 0;
-                    json.forEach(row => {
-                        const nip = String(row['NIP'] || row['nip'] || row['NIP/NIK'] || '').trim();
-                        const nama = String(row['Nama'] || row['nama'] || row['Nama Lengkap'] || '').trim();
-                        const jabatan = String(row['Jabatan'] || row['jabatan'] || row['Mapel'] || 'Guru').trim();
-                        const wa = String(row['NoWhatsApp'] || row['wa'] || row['WhatsApp'] || row['No WA'] || '').trim();
-
-                        if (nip && nama) {
-                            const teacherData = {
-                                nip,
-                                nama,
-                                jabatan,
-                                wa,
-                                fotoUrl: `https://placehold.co/300x400/021e17/d4af37?text=${encodeURIComponent(nama)}`
-                            };
-                            window.saveTeacherToDB(teacherData);
-                            addedCount++;
-                        }
-                    });
-
-                    showAlertModal(
-                        "Import Excel Berhasil",
-                        `Berhasil mengimpor <b>${addedCount}</b> data guru dari berkas Excel.`,
-                        "success"
-                    );
-                } catch (err) {
-                    showAlertModal("Gagal Membaca Excel", "Format berkas Excel tidak sesuai. Pastikan menggunakan template yang benar.", "error");
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                // Ekstrak nama file tanpa ekstensi (misal: 12345.jpg -> 12345)
+                const filenameNip = file.name.substring(0, file.name.lastIndexOf('.'));
+                
+                const teacher = window.AppState.guruList.find(g => g.nip === filenameNip);
+                if (teacher) {
+                    const base64 = await window.compressImage(file);
+                    teacher.foto = base64;
+                    await window.saveTeacherToDB(teacher); // Memanggil save optimistic & firebase
+                    successCount++;
+                } else {
+                    failedCount++;
                 }
-            };
-            reader.readAsArrayBuffer(file);
+            }
+
+            event.target.value = ''; // Reset input file
+            
+            let msg = `<b>${successCount} Foto</b> berhasil disinkronkan.`;
+            if (failedCount > 0) msg += `<br><span class="text-red-500">${failedCount} Foto diabaikan karena nama file (NIP) tidak cocok.</span>`;
+            showAlertModal("Sinkronisasi Selesai", msg, successCount > 0 ? "success" : "warning");
         };
 
+        // Rekapan Data Filter UI & Generate
         window.updateRecapFilterUI = function() {
             const type = document.getElementById('recap-type-select').value;
-            const dateContainer = document.getElementById('filter-date-container');
-            const monthContainer = document.getElementById('filter-month-container');
-
-            if (type === 'monthly') {
-                dateContainer.classList.add('hidden');
-                monthContainer.classList.remove('hidden');
-            } else {
-                dateContainer.classList.remove('hidden');
-                monthContainer.classList.add('hidden');
-            }
+            document.getElementById('filter-date-container').classList.toggle('hidden', type === 'monthly');
+            document.getElementById('filter-month-container').classList.toggle('hidden', type !== 'monthly');
             generateRecapData();
         };
 
         window.generateRecapData = function() {
             const type = document.getElementById('recap-type-select').value;
-            const dateVal = document.getElementById('recap-date-input').value || new Date().toISOString().split('T')[0];
-            const monthVal = document.getElementById('recap-month-input').value || new Date().toISOString().substring(0, 7);
-
-            const tbody = document.getElementById('table-recap-body');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
+            const dateVal = document.getElementById('recap-date-input').value;
+            const monthVal = document.getElementById('recap-month-input').value;
             let filteredAtt = [];
 
             if (type === 'daily') {
                 filteredAtt = window.AppState.attendanceList.filter(a => a.tanggal === dateVal);
             } else if (type === 'monthly') {
-                filteredAtt = window.AppState.attendanceList.filter(a => a.tanggal && a.tanggal.startsWith(monthVal));
-            } else if (type === 'weekly') {
-                const selectedDate = new Date(dateVal);
-                const sevenDaysAgo = new Date(selectedDate);
-                sevenDaysAgo.setDate(selectedDate.getDate() - 6);
-
+                filteredAtt = window.AppState.attendanceList.filter(a => a.tanggal.startsWith(monthVal));
+            } else if (type === 'weekly' && dateVal) {
+                const selDate = new Date(dateVal);
+                const pastDate = new Date(selDate); pastDate.setDate(pastDate.getDate() - 6);
                 filteredAtt = window.AppState.attendanceList.filter(a => {
-                    const attDate = new Date(a.tanggal);
-                    return attDate >= sevenDaysAgo && attDate <= selectedDate;
+                    const d = new Date(a.tanggal); return d >= pastDate && d <= selDate;
                 });
             }
 
-            const totalTeachers = window.AppState.guruList.length;
-            const totalHadir = filteredAtt.filter(a => a.status === 'Hadir').length;
-            const totalAlpha = filteredAtt.filter(a => a.status === 'Alpha').length;
-            const percent = totalTeachers > 0 ? Math.round((totalHadir / totalTeachers) * 100) : 0;
+            const tbody = document.getElementById('table-recap-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
 
-            document.getElementById('recap-stat-total').innerText = totalTeachers;
-            document.getElementById('recap-stat-hadir').innerText = totalHadir;
-            document.getElementById('recap-stat-alpha').innerText = totalAlpha;
-            document.getElementById('recap-stat-percent').innerText = `${percent}%`;
+            const totalGuru = window.AppState.guruList.length;
+            const hadirCount = filteredAtt.filter(a => a.status === 'Hadir').length;
+            
+            // Note: Untuk rekapan selain daily, perhitungan alfa lebih rumit. Ini disederhanakan untuk UI.
+            const alphaCount = type === 'daily' ? Math.max(0, totalGuru - hadirCount) : '-';
+            const percent = type === 'daily' && totalGuru > 0 ? Math.round((hadirCount / totalGuru) * 100) : '-';
 
-            if (filteredAtt.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-emerald-400/70">Tidak ada data presensi pada rentang ini.</td></tr>`;
-                return;
-            }
+            document.getElementById('recap-stat-total').innerText = totalGuru;
+            document.getElementById('recap-stat-hadir').innerText = hadirCount;
+            document.getElementById('recap-stat-alpha').innerText = alphaCount;
+            document.getElementById('recap-stat-percent').innerText = type === 'daily' ? `${percent}%` : percent;
 
             filteredAtt.forEach((rec, idx) => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-emerald-900/40 transition border-b border-emerald-900/30";
-
-                const statusBadge = rec.status === 'Hadir' 
-                    ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Hadir</span>`
-                    : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-300 border border-red-500/40">Alpha</span>`;
+                tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
+                const isHadir = rec.status === 'Hadir';
+                const badge = isHadir ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700';
 
                 tr.innerHTML = `
-                    <td class="p-3 font-mono">${idx + 1}</td>
-                    <td class="p-3 font-mono font-bold text-amber-300">${rec.nip}</td>
-                    <td class="p-3 font-semibold text-emerald-100">${rec.nama}</td>
-                    <td class="p-3 text-emerald-200">${rec.jabatan}</td>
-                    <td class="p-3 font-mono text-emerald-200">${rec.tanggal}</td>
-                    <td class="p-3 font-mono font-bold text-amber-300">${rec.jam}</td>
-                    <td class="p-3">${statusBadge}</td>
-                    <td class="p-3 text-center text-xs font-semibold text-emerald-300"><i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i> Terkirim</td>
+                    <td class="p-3">${idx + 1}</td>
+                    <td class="p-3 font-mono text-xs">${rec.nip}</td>
+                    <td class="p-3 font-bold">${rec.nama}</td>
+                    <td class="p-3 text-xs text-gray-500">${rec.jabatan}</td>
+                    <td class="p-3 font-mono text-xs">${rec.tanggal}</td>
+                    <td class="p-3 font-mono font-bold">${rec.jam}</td>
+                    <td class="p-3"><span class="px-2 py-1 rounded text-[10px] font-bold ${badge}">${rec.status}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
         };
 
-        window.downloadExcelReport = function() {
-            const list = window.AppState.attendanceList;
-            if (list.length === 0) {
-                showAlertModal("Tidak Ada Data", "Belum ada rekapan data presensi untuk diunduh.", "warning");
-                return;
-            }
-
-            const exportData = list.map((item, index) => ({
-                "No": index + 1,
-                "NIP / NIK": item.nip,
-                "Nama Guru": item.nama,
-                "Jabatan / Mapel": item.jabatan,
-                "Tanggal": item.tanggal,
-                "Jam Masuk": item.jam,
-                "Status Kehadiran": item.status
-            }));
-
-            const ws = XLSX.utils.json_to_sheet(exportData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Rekapan Presensi Guru");
-            XLSX.writeFile(wb, `Rekapan_Presensi_Guru_SMP_Barapen_${new Date().toISOString().split('T')[0]}.xlsx`);
-        };
-
-        window.sendSummaryToPrincipalWA = function() {
-            const kepsekWA = window.AppState.settings.kepsekWA;
-            if (!kepsekWA) {
-                showAlertModal("Pengaturan Belum Diset", "Nomor WhatsApp Kepala Sekolah belum diatur.", "warning");
-                return;
-            }
-
-            const todayStr = new Date().toISOString().split('T')[0];
-            const todayScans = window.AppState.attendanceList.filter(a => a.tanggal === todayStr && a.status === 'Hadir');
+        // Modal QR Card
+        window.openCardModal = function(nip) {
+            const guru = window.AppState.guruList.find(g => g.nip === nip);
+            if (!guru) return;
+            document.getElementById('card-guru-nama').innerText = guru.nama;
+            document.getElementById('card-guru-jabatan').innerText = guru.jabatan;
+            document.getElementById('card-guru-nip').innerText = `NIP: ${guru.nip}`;
             
-            let textMsg = `*REKAPAN PRESENSI GURU - SMP BARAPEN*\n`;
-            textMsg += `Tanggal: ${todayStr}\n`;
-            textMsg += `Total Guru Hadir: ${todayScans.length} dari ${window.AppState.guruList.length} Guru\n\n`;
-            textMsg += `*Daftar Kehadiran Hari Ini:*\n`;
-
-            if (todayScans.length === 0) {
-                textMsg += `- Belum ada guru yang hadir.\n`;
+            const fotoEl = document.getElementById('card-guru-foto');
+            if(guru.foto) {
+                fotoEl.src = guru.foto;
+                fotoEl.style.display = 'block';
             } else {
-                todayScans.forEach((scan, i) => {
-                    textMsg += `${i + 1}. ${scan.nama} (${scan.nip}) - Jam: ${scan.jam} WIB\n`;
-                });
+                fotoEl.style.display = 'none';
             }
 
-            textMsg += `\n_Laporan Otomatis Sistem Presensi Digital SMP BARAPEN_`;
+            const qrContainer = document.getElementById('qrcode-container');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, { text: guru.nip, width: 150, height: 150, colorDark: "#064e3b", colorLight: "#ffffff" });
+            document.getElementById('modal-card').classList.remove('hidden');
+        };
+        window.closeModalCard = () => document.getElementById('modal-card').classList.add('hidden');
 
-            const encodedMsg = encodeURIComponent(textMsg);
-            window.open(`https://wa.me/${formatPhoneWA(kepsekWA)}?text=${encodedMsg}`, '_blank');
+        // Excel & WA Exports
+        window.downloadExcelReport = () => {
+            const table = document.getElementById('recap-table');
+            if (!table) return;
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Rekapan" });
+            XLSX.writeFile(wb, `Rekap_Presensi_WIT.xlsx`);
         };
 
-        window.formatPhoneWA = function(phone) {
-            if (!phone) return '';
-            let cleaned = phone.replace(/[^0-9]/g, '');
-            if (cleaned.startsWith('0')) {
-                cleaned = '62' + cleaned.substring(1);
-            }
-            return cleaned;
+        window.sendSummaryToPrincipalWA = () => {
+            const kepsekWA = window.AppState.settings.kepsekWA || '081234567890';
+            const dateVal = document.getElementById('recap-date-input').value;
+            const msg = `*REKAPAN PRESENSI GURU (WIT)*\nTanggal: ${dateVal}\nTotal: ${window.AppState.guruList.length}\nHadir: ${document.getElementById('recap-stat-hadir').innerText}`;
+            window.open(`https://wa.me/${formatPhoneWA(kepsekWA)}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        window.playSound = function(type) {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                if (type === 'success') {
-                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-                    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                    osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + 0.4);
-                } else if (type === 'duplicate') {
-                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(349.23, audioCtx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-                    osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + 0.35);
-                } else {
-                    osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + 0.3);
-                }
-            } catch(e) {
-                console.warn("Audio Context error:", e);
-            }
+        // Settings Modal
+        window.openSettingsModal = function() {
+            document.getElementById('setting-wa-key').value = window.AppState.settings.waApiKey || '';
+            document.getElementById('setting-kepsek-wa').value = window.AppState.settings.kepsekWA || '';
+            document.getElementById('modal-settings').classList.remove('hidden');
         };
-
-        window.sendDualWhatsAppNotifications = async function(teacher, attRecord) {
-            const waKey = window.AppState.settings.waApiKey;
-            const kepsekWA = window.AppState.settings.kepsekWA;
-
-            const pesanGuru = `*PRESENSI SMP BARAPEN BERHASIL*\n\nYth. ${teacher.nama}\nNIP/NIK: ${teacher.nip}\nStatus: Hadir Jam ${attRecord.jam} WIB\nTanggal: ${attRecord.tanggal}\n\nTerima kasih atas dedikasi Bapak/Ibu. Selamat bertugas!`;
-            const pesanKepsek = `*LAPORAN PRESENSI GURU - SMP BARAPEN*\n\nTelah melakukan presensi:\nNama: ${teacher.nama}\nNIP/NIK: ${teacher.nip}\nJabatan: ${teacher.jabatan}\nWaktu: ${attRecord.jam} WIB (${attRecord.tanggal})\n\n_Laporan Otomatis Sistem Presensi Digital SMP BARAPEN_`;
-
-            attRecord.pesanGuruText = pesanGuru;
-            attRecord.pesanKepsekText = pesanKepsek;
-
-            if (waKey && waKey.length > 5) {
-                try {
-                    fetch('https://api.fonnte.com/send', {
-                        method: 'POST',
-                        headers: { 'Authorization': waKey },
-                        body: new URLSearchParams({ 'target': formatPhoneWA(teacher.wa), 'message': pesanGuru })
-                    }).catch(e => console.log('WA Gateway call skipped/offline:', e));
-
-                    if (kepsekWA) {
-                        fetch('https://api.fonnte.com/send', {
-                            method: 'POST',
-                            headers: { 'Authorization': waKey },
-                            body: new URLSearchParams({ 'target': formatPhoneWA(kepsekWA), 'message': pesanKepsek })
-                        }).catch(e => console.log('WA Gateway Kepsek call skipped/offline:', e));
-                    }
-                } catch(e) {}
-            }
-
-            return { pesanGuru, pesanKepsek };
+        window.closeSettingsModal = () => document.getElementById('modal-settings').classList.add('hidden');
+        window.saveSettings = async function() {
+            await window.saveSettingsToDB({
+                waApiKey: document.getElementById('setting-wa-key').value,
+                kepsekWA: document.getElementById('setting-kepsek-wa').value
+            });
+            closeSettingsModal();
         };
-
-        window.updateStats = function() {
-            const totalGuru = window.AppState.guruList.length;
-            const todayStr = new Date().toISOString().split('T')[0];
-            const hadirToday = window.AppState.attendanceList.filter(a => a.tanggal === todayStr && a.status === 'Hadir').length;
-
-            const statTotalEl = document.getElementById('stat-total-guru');
-            const statHadirEl = document.getElementById('stat-hadir-today');
-
-            if (statTotalEl) statTotalEl.innerText = totalGuru;
-            if (statHadirEl) statHadirEl.innerText = hadirToday;
-        };
-
-        document.addEventListener('keydown', (e) => {
-            if (window.AppState.currentScanMode === 'usb') {
-                const activeElem = document.activeElement;
-                const hwInput = document.getElementById('barcode-hardware-input');
-                if (hwInput && activeElem !== hwInput && activeElem.tagName !== 'INPUT') {
-                    hwInput.focus();
-                }
-            }
-        });
 
         document.addEventListener('DOMContentLoaded', () => {
-            const hwInput = document.getElementById('barcode-hardware-input');
-            if (hwInput) {
-                hwInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        const nip = hwInput.value.trim();
-                        if (nip) {
-                            processNipScan(nip);
-                            hwInput.value = '';
-                        }
-                    }
-                });
-            }
-
-            const dateInput = document.getElementById('recap-date-input');
-            const monthInput = document.getElementById('recap-month-input');
-            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-            if (monthInput) monthInput.value = new Date().toISOString().substring(0, 7);
-
-            setInterval(() => {
-                const clockEl = document.getElementById('live-clock');
-                const dateEl = document.getElementById('live-date');
-                const now = new Date();
-                if (clockEl) clockEl.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
-                if (dateEl) {
-                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                    dateEl.innerText = now.toLocaleDateString('id-ID', options);
-                }
-            }, 1000);
+            document.getElementById('recap-date-input').value = getWITDateString();
         });
     </script>
 </body>
