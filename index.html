@@ -94,12 +94,20 @@
         @media print {
             .no-print, aside, header, footer, #modal-guru, #modal-settings, #modal-alert, #floating-wa-btn, #modal-panduan, #modal-dev { display: none !important; }
             body { background: white !important; color: black !important; }
+            body > *:not(#modal-card) { display: none !important; }
             #modal-card {
-                position: absolute !important; top: 0 !important; left: 0 !important;
+                position: fixed !important; top: 0 !important; left: 0 !important;
                 width: 100% !important; height: 100% !important; background: white !important;
                 display: flex !important; align-items: center !important; justify-content: center !important;
+                padding: 0 !important; margin: 0 !important; overflow: visible !important;
+            }
+            #modal-card > .white-panel {
+                width: auto !important; max-width: 100% !important; margin: 0 !important;
+                box-shadow: none !important; border: 0 !important; padding: 0 !important;
             }
             #printable-card { border: 2px solid #059669 !important; border-radius: 16px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #qrcode-container img, #qrcode-container canvas { display: block !important; margin: 0 auto !important; }
+            @page { size: A4 portrait; margin: 10mm; }
         }
 
         /* Custom Sidebar Active State */
@@ -584,7 +592,7 @@
             </div>
 
             <div class="flex justify-end pt-2 no-print">
-                <button onclick="window.print()" class="bg-slate-900 text-white hover:bg-black px-5 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg">
+                <button type="button" onclick="printCurrentGuruCard()" class="bg-slate-900 text-white hover:bg-black px-5 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg">
                     <i class="fa-solid fa-print"></i> <span>Cetak Kartu Presensi</span>
                 </button>
             </div>
@@ -1361,9 +1369,9 @@
                         <div class="flex justify-between text-slate-600"><span>WA:</span><span class="font-bold text-slate-800">${guru.wa || '-'}</span></div>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-                        <button onclick="openCardModal('${guru.nip}')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition border border-emerald-200">
-                            <i class="fa-solid fa-qrcode mr-1 text-emerald-600"></i> Cetak QR
-                        </button>
+                        <button type="button" data-action="print-qr" data-nip="${guru.nip}" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition border border-emerald-200">
+                             <i class="fa-solid fa-qrcode mr-1 text-emerald-600"></i> Cetak QR
+                         </button>
                         <div class="flex space-x-1.5">
                             <button onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-xl text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 transition"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button onclick="deleteGuru('${guru.nip}')" class="p-2 rounded-xl text-xs bg-red-50 hover:bg-red-100 text-red-600 transition"><i class="fa-solid fa-trash"></i></button>
@@ -1371,6 +1379,13 @@
                     </div>
                 `;
                 container.appendChild(card);
+
+                const printBtn = card.querySelector('[data-action="print-qr"]');
+                if (printBtn) {
+                    printBtn.addEventListener('click', () => {
+                        window.openCardModal(printBtn.getAttribute('data-nip'));
+                    });
+                }
             });
         };
 
@@ -1752,26 +1767,82 @@
         };
 
         window.openCardModal = function(nip) {
-            const guru = window.AppState.guruList.find(g => g.nip === nip);
-            if (!guru) return;
-            document.getElementById('card-guru-nama').innerText = guru.nama;
-            document.getElementById('card-guru-jabatan').innerText = guru.jabatan;
-            document.getElementById('card-guru-nip').innerText = `NIP: ${guru.nip}`;
-            
+            const normalizedNip = String(nip ?? '').trim();
+            const guru = window.AppState.guruList.find(g => String(g.nip ?? '').trim() === normalizedNip);
+            if (!guru) {
+                console.warn('Data guru untuk Cetak QR tidak ditemukan:', nip);
+                if (window.showAlertModal) showAlertModal('Data Tidak Ditemukan', 'Data guru yang dipilih tidak ditemukan.', 'error');
+                return;
+            }
+
+            const modal = document.getElementById('modal-card');
+            const qrContainer = document.getElementById('qrcode-container');
+            const printButton = modal?.querySelector('[onclick="printCurrentGuruCard()"]');
+            if (!modal || !qrContainer) return;
+
+            document.getElementById('card-guru-nama').innerText = guru.nama || '-';
+            document.getElementById('card-guru-jabatan').innerText = guru.jabatan || '-';
+            document.getElementById('card-guru-nip').innerText = `NIP: ${guru.nip || '-'}`;
+
             const fotoEl = document.getElementById('card-guru-foto');
-            if(guru.foto) {
+            if (guru.foto) {
                 fotoEl.src = guru.foto;
                 fotoEl.style.display = 'block';
             } else {
+                fotoEl.removeAttribute('src');
                 fotoEl.style.display = 'none';
             }
 
-            const qrContainer = document.getElementById('qrcode-container');
+            modal.dataset.currentNip = normalizedNip;
             qrContainer.innerHTML = '';
-            new QRCode(qrContainer, { text: guru.nip, width: 160, height: 160, colorDark: "#064e3b", colorLight: "#ffffff" });
-            document.getElementById('modal-card').classList.remove('hidden');
+            modal.classList.remove('hidden');
+
+            try {
+                if (typeof window.QRCode !== 'function') {
+                    throw new Error('Library QRCode.js belum termuat.');
+                }
+                new window.QRCode(qrContainer, {
+                    text: normalizedNip,
+                    width: 180,
+                    height: 180,
+                    colorDark: '#064e3b',
+                    colorLight: '#ffffff',
+                    correctLevel: window.QRCode.CorrectLevel ? window.QRCode.CorrectLevel.H : undefined
+                });
+                if (printButton) {
+                    printButton.disabled = false;
+                    printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            } catch (error) {
+                console.error('Gagal membuat QR Code:', error);
+                qrContainer.innerHTML = '<div class="text-center p-4 text-red-600 text-xs font-bold">QR Code gagal dibuat. Muat ulang halaman dan coba lagi.</div>';
+                if (printButton) {
+                    printButton.disabled = true;
+                    printButton.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                if (window.showAlertModal) showAlertModal('QR Code Bermasalah', 'Kartu guru berhasil dibuka, tetapi QR Code belum dapat dibuat karena library QR Code tidak termuat.', 'error');
+            }
         };
-        window.closeModalCard = () => document.getElementById('modal-card').classList.add('hidden');
+
+        window.printCurrentGuruCard = function() {
+            const modal = document.getElementById('modal-card');
+            const qrContainer = document.getElementById('qrcode-container');
+            if (!modal || modal.classList.contains('hidden')) return;
+            if (!qrContainer || (!qrContainer.querySelector('img') && !qrContainer.querySelector('canvas'))) {
+                if (window.showAlertModal) showAlertModal('QR Belum Siap', 'QR Code belum tersedia. Silakan buka kembali kartu guru lalu coba lagi.', 'warning');
+                return;
+            }
+            window.print();
+        };
+
+        window.closeModalCard = () => {
+            const modal = document.getElementById('modal-card');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') window.closeModalCard();
+        });
 
         window.openSettingsModal = function() {
             document.getElementById('setting-wa-key').value = window.AppState.settings.waApiKey || '';
