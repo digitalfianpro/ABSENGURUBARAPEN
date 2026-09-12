@@ -484,9 +484,9 @@
 
             <!-- Date, Clock (WIT) & Cloud Connection Status -->
             <div class="flex items-center space-x-3 sm:space-x-4">
-                <div id="firebase-status-badge" class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 text-xs font-semibold shadow-glow-emerald">
+                <div id="cloud-status-badge" class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 text-xs font-semibold shadow-glow-emerald">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span id="firebase-status-text">Memuat...</span>
+                    <span id="cloud-status-text">Memuat...</span>
                 </div>
                 
                 <div class="flex flex-col items-end text-right px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950 to-slate-900 border border-emerald-500/30 shadow-md">
@@ -905,32 +905,23 @@
         </div>
     </div>
 
-    <!-- MODAL PASSWORD PENGATURAN WA -->
+    <!-- MODAL LOGIN ADMIN PENGATURAN WA -->
     <div id="modal-wa-password" class="fixed inset-0 z-[10001] hidden bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
         <div class="white-panel w-full max-w-sm rounded-3xl p-6 shadow-2xl border-2 border-amber-400/60 relative">
-            <button type="button" onclick="closeWAPasswordModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <button type="button" onclick="closeWAPasswordModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl"><i class="fa-solid fa-xmark"></i></button>
             <div class="text-center space-y-4">
-                <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-yellow-50 border-2 border-amber-300 flex items-center justify-center shadow-[0_0_25px_rgba(245,158,11,.25)]">
-                    <i class="fa-solid fa-lock text-2xl text-amber-600"></i>
-                </div>
+                <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-yellow-50 border-2 border-amber-300 flex items-center justify-center"><i class="fa-solid fa-user-shield text-2xl text-amber-600"></i></div>
                 <div>
-                    <h3 class="font-playfair text-xl font-extrabold text-slate-800">Pengaturan WA Gateway</h3>
-                    <p class="text-xs text-slate-500 mt-1">Masukkan password untuk membuka pengaturan.</p>
+                    <h3 class="font-playfair text-xl font-extrabold text-slate-800">Akses Pengaturan WA</h3>
+                    <p class="text-xs text-slate-500 mt-1">Login akun admin yang diizinkan oleh Cloudflare Worker.</p>
                 </div>
                 <form onsubmit="verifyWAPassword(event)" class="space-y-3 text-left">
-                    <label class="block text-xs font-bold text-slate-700">Password Akses</label>
-                    <div class="relative">
-                        <input id="wa-settings-password" type="password" autocomplete="off" placeholder="Masukkan password" class="w-full bg-white border-2 border-amber-300 rounded-xl px-4 py-3 pr-12 text-sm text-slate-800 font-mono focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
-                        <button type="button" onclick="toggleWAPasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-600">
-                            <i id="wa-password-eye" class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
+                    <label class="block text-xs font-bold text-slate-700">Email Admin</label>
+                    <input id="wa-settings-email" type="email" autocomplete="username" required placeholder="admin@sekolah.sch.id" class="w-full bg-white border-2 border-amber-300 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-amber-500">
+                    <label class="block text-xs font-bold text-slate-700">Password Admin</label>
+                    <input id="wa-settings-password" type="password" autocomplete="current-password" required placeholder="Masukkan password" class="w-full bg-white border-2 border-amber-300 rounded-xl px-4 py-3 text-sm text-slate-800 font-mono focus:outline-none focus:border-amber-500">
                     <p id="wa-password-error" class="hidden text-xs text-red-600 font-semibold"></p>
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-xs shadow-lg transition">
-                        <i class="fa-solid fa-unlock-keyhole mr-2"></i> Buka Pengaturan
-                    </button>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white font-extrabold text-xs shadow-lg"><i class="fa-solid fa-right-to-bracket mr-2"></i> Masuk Pengaturan</button>
                 </form>
             </div>
         </div>
@@ -953,7 +944,7 @@
                 <div class="flex items-center justify-between p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                     <div>
                         <h4 class="font-bold text-emerald-900 text-xs">Kirim WA Otomatis Saat Scan</h4>
-                        <p class="text-[11px] text-emerald-700">Kirim pesan konfirmasi langsung ke Guru & Kepala Sekolah setelah scan</p>
+                        <p class="text-[11px] text-emerald-700">Setelah guru scan, sistem hanya mengirim laporan otomatis ke Kepala Sekolah. Guru menerima laporan hanya jika mengirim <b>HADIR</b>.</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="setting-auto-wa" class="sr-only peer" checked>
@@ -963,7 +954,10 @@
 
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">WhatsApp Gateway API Key (Fonnte) *</label>
-                    <input type="text" id="setting-wa-key" placeholder="Masukkan Token API Fonnte..." class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:border-emerald-500">
+                    <input type="password" id="setting-wa-key" placeholder="Masukkan token Fonnte baru..." class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-500 mt-1">Token disimpan di server Cloudflare, bukan di browser. Setiap token baru langsung dipakai pengiriman berikutnya.</p>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Nomor WA Kepala Sekolah *</label>
@@ -974,7 +968,8 @@
                         <i class="fa-solid fa-paper-plane mr-1.5"></i> Uji Coba WA Gateway
                     </button>
                     <div class="flex space-x-2">
-                        <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100">Batal</button>
+                        <button onclick="signOutWaAdmin()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100">Keluar Admin</button>
+                        <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100">Tutup</button>
                         <button onclick="saveSettings()" class="bg-emerald-600 text-white hover:bg-emerald-700 px-5 py-2 rounded-xl text-xs font-bold shadow-md">Simpan Pengaturan</button>
                     </div>
                 </div>
@@ -1087,21 +1082,17 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // ============================================================
+        // SMP BARAPEN - CLOUDFLARE WORKER CLIENT
+        // Cloudflare sudah dilepas. Semua data cloud melalui Worker + D1.
+        // Ganti URL di bawah setelah Worker selesai di-deploy.
+        // ============================================================
+        const WORKER_API_URL = window.SMP_BARAPEN_WORKER_URL
+            || "https://smp-barapen-worker.proktorsmp6.workers.dev";
 
-        const envConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const firebaseConfig = envConfig || {
-            apiKey: "AIzaSyAcEDylRsxGDqlyQ70tM0sMrEnwAsFHb5I",
-            authDomain: "smp-barapen.firebaseapp.com",
-            projectId: "smp-barapen",
-            storageBucket: "smp-barapen.firebasestorage.app",
-            messagingSenderId: "330897999670",
-            appId: "1:330897999670:web:baf70a0bb02448328e9597"
-        };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'smp-barapen-app';
-        let app, db, auth;
+        const API = WORKER_API_URL.replace(/\/+$/, '');
+        let cloudReady = false;
+        let adminToken = sessionStorage.getItem('smp_barapen_admin_token') || '';
 
         window.AppState = {
             guruList: [
@@ -1110,85 +1101,102 @@
                 { nip: '199211052019031003', nama: 'Budi Santoso, S.Kom', jabatan: 'Guru Informatika / TIK', wa: '081234567892', foto: '' }
             ],
             attendanceList: [],
-            settings: { waApiKey: "hYTQuJfWP5fKHaywnx1K", kepsekWA: "081247178832", autoSendWA: true },
+            settings: { waApiKey: "", kepsekWA: "", autoSendWA: true, waHasToken: false },
             currentScanMode: 'camera',
             html5QrcodeScanner: null,
             isScanningLocked: false
         };
 
-        // Initialize Firebase with fallback to offline local state
-        async function initFirebase() {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                
-                if (initialAuthToken) await signInWithCustomToken(auth, initialAuthToken);
-                else await signInAnonymously(auth);
+        async function apiFetch(path, options = {}) {
+            const headers = new Headers(options.headers || {});
+            headers.set('Content-Type', 'application/json');
+            if (adminToken) headers.set('Authorization', `Bearer ${adminToken}`);
 
-                if (auth.currentUser) {
-                    updateFirebaseBadge(true, "Cloud Tersambung");
-                    setupFirestoreListeners(auth.currentUser);
-                } else {
-                    updateFirebaseBadge(false, "Mode Lokal Ready");
-                }
-            } catch (error) {
-                console.warn("Koneksi Firebase Cloud offline, menggunakan mode penyimpanan lokal:", error);
-                updateFirebaseBadge(false, "Mode Lokal Active");
+            const response = await fetch(`${API}${path}`, { ...options, headers });
+            const textBody = await response.text();
+            let data = {};
+            try { data = textBody ? JSON.parse(textBody) : {}; } catch { data = { message: textBody }; }
+
+            if (!response.ok) {
+                throw new Error(data?.message || `Worker HTTP ${response.status}`);
             }
+            return data;
         }
 
-        function updateFirebaseBadge(connected, text) {
-            const badge = document.getElementById('firebase-status-badge');
-            const badgeText = document.getElementById('firebase-status-text');
+        function updateCloudflareBadge(connected, text) {
+            const badge = document.getElementById('cloud-status-badge');
+            const badgeText = document.getElementById('cloud-status-text');
             if (badge && badgeText) {
-                badge.className = connected 
+                badge.className = connected
                     ? "hidden sm:flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-950 border border-emerald-500/50 text-emerald-300 text-xs font-bold shadow-glow-emerald"
                     : "hidden sm:flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-amber-500/50 text-amber-300 text-xs font-bold";
                 badgeText.innerText = text;
             }
         }
 
-        function setupFirestoreListeners(user) {
-            if (!db || !user) return;
-            const guruColRef = collection(db, 'artifacts', appId, 'public', 'data', 'teachers');
-            const attColRef = collection(db, 'artifacts', appId, 'public', 'data', 'attendance');
-            const settingsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'settings');
+        window.applyWhatsAppSettings = function(settingsData = {}) {
+            const normalized = {
+                waApiKey: '',
+                kepsekWA: String(settingsData.kepsekWA ?? '').trim(),
+                autoSendWA: settingsData.autoSendWA !== false,
+                waHasToken: settingsData.waHasToken === true
+            };
+            window.AppState.settings = { ...window.AppState.settings, ...normalized };
+            try {
+                localStorage.setItem('smp_barapen_wa_settings', JSON.stringify({
+                    kepsekWA: normalized.kepsekWA,
+                    autoSendWA: normalized.autoSendWA,
+                    waHasToken: normalized.waHasToken,
+                    updatedAt: Date.now()
+                }));
+            } catch (e) {}
+            return window.AppState.settings;
+        };
 
-            onSnapshot(guruColRef, (snapshot) => {
-                if (!snapshot.empty) {
-                    const teachers = [];
-                    snapshot.forEach(docSnap => teachers.push({ id: docSnap.id, ...docSnap.data() }));
-                    window.AppState.guruList = teachers;
+        async function bootstrapCloudflare() {
+            try {
+                if (!API || API.includes('REPLACE_WITH_YOUR_WORKER')) {
+                    updateCloudflareBadge(false, "Worker belum dikonfigurasi");
+                    return;
                 }
-                if (window.renderGuruCards) window.renderGuruCards();
-                if (window.renderDashboard) window.renderDashboard();
-            }, (err) => console.error(err));
-
-            onSnapshot(attColRef, (snapshot) => {
-                const attendance = [];
-                snapshot.forEach(docSnap => attendance.push({ id: docSnap.id, ...docSnap.data() }));
-                window.AppState.attendanceList = attendance;
-                if (window.renderTodayScanTable) window.renderTodayScanTable();
-                if (window.renderDashboard) window.renderDashboard();
-                if (window.generateRecapData) window.generateRecapData();
-            }, (err) => console.error(err));
-
-            onSnapshot(settingsColRef, (snapshot) => {
-                snapshot.forEach(docSnap => {
-                    if (docSnap.id === 'general') {
-                        window.applyWhatsAppSettings?.(docSnap.data() || {});
-                    }
-                });
-            }, (err) => console.error(err));
+                const data = await apiFetch('/api/bootstrap', { method: 'GET' });
+                window.AppState.guruList = Array.isArray(data.teachers) ? data.teachers : [];
+                window.AppState.attendanceList = Array.isArray(data.attendance) ? data.attendance : [];
+                window.applyWhatsAppSettings(data.settings || {});
+                cloudReady = true;
+                updateCloudflareBadge(true, "Cloudflare Tersambung");
+                window.renderGuruCards?.();
+                window.renderTodayScanTable?.();
+                window.renderDashboard?.();
+                window.generateRecapData?.();
+            } catch (error) {
+                console.error('Koneksi Cloudflare gagal:', error);
+                cloudReady = false;
+                updateCloudflareBadge(false, "Cloudflare offline");
+                window.showAlertModal?.('Koneksi Cloudflare', error?.message || 'Worker belum dapat dihubungi.', 'error');
+            }
         }
 
+        window.refreshCloudData = async function() {
+            const data = await apiFetch('/api/bootstrap', { method: 'GET' });
+            window.AppState.guruList = Array.isArray(data.teachers) ? data.teachers : [];
+            window.AppState.attendanceList = Array.isArray(data.attendance) ? data.attendance : [];
+            window.applyWhatsAppSettings(data.settings || {});
+            window.renderGuruCards?.();
+            window.renderTodayScanTable?.();
+            window.renderDashboard?.();
+            window.generateRecapData?.();
+            return data;
+        };
+
         window.saveTeacherToDB = async function(teacherData) {
+            if (!adminToken) {
+                throw new Error('Silakan login melalui Pengaturan WA terlebih dahulu untuk mengelola data guru.');
+            }
             const previousNip = String(teacherData.previousNip || '').trim();
             const newNip = String(teacherData.nip || '').trim();
-            const compareNip = previousNip || newNip;
-            const idx = window.AppState.guruList.findIndex(g => String(g.nip || '').trim() === compareNip);
+
+            const idx = window.AppState.guruList.findIndex(g => String(g.nip || '').trim() === (previousNip || newNip));
             const conflict = window.AppState.guruList.find(g => {
                 const gNip = String(g.nip || '').trim();
                 return gNip === newNip && (previousNip ? gNip !== previousNip : true);
@@ -1202,189 +1210,126 @@
             const mergedTeacher = { ...(oldTeacher || {}), ...teacherData, nip: newNip };
             if (!mergedTeacher.foto && oldTeacher?.foto) mergedTeacher.foto = oldTeacher.foto;
             delete mergedTeacher.previousNip;
-            if (idx >= 0) window.AppState.guruList[idx] = mergedTeacher;
-            else window.AppState.guruList.push(mergedTeacher);
-            window.renderGuruCards?.();
 
-            if (!(db && auth?.currentUser)) return;
-            try {
-                const teachersColRef = collection(db, 'artifacts', appId, 'public', 'data', 'teachers');
-                const attColRef = collection(db, 'artifacts', appId, 'public', 'data', 'attendance');
-                await setDoc(doc(teachersColRef, newNip), mergedTeacher, { merge: true });
+            const result = await apiFetch('/api/teachers', {
+                method: 'POST',
+                body: JSON.stringify({ ...mergedTeacher, previousNip })
+            });
 
-                const targetOldNip = previousNip || newNip;
-                const attSnapshot = await getDocs(attColRef);
-                const recordsToUpdate = attSnapshot.docs.filter(snap => String(snap.data().nip || '').trim() === targetOldNip);
-                for (const snap of recordsToUpdate) {
-                    const data = snap.data();
-                    const updated = { ...data, nip: newNip, nama: mergedTeacher.nama, jabatan: mergedTeacher.jabatan };
-                    const newId = `${newNip}_${data.tanggal}`;
-                    await setDoc(doc(attColRef, newId), updated, { merge: true });
-                    if (snap.id !== newId) await deleteDoc(snap.ref);
-                }
-
-                if (previousNip && previousNip !== newNip) {
-                    await deleteDoc(doc(teachersColRef, previousNip));
-                }
-
-                window.AppState.attendanceList = window.AppState.attendanceList.map(record =>
-                    String(record.nip || '').trim() === targetOldNip
-                        ? { ...record, id: `${newNip}_${record.tanggal}`, nip: newNip, nama: mergedTeacher.nama, jabatan: mergedTeacher.jabatan }
-                        : (String(record.nip || '').trim() === newNip
-                            ? { ...record, nama: mergedTeacher.nama, jabatan: mergedTeacher.jabatan }
-                            : record)
-                );
-                window.renderTodayScanTable?.();
-                window.renderDashboard?.();
-                window.generateRecapData?.();
-            } catch (e) {
-                console.error('Gagal menyinkronkan perubahan data guru:', e);
-                throw e;
-            }
+            await window.refreshCloudData();
+            return result.teacher || mergedTeacher;
         };
 
         window.deleteTeacherFromDB = async function(nip) {
-            window.AppState.guruList = window.AppState.guruList.filter(g => g.nip !== nip);
-            if (window.renderGuruCards) window.renderGuruCards();
-
-            if (db && auth.currentUser) {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'teachers', nip);
-                await deleteDoc(docRef).catch(e => console.error(e));
-            }
+            if (!adminToken) throw new Error('Login admin diperlukan.');
+            await apiFetch(`/api/teachers/${encodeURIComponent(nip)}`, { method: 'DELETE' });
+            await window.refreshCloudData();
         };
 
         window.saveAttendanceToDB = async function(attendanceData) {
-            // ID memakai NIP + tanggal sehingga setiap hari menjadi rekaman terpisah.
-            // Dengan begitu, scan esok hari membuat dokumen baru dan data kemarin tetap tersimpan.
             const docId = `${attendanceData.nip}_${attendanceData.tanggal}`;
-            const existingIdx = window.AppState.attendanceList.findIndex(a => a.id === docId);
-            if (existingIdx >= 0) window.AppState.attendanceList[existingIdx] = { id: docId, ...attendanceData };
-            else window.AppState.attendanceList.push({ id: docId, ...attendanceData });
-            
-            if (window.renderTodayScanTable) window.renderTodayScanTable();
-            if (window.renderDashboard) window.renderDashboard();
-            if (window.generateRecapData) window.generateRecapData();
+            const result = await apiFetch('/api/attendance', {
+                method: 'POST',
+                body: JSON.stringify({ id: docId, ...attendanceData })
+            });
 
-            if (db && auth.currentUser) {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', docId);
-                await setDoc(docRef, attendanceData, { merge: true }).catch(e => console.error(e));
-            }
-        };
-
-        // Terapkan konfigurasi WhatsApp terbaru seketika ke runtime aplikasi.
-        // Semua fungsi WA membaca window.AppState.settings saat akan mengirim pesan,
-        // sehingga API Key dan nomor Kepsek baru langsung aktif tanpa perlu refresh.
-        window.applyWhatsAppSettings = function(settingsData = {}) {
-            const normalized = {
-                waApiKey: String(settingsData.waApiKey ?? '').trim(),
-                kepsekWA: String(settingsData.kepsekWA ?? '').trim(),
-                autoSendWA: settingsData.autoSendWA !== false
-            };
-
-            window.AppState.settings = { ...window.AppState.settings, ...normalized };
-
-            // Simpan cache lokal sebagai cadangan agar konfigurasi terakhir tetap tersedia
-            // meskipun Firebase belum selesai memuat konfigurasi saat halaman dibuka.
-            try {
-                localStorage.setItem('smp_barapen_wa_settings', JSON.stringify({
-                    ...normalized,
-                    updatedAt: Date.now()
-                }));
-            } catch (e) {
-                console.warn('Cache pengaturan WA lokal tidak dapat disimpan:', e);
-            }
-
-            return window.AppState.settings;
-        };
-
-        // Pulihkan konfigurasi WA terakhir dari cache lokal sebelum Firebase selesai sinkron.
-        try {
-            const cachedWaSettings = JSON.parse(localStorage.getItem('smp_barapen_wa_settings') || 'null');
-            if (cachedWaSettings) window.applyWhatsAppSettings(cachedWaSettings);
-        } catch (e) {
-            console.warn('Cache pengaturan WA lokal tidak valid:', e);
-        }
-
-        window.saveSettingsToDB = async function(settingsData) {
-            const latestSettings = window.applyWhatsAppSettings(settingsData);
-
-            if (db && auth?.currentUser) {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'general');
-                try {
-                    await setDoc(docRef, {
-                        waApiKey: latestSettings.waApiKey,
-                        kepsekWA: latestSettings.kepsekWA,
-                        autoSendWA: latestSettings.autoSendWA,
-                        updatedAt: new Date().toISOString()
-                    }, { merge: true });
-                } catch (e) {
-                    console.error('Gagal menyimpan pengaturan WA ke Firebase:', e);
-                }
-            }
-
-            return latestSettings;
+            await window.refreshCloudData();
+            return result.record;
         };
 
         window.executeClearTodayHistory = async function() {
+            if (!adminToken) throw new Error('Login admin diperlukan untuk menghapus rekapan.');
             const todayStr = getWITDateString();
-            const toDelete = window.AppState.attendanceList.filter(a => a.tanggal === todayStr);
-            
-            window.AppState.attendanceList = window.AppState.attendanceList.filter(a => a.tanggal !== todayStr);
-            if (window.renderTodayScanTable) window.renderTodayScanTable();
-            if (window.renderDashboard) window.renderDashboard();
-            if (window.generateRecapData) window.generateRecapData();
+            await apiFetch(`/api/attendance?date=${encodeURIComponent(todayStr)}`, { method: 'DELETE' });
+            await window.refreshCloudData();
 
-            if (db && auth.currentUser) {
-                try {
-                    const promises = toDelete.map(record => {
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', record.id);
-                        return deleteDoc(docRef);
-                    });
-                    await Promise.all(promises);
-                    showAlertModal("Berhasil", "Riwayat presensi hari ini telah dibersihkan.", "success");
-                } catch (e) {
-                    console.error("Gagal menghapus beberapa data server:", e);
-                }
-            } else {
-                showAlertModal("Berhasil", "Riwayat presensi hari ini telah dibersihkan.", "success");
-            }
-
-            document.getElementById('last-scan-profile').classList.add('hidden');
-            document.getElementById('last-scan-empty').classList.remove('hidden');
+            document.getElementById('last-scan-profile')?.classList.add('hidden');
+            document.getElementById('last-scan-empty')?.classList.remove('hidden');
+            showAlertModal("Berhasil", "Riwayat presensi hari ini telah dibersihkan.", "success");
         };
 
         window.clearAllAttendanceHistory = async function() {
+            if (!adminToken) {
+                showAlertModal('Akses Admin', 'Login melalui Pengaturan WA terlebih dahulu.', 'warning');
+                return;
+            }
             const total = window.AppState.attendanceList.length;
             if (total === 0) {
                 showAlertModal("Info", "Belum ada rekapan presensi yang tersimpan.", "warning");
                 return;
             }
-            if (!confirm(`PERINGATAN!\n\nSemua rekapan presensi (${total} data) akan dihapus permanen dari aplikasi dan Cloud Firebase.\n\nData guru/master tidak akan terhapus.\n\nLanjutkan?`)) return;
+            if (!confirm(`PERINGATAN!\n\nSemua rekapan presensi (${total} data) akan dihapus permanen.\n\nData guru/master tidak akan terhapus.\n\nLanjutkan?`)) return;
 
-            const records = [...window.AppState.attendanceList];
-            window.AppState.attendanceList = [];
-            renderTodayScanTable();
-            generateRecapData();
+            await apiFetch('/api/attendance', { method: 'DELETE', body: JSON.stringify({ all: true }) });
+            await window.refreshCloudData();
             document.getElementById('last-scan-profile')?.classList.add('hidden');
             document.getElementById('last-scan-empty')?.classList.remove('hidden');
-
-            if (db && auth?.currentUser) {
-                try {
-                    const promises = records.map(record =>
-                        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'attendance', record.id))
-                    );
-                    await Promise.all(promises);
-                } catch (e) {
-                    console.error('Gagal menghapus seluruh rekapan dari Firebase:', e);
-                    showAlertModal("Gagal", "Sebagian data mungkin belum terhapus dari Cloud Firebase. Silakan cek koneksi lalu ulangi.", "error");
-                    return;
-                }
-            }
-            showAlertModal("Berhasil", `Seluruh rekapan presensi (${records.length} data) berhasil dihapus.`, "success");
+            showAlertModal("Berhasil", `Seluruh rekapan presensi (${total} data) berhasil dihapus.`, "success");
         };
 
-        document.addEventListener('DOMContentLoaded', initFirebase);
-    </script>
+        window.sendWhatsAppMessage = async function(targetPhone, messageText) {
+            const cleanPhone = formatPhoneWA(targetPhone);
+            if (!cleanPhone) return { success: false, message: 'Nomor WhatsApp tidak valid.' };
+            try {
+                return await apiFetch('/api/wa/send', {
+                    method: 'POST',
+                    body: JSON.stringify({ target: cleanPhone, message: messageText })
+                });
+            } catch (err) {
+                console.error('Pengiriman WA gagal:', err);
+                return { success: false, message: err?.message || 'Gateway tidak terjangkau.' };
+            }
+        };
+
+        // Setelah scan: hanya server yang mengirim laporan otomatis ke Kepala Sekolah.
+        // Guru tidak mendapat pesan otomatis; laporan guru dikirim hanya setelah keyword HADIR.
+        window.sendAutomaticPresensiWA = async function(teacher, jamStr) {
+            const statusEl = document.getElementById('last-scan-wa-status');
+            if (statusEl) {
+                statusEl.classList.remove('hidden');
+                statusEl.innerHTML = '<div class="text-emerald-800 font-bold"><i class="fa-solid fa-server mr-1"></i> Presensi tersimpan. Laporan Kepala Sekolah diproses otomatis oleh Cloudflare Worker.</div>';
+            }
+            return { success: true, serverTriggered: true };
+        };
+
+        window.callWaFunction = async function(functionName, data = {}) {
+            const map = {
+                getWaSettings: { method: 'GET', path: '/api/settings' },
+                saveWaSettings: { method: 'POST', path: '/api/settings' },
+                testWaGateway: { method: 'POST', path: '/api/wa/test' },
+                sendWaMessage: { method: 'POST', path: '/api/wa/send' },
+                sendSummaryToPrincipalWA: { method: 'POST', path: '/api/wa/summary' }
+            };
+            const item = map[functionName];
+            if (!item) throw new Error(`Fungsi Worker tidak dikenal: ${functionName}`);
+            const opts = { method: item.method };
+            if (item.method !== 'GET') opts.body = JSON.stringify(data);
+            return await apiFetch(item.path, opts);
+        };
+
+        window.getCurrentWaSettings = async function() {
+            const result = await window.callWaFunction('getWaSettings');
+            window.applyWhatsAppSettings(result || {});
+            return result || {};
+        };
+
+        window.saveSettingsToDB = async function(settingsData) {
+            const result = await window.callWaFunction('saveWaSettings', {
+                waApiKey: String(settingsData.waApiKey || '').trim(),
+                kepsekWA: String(settingsData.kepsekWA || '').trim(),
+                autoSendWA: settingsData.autoSendWA !== false
+            });
+            window.applyWhatsAppSettings(result || {});
+            return { ...(result || {}), cloudSaved: true };
+        };
+
+        try {
+            const cachedWaSettings = JSON.parse(localStorage.getItem('smp_barapen_wa_settings') || 'null');
+            if (cachedWaSettings) window.applyWhatsAppSettings(cachedWaSettings);
+        } catch (e) {}
+
+        document.addEventListener('DOMContentLoaded', bootstrapCloudflare);
+</script>
 
     <script>
         let currentDayTracker = "";
@@ -1641,102 +1586,54 @@
                 tanggal: todayStr, jam: jamStr, status: 'Hadir'
             };
 
-            playSound('success');
-            showLastScannedProfile(teacher, jamStr);
-            await window.saveAttendanceToDB(attRecord);
-            sendAutomaticPresensiWA(teacher, jamStr);
+            try {
+                await window.saveAttendanceToDB(attRecord);
+                playSound('success');
+                showLastScannedProfile(teacher, jamStr);
+                await sendAutomaticPresensiWA(teacher, jamStr);
+            } catch (error) {
+                playSound('error');
+                showAlertModal('Gagal Menyimpan Presensi', error?.message || 'Presensi tidak dapat disimpan.', 'error');
+            }
         }
 
+        // Semua pengiriman WA keluar lewat Cloud Function. Token Fonnte tidak ada di browser.
         window.sendWhatsAppMessage = async function(targetPhone, messageText) {
-            const apiKey = window.AppState.settings.waApiKey;
             const cleanPhone = formatPhoneWA(targetPhone);
-
-            if (!cleanPhone) return { success: false, message: "Nomor WhatsApp tidak valid." };
-            if (!apiKey) return { success: false, message: "API Key WA Gateway belum diatur." };
-
+            if (!cleanPhone) return { success: false, message: 'Nomor WhatsApp tidak valid.' };
             try {
-                const formData = new FormData();
-                formData.append('target', cleanPhone);
-                formData.append('message', messageText);
-                formData.append('countryCode', '62');
-
-                const response = await fetch('https://api.fonnte.com/send', {
-                    method: 'POST',
-                    headers: { 'Authorization': apiKey },
-                    body: formData
-                });
-
-                const result = await response.json();
-                if (result.status === true || result.status === 'true' || result.detail) {
-                    return { success: true, result };
-                } else {
-                    return { success: false, message: result.reason || result.message || "Gagal dari Gateway" };
-                }
+                const result = await window.callWaFunction('sendWaMessage', { target: cleanPhone, message: messageText });
+                return result?.success ? result : { success: false, message: result?.message || 'Gagal dari Gateway' };
             } catch (err) {
-                return { success: false, message: "Server WA Gateway tidak terjangkau." };
+                console.error('Pengiriman WA gagal:', err);
+                return { success: false, message: err?.message || 'Cloud Function WA tidak terjangkau.' };
             }
         };
 
+        // Setelah scan: hanya server yang mengirim laporan otomatis ke Kepala Sekolah.
+        // Guru tidak mendapat pesan otomatis; laporan guru dikirim hanya setelah keyword HADIR.
         window.sendAutomaticPresensiWA = async function(teacher, jamStr) {
-            if (window.AppState.settings.autoSendWA === false) return;
-
-            const dateStr = new Date().toLocaleDateString('id-ID', {
-                timeZone: 'Asia/Jayapura', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
-
-            const msgGuru = `*PRESENSI SMP BARAPEN*\n\nHalo Bpk/Ibu *${teacher.nama}*,\n\nPresensi Anda telah *BERHASIL DICATAT*:\n📅 Tanggal: ${dateStr}\n⏰ Jam Masuk: ${jamStr} WIT\n📌 Status: HADIR\n\nTerima kasih dan selamat bertugas!`;
-            const msgKepsek = `*LAPORAN PRESENSI GURU - SMP BARAPEN*\n\nPresensi guru baru saja dicatat:\n👤 Nama: *${teacher.nama}*\n🆔 NIP: ${teacher.nip}\n💼 Jabatan: ${teacher.jabatan}\n⏰ Jam Masuk: ${jamStr} WIT (${dateStr})\n📌 Status: HADIR`;
-
-            const kepsekWA = window.AppState.settings.kepsekWA;
             const statusEl = document.getElementById('last-scan-wa-status');
-            
             if (statusEl) {
                 statusEl.classList.remove('hidden');
-                statusEl.innerHTML = `
-                    <div class="flex items-center justify-center space-x-2 text-emerald-800 font-bold">
-                        <i class="fa-solid fa-paper-plane fa-spin text-emerald-600"></i>
-                        <span>Mengirim notifikasi WhatsApp ke Guru & Kepala Sekolah...</span>
-                    </div>`;
+                statusEl.innerHTML = '<div class="text-emerald-800 font-bold"><i class="fa-solid fa-server mr-1"></i> Presensi tersimpan. Laporan Kepala Sekolah diproses otomatis oleh server.</div>';
             }
-
-            const [resGuru, resKepsek] = await Promise.all([
-                sendWhatsAppMessage(teacher.wa, msgGuru),
-                sendWhatsAppMessage(kepsekWA, msgKepsek)
-            ]);
-
-            if (statusEl) {
-                let statusText = '';
-                if (resGuru.success && resKepsek.success) {
-                    statusText = `<div class="text-emerald-800 font-bold"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Notifikasi WhatsApp terkirim ke Guru (${teacher.wa}) & Kepsek (${kepsekWA})</div>`;
-                } else if (resGuru.success) {
-                    statusText = `<div class="text-amber-800 font-semibold"><i class="fa-solid fa-circle-info text-amber-600 mr-1"></i> Notifikasi terkirim ke Guru, namun ke Kepsek terhambat: ${resKepsek.message}</div>`;
-                } else {
-                    statusText = `<div class="text-slate-700 font-medium">Pengiriman WA Gateway otomatis: ${resGuru.message || 'Cek API Key WA'}</div>`;
-                }
-                statusEl.innerHTML = statusText;
-            }
+            return { success: true, serverTriggered: true };
         };
 
         window.testWAGatewayConnection = async function() {
-            const testPhone = document.getElementById('setting-kepsek-wa').value.trim();
-            const apiKey = document.getElementById('setting-wa-key').value.trim();
-
-            if (!apiKey) {
-                showAlertModal("Peringatan", "Masukkan WhatsApp Gateway API Key terlebih dahulu.", "warning");
-                return;
-            }
+            const testPhone = document.getElementById('setting-kepsek-wa')?.value.trim() || '';
             if (!testPhone) {
-                showAlertModal("Peringatan", "Masukkan Nomor WA Kepala Sekolah.", "warning");
+                showAlertModal('Peringatan', 'Masukkan Nomor WA Kepala Sekolah.', 'warning');
                 return;
             }
-
-            showAlertModal("Menguji Koneksi", "Sedang mengirim pesan pengujian...", "warning");
-            const res = await sendWhatsAppMessage(testPhone, "*UJI COBA WA GATEWAY - SMP BARAPEN*\nKoneksi WhatsApp Gateway berhasil dikonfigurasi!");
-            
-            if (res.success) {
-                showAlertModal("Berhasil!", `Pesan uji coba berhasil terkirim ke nomor ${testPhone}.`, "success");
-            } else {
-                showAlertModal("Gagal Kirim", `Gagal mengirim WA: ${res.message}`, "error");
+            try {
+                showAlertModal('Menguji Koneksi', 'Mengirim pesan uji melalui server Fonnte...', 'warning');
+                const res = await window.callWaFunction('testWaGateway', { target: formatPhoneWA(testPhone) });
+                if (res?.success) showAlertModal('Berhasil!', `Pesan uji coba berhasil terkirim ke nomor ${testPhone}.`, 'success');
+                else showAlertModal('Gagal Kirim', `Gagal mengirim WA: ${res?.message || 'Periksa konfigurasi.'}`, 'error');
+            } catch (err) {
+                showAlertModal('Gagal', err?.message || 'Cloud Function belum siap.', 'error');
             }
         };
 
@@ -1845,21 +1742,26 @@
             });
         };
 
-        window.markUnscannedAsAbsentToday = function() {
+        window.markUnscannedAsAbsentToday = async function() {
             const todayStr = getWITDateString();
-            let count = 0;
-            window.AppState.guruList.forEach(guru => {
+            const targets = window.AppState.guruList.filter(guru => {
                 const hasStarted = window.AppState.attendanceList.some(a => a.nip === guru.nip && a.status === 'Hadir');
                 const existing = window.AppState.attendanceList.find(a => a.nip === guru.nip && a.tanggal === todayStr);
-                if (hasStarted && !existing) {
-                    window.saveAttendanceToDB({
-                        nip: guru.nip, nama: guru.nama, jabatan: guru.jabatan,
-                        tanggal: todayStr, jam: '-', status: 'Tidak Hadir (Alpha)'
-                    });
-                    count++;
-                }
+                return hasStarted && !existing;
             });
-            showAlertModal('Selesai', `<b>${count} Guru</b> ditandai Tidak Hadir (Alpha). Guru yang belum pernah scan tetap tidak dihitung.`, 'success');
+            if (!targets.length) {
+                showAlertModal('Info', 'Tidak ada guru yang perlu ditandai Alpha. Guru yang belum pernah memulai presensi tetap tidak dihitung.', 'warning');
+                return;
+            }
+            try {
+                await Promise.all(targets.map(guru => window.saveAttendanceToDB({
+                    nip: guru.nip, nama: guru.nama, jabatan: guru.jabatan,
+                    tanggal: todayStr, jam: '-', status: 'Tidak Hadir (Alpha)'
+                })));
+                showAlertModal('Selesai', `<b>${targets.length} Guru</b> ditandai Tidak Hadir (Alpha). Guru yang belum pernah scan tetap tidak dihitung.`, 'success');
+            } catch (error) {
+                showAlertModal('Gagal', error?.message || 'Sebagian data Alpha gagal disimpan.', 'error');
+            }
         };
 
         window.renderGuruCards = function() {
@@ -2094,7 +1996,8 @@
                         if(isSunday) trHTML+=`<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">M</td>`;
                         else if(beforeStart||future) trHTML+=`<td class="p-2 text-center border-l border-slate-200 text-slate-300">-</td>`;
                         else if(record&&record.status==='Hadir'){hadirCount++; trHTML+=`<td class="p-2 text-center border-l border-slate-200 bg-emerald-100 text-emerald-800 font-bold">H</td>`;}
-                        else {alphaCount++; trHTML+=`<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">A</td>`;}
+                        else if(record&&record.status==='Tidak Hadir (Alpha)'){alphaCount++; trHTML+=`<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">A</td>`;}
+                        else trHTML+=`<td class="p-2 text-center border-l border-slate-200 text-slate-300">-</td>`;
                     }
                     const den=hadirCount+alphaCount; const pct=den?Math.round(hadirCount/den*100):0; grandTotalHadir+=hadirCount; grandTotalAlpha+=alphaCount;
                     trHTML+=`<td class="p-3 text-center bg-emerald-50 font-bold text-emerald-800 border-l border-emerald-200">${hadirCount}</td><td class="p-3 text-center bg-red-50 font-bold text-red-600">${alphaCount}</td><td class="p-3 text-center bg-amber-50 font-bold text-amber-800">${pct}%</td></tr>`; tbody.innerHTML+=trHTML;
@@ -2106,8 +2009,8 @@
                 let gh=0,ga=0; guruList.forEach((guru,idx)=>{let h=0,a=0; const first=getFirstScanDate(guru.nip); let tr=`<tr class="hover:bg-slate-50 transition border-b border-slate-100 font-medium"><td class="p-3 font-bold">${idx+1}</td><td class="p-3 font-mono text-xs">${guru.nip}</td><td class="p-3 font-bold text-slate-800">${guru.nama}</td><td class="p-3 text-slate-600">${guru.jabatan}</td>`; weekDays.forEach(d=>{const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; const sun=d.getDay()===0; const rec=attendance.find(x=>x.nip===guru.nip&&x.tanggal===ds); const before=!first||ds<first; const future=ds>todayWit; if(sun)tr+=`<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">LIBUR</td>`; else if(before||future)tr+=`<td class="p-2 text-center border-l border-slate-200 text-slate-300">-</td>`; else if(rec&&rec.status==='Hadir'){h++;tr+=`<td class="p-2 text-center border-l border-slate-200 bg-emerald-100 text-emerald-800 font-bold">${rec.jam}</td>`;} else {a++;tr+=`<td class="p-2 text-center border-l border-slate-200 text-slate-400">Alpha</td>`;}}); const den=h+a,p=den?Math.round(h/den*100):0;gh+=h;ga+=a;tr+=`<td class="p-3 text-center bg-emerald-50 font-bold text-emerald-800 border-l border-emerald-200">${h} Hari</td><td class="p-3 text-center bg-red-50 font-bold text-red-600">${a} Hari</td><td class="p-3 text-center bg-amber-50 font-bold text-amber-800">${p}%</td></tr>`;tbody.innerHTML+=tr;}); document.getElementById('recap-stat-total').innerText=guruList.length;document.getElementById('recap-stat-hadir').innerText=gh;document.getElementById('recap-stat-alpha').innerText=ga;const den=gh+ga;document.getElementById('recap-stat-percent').innerText=`${den?Math.round(gh/den*100):0}%`;
             } else {
                 tableHead.innerHTML=`<tr class="bg-slate-100 text-slate-700 font-extrabold uppercase text-[11px] border-b border-slate-300"><th class="p-3">No</th><th class="p-3">NIP</th><th class="p-3">Nama Guru</th><th class="p-3">Jabatan</th><th class="p-3">Tanggal (WIT)</th><th class="p-3">Jam Masuk</th><th class="p-3">Status</th></tr>`;
-                const filtered=attendance.filter(a=>a.tanggal===dateVal); const startedTeachers=guruList.filter(g=>attendance.some(a=>a.nip===g.nip&&a.status==='Hadir'&&a.tanggal<=dateVal)); const totalHadir=filtered.filter(a=>a.status==='Hadir').length; const totalAlpha=Math.max(0,startedTeachers.length-totalHadir);
-                document.getElementById('recap-stat-total').innerText=guruList.length;document.getElementById('recap-stat-hadir').innerText=totalHadir;document.getElementById('recap-stat-alpha').innerText=totalAlpha;document.getElementById('recap-stat-percent').innerText=`${startedTeachers.length?Math.round(totalHadir/startedTeachers.length*100):0}%`;
+                const filtered=attendance.filter(a=>a.tanggal===dateVal); const totalHadir=filtered.filter(a=>a.status==='Hadir').length; const totalAlpha=filtered.filter(a=>a.status==='Tidak Hadir (Alpha)').length; const denominator=totalHadir+totalAlpha;
+                document.getElementById('recap-stat-total').innerText=guruList.length;document.getElementById('recap-stat-hadir').innerText=totalHadir;document.getElementById('recap-stat-alpha').innerText=totalAlpha;document.getElementById('recap-stat-percent').innerText=`${denominator?Math.round(totalHadir/denominator*100):0}%`;
                 filtered.forEach((rec,idx)=>{const tr=document.createElement('tr');tr.className='hover:bg-slate-50 transition border-b border-slate-100 font-medium';tr.innerHTML=`<td class="p-3 font-bold">${idx+1}</td><td class="p-3 font-mono text-xs">${rec.nip}</td><td class="p-3 font-bold text-slate-800">${rec.nama}</td><td class="p-3 text-slate-600">${rec.jabatan}</td><td class="p-3 font-mono text-xs">${rec.tanggal}</td><td class="p-3 font-mono font-bold text-emerald-700">${rec.jam} WIT</td><td class="p-3"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${rec.status==='Hadir'?'bg-emerald-100 text-emerald-800':'bg-red-100 text-red-700'}">${rec.status}</span></td>`;tbody.appendChild(tr);});
             }
         };
@@ -2120,11 +2023,15 @@
             XLSX.writeFile(wb, `Laporan_Presensi_SMP_Barapen_${type.toUpperCase()}.xlsx`);
         };
 
-        window.sendSummaryToPrincipalWA = () => {
-            const kepsekWA = window.AppState.settings.kepsekWA || '081247178832';
-            const dateVal = document.getElementById('recap-date-input').value;
-            const msg = `*REKAPAN RESMI PRESENSI GURU SMP BARAPEN*\nTanggal Acuan: ${dateVal}\nTotal Terdaftar: ${window.AppState.guruList.length}\nTotal Hadir: ${document.getElementById('recap-stat-hadir').innerText}\nTotal Alpha: ${document.getElementById('recap-stat-alpha').innerText}\nPersentase Kehadiran: ${document.getElementById('recap-stat-percent').innerText}`;
-            window.open(`https://wa.me/${formatPhoneWA(kepsekWA)}?text=${encodeURIComponent(msg)}`, '_blank');
+        window.sendSummaryToPrincipalWA = async () => {
+            try {
+                const dateVal = document.getElementById('recap-date-input').value || getWITDateString();
+                const res = await window.callWaFunction('sendSummaryToPrincipalWA', { date: dateVal });
+                if (res?.success) showAlertModal('Berhasil', 'Ringkasan berhasil dikirim ke Kepala Sekolah melalui Fonnte.', 'success');
+                else showAlertModal('Gagal', res?.message || 'Ringkasan gagal dikirim.', 'error');
+            } catch (e) {
+                showAlertModal('Gagal', e?.message || 'Ringkasan gagal dikirim.', 'error');
+            }
         };
 
         window.openCardModal = function(nip) {
@@ -2208,62 +2115,60 @@
             }
         });
 
-        const WA_SETTINGS_PASSWORD = 'barapen2026';
         window.requestSettingsAccess = function() {
             const modal = document.getElementById('modal-wa-password');
+            const email = document.getElementById('wa-settings-email');
             const input = document.getElementById('wa-settings-password');
             const error = document.getElementById('wa-password-error');
-            if (input) {
-                input.value = '';
-                input.type = 'password';
-            }
-            if (error) {
-                error.classList.add('hidden');
-                error.innerText = '';
-            }
-            document.getElementById('wa-password-eye')?.classList.remove('fa-eye-slash');
-            document.getElementById('wa-password-eye')?.classList.add('fa-eye');
+            if (email) email.value = '';
+            if (input) input.value = '';
+            if (error) { error.classList.add('hidden'); error.innerText = ''; }
             modal?.classList.remove('hidden');
-            setTimeout(() => input?.focus(), 120);
+            setTimeout(() => email?.focus(), 120);
         };
 
-        window.closeWAPasswordModal = function() {
-            document.getElementById('modal-wa-password')?.classList.add('hidden');
-        };
+        window.closeWAPasswordModal = function() { document.getElementById('modal-wa-password')?.classList.add('hidden'); };
 
-        window.toggleWAPasswordVisibility = function() {
-            const input = document.getElementById('wa-settings-password');
-            const eye = document.getElementById('wa-password-eye');
-            if (!input || !eye) return;
-            const show = input.type === 'password';
-            input.type = show ? 'text' : 'password';
-            eye.classList.toggle('fa-eye', !show);
-            eye.classList.toggle('fa-eye-slash', show);
-        };
-
-        window.verifyWAPassword = function(event) {
+        window.verifyWAPassword = async function(event) {
             event.preventDefault();
-            const input = document.getElementById('wa-settings-password');
+            const email = document.getElementById('wa-settings-email')?.value.trim() || '';
+            const password = document.getElementById('wa-settings-password')?.value || '';
             const error = document.getElementById('wa-password-error');
-            if (input?.value === WA_SETTINGS_PASSWORD) {
+            try {
+                const result = await apiFetch('/api/admin/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                adminToken = result.token || '';
+                if (!adminToken) throw new Error('Token admin tidak diterima dari Worker.');
+                sessionStorage.setItem('smp_barapen_admin_token', adminToken);
+                await window.getCurrentWaSettings();
                 closeWAPasswordModal();
                 openSettingsModal();
-                return;
+            } catch (e) {
+                console.error('Login admin gagal:', e);
+                if (error) {
+                    error.textContent = e?.message || 'Login gagal. Periksa email/password.';
+                    error.classList.remove('hidden');
+                }
             }
-            if (error) {
-                error.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Password salah. Akses ditolak.';
-                error.classList.remove('hidden');
-            }
-            input?.select();
         };
 
-        window.openSettingsModal = function() {
-            document.getElementById('setting-wa-key').value = window.AppState.settings.waApiKey || '';
+        window.signOutWaAdmin = async function() {
+            adminToken = '';
+            sessionStorage.removeItem('smp_barapen_admin_token');
+            closeSettingsModal();
+            showAlertModal('Keluar', 'Sesi Admin telah ditutup.', 'success');
+        };
+
+        window.openSettingsModal = async function() {
+            if (!adminToken) { requestSettingsAccess(); return; }
+            try { await window.getCurrentWaSettings(); } catch (e) { console.warn('Gagal memuat pengaturan WA:', e); }
+            const tokenInput = document.getElementById('setting-wa-key');
+            if (tokenInput) tokenInput.value = '';
             document.getElementById('setting-kepsek-wa').value = window.AppState.settings.kepsekWA || '';
             const autoWaCheckbox = document.getElementById('setting-auto-wa');
-            if (autoWaCheckbox) {
-                autoWaCheckbox.checked = window.AppState.settings.autoSendWA !== false;
-            }
+            if (autoWaCheckbox) autoWaCheckbox.checked = window.AppState.settings.autoSendWA !== false;
             document.getElementById('modal-settings').classList.remove('hidden');
         };
         window.closeSettingsModal = () => document.getElementById('modal-settings').classList.add('hidden');
@@ -2272,22 +2177,16 @@
             const waKey = document.getElementById('setting-wa-key')?.value.trim() || '';
             const kepsekWA = document.getElementById('setting-kepsek-wa')?.value.trim() || '';
             const autoSendWA = document.getElementById('setting-auto-wa')?.checked ?? true;
-
-            if (!waKey) {
-                showAlertModal("Peringatan", "Masukkan WhatsApp Gateway API Key terlebih dahulu.", "warning");
-                return;
+            if (!waKey) { showAlertModal('Peringatan', 'Masukkan API Key Fonnte baru.', 'warning'); return; }
+            if (!kepsekWA) { showAlertModal('Peringatan', 'Masukkan Nomor WA Kepala Sekolah.', 'warning'); return; }
+            try {
+                await window.saveSettingsToDB({ waApiKey: waKey, kepsekWA, autoSendWA });
+                document.getElementById('setting-wa-key').value = '';
+                closeSettingsModal();
+                showAlertModal('Tersimpan & Langsung Aktif', 'Token Fonnte baru dan nomor Kepala Sekolah tersimpan di server. Pengiriman berikutnya langsung menggunakan token terbaru tanpa mengubah file GitHub.', 'success');
+            } catch (e) {
+                showAlertModal('Gagal Menyimpan', e?.message || 'Pengaturan WA gagal disimpan.', 'error');
             }
-            if (!kepsekWA) {
-                showAlertModal("Peringatan", "Masukkan Nomor WA Kepala Sekolah.", "warning");
-                return;
-            }
-
-            // Aktifkan nilai baru terlebih dahulu agar fitur WA langsung memakai konfigurasi baru.
-            window.applyWhatsAppSettings({ waApiKey: waKey, kepsekWA, autoSendWA });
-            await window.saveSettingsToDB({ waApiKey: waKey, kepsekWA, autoSendWA });
-
-            closeSettingsModal();
-            showAlertModal("Tersimpan", "Pengaturan WhatsApp Gateway berhasil disimpan dan langsung diaktifkan. API Key dan nomor Kepala Sekolah terbaru akan digunakan pada pengiriman WA berikutnya.", "success");
         };
 
         (function setupDraggableAndSecretWA() {
