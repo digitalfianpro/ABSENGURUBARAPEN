@@ -14,13 +14,17 @@
                 extend: {
                     colors: {
                         emerald: {
-                            400: '#34d399',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            800: '#065f46',
-                            900: '#064e3b',
-                            950: '#022c22',
+                            50: '#f2fbff',
+                            100: '#dff6ff',
+                            200: '#b9ebff',
+                            300: '#7edcff',
+                            400: '#35c8ff',
+                            500: '#08aaff',
+                            600: '#0088ff',
+                            700: '#006de6',
+                            800: '#0756b8',
+                            900: '#0a438e',
+                            950: '#06295b',
                         },
                         darkbg: '#07120e',
                         darkcard: '#0f231c',
@@ -754,6 +758,304 @@
     @media (min-width:768px) { [class~="md:relative"] { position:relative } }
     @media (min-width:768px) { [class~="md:translate-x-0"] { transform:translateX(0) } }
     </style>
+
+
+    <!-- Tema Biru Stabilo Luxury - UI only, tidak mengubah logika aplikasi -->
+    <style id="smp-barapen-blue-luxury-theme">
+        :root {
+            --sb-blue-50: #f2fbff;
+            --sb-blue-100: #dff6ff;
+            --sb-blue-200: #b9ebff;
+            --sb-blue-300: #7edcff;
+            --sb-blue-400: #35c8ff;
+            --sb-blue-500: #08aaff;
+            --sb-blue-600: #0088ff;
+            --sb-blue-700: #006de6;
+            --sb-blue-800: #0756b8;
+            --sb-blue-900: #0a438e;
+            --sb-blue-950: #06295b;
+            --sb-navy: #061b3f;
+            --sb-white: #ffffff;
+        }
+
+        /* Halaman utama tetap putih dan bersih */
+        html, body {
+            background: #ffffff !important;
+            background-image: none !important;
+            color: #172033 !important;
+        }
+        body::before {
+            background: linear-gradient(115deg, transparent 0%, rgba(0,136,255,.025) 45%, rgba(53,200,255,.08) 50%, rgba(0,136,255,.025) 55%, transparent 100%) !important;
+            opacity: .45 !important;
+        }
+        main {
+            background: #ffffff !important;
+        }
+        .white-panel {
+            background: #ffffff !important;
+            border-color: #dceaf7 !important;
+            box-shadow: 0 14px 34px rgba(15, 42, 78, .08), 0 2px 8px rgba(15, 42, 78, .05) !important;
+        }
+
+        /* Sidebar biru stabilo premium */
+        #sidebar {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(126,220,255,.38), transparent 25%),
+                radial-gradient(circle at 85% 28%, rgba(53,200,255,.30), transparent 28%),
+                linear-gradient(165deg, #061b3f 0%, #0756b8 28%, #0088ff 63%, #06b9ff 100%) !important;
+            border-right: 1px solid rgba(185,235,255,.70) !important;
+            box-shadow: 12px 0 44px rgba(0,76,180,.24), inset -1px 0 0 rgba(255,255,255,.24), inset 0 0 42px rgba(53,200,255,.10) !important;
+        }
+        #sidebar > div:first-child {
+            background: linear-gradient(180deg, rgba(5,37,88,.66), rgba(5,69,155,.30)) !important;
+            border-bottom-color: rgba(185,235,255,.34) !important;
+            padding-top: 1.15rem !important;
+            padding-bottom: 1.15rem !important;
+        }
+        #sidebar nav {
+            scrollbar-color: rgba(223,246,255,.65) transparent;
+        }
+        .sidebar-section-label {
+            color: rgba(223,246,255,.86) !important;
+            text-shadow: 0 1px 10px rgba(0,45,110,.35) !important;
+        }
+
+        /* Logo sidebar diperbesar */
+        #sidebar img[alt="Logo SMP Barapen"] {
+            width: 104px !important;
+            height: 104px !important;
+            min-width: 104px !important;
+            min-height: 104px !important;
+            max-width: 104px !important;
+            max-height: 104px !important;
+            padding: 6px !important;
+            background: radial-gradient(circle, #ffffff 0%, #eefaff 68%, #d9f4ff 100%) !important;
+            border: 4px solid rgba(255,255,255,.94) !important;
+            box-shadow: 0 0 0 4px rgba(53,200,255,.22), 0 0 30px rgba(53,200,255,.72), 0 18px 38px rgba(0,41,105,.30) !important;
+        }
+        #sidebar .group > div.absolute {
+            background: linear-gradient(135deg, #ffffff, #7edcff, #08aaff) !important;
+            opacity: .70 !important;
+        }
+        #sidebar h1 {
+            color: #ffffff !important;
+            text-shadow: 0 2px 16px rgba(0,28,84,.55) !important;
+        }
+        #sidebar p,
+        #sidebar [class*="text-emerald-"] {
+            color: #e8faff !important;
+        }
+
+        /* Tombol menu: glass + chrome shine + depth */
+        .sidebar-btn,
+        .sidebar-special-btn,
+        .sidebar-settings-btn {
+            position: relative !important;
+            overflow: hidden !important;
+            border-radius: 15px !important;
+            border: 1px solid rgba(223,246,255,.30) !important;
+            color: rgba(255,255,255,.93) !important;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.065) 45%, rgba(0,74,190,.14)) !important;
+            box-shadow:
+                0 10px 24px rgba(0,39,100,.20),
+                inset 0 1px 0 rgba(255,255,255,.26),
+                inset 0 -1px 0 rgba(0,42,110,.16) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease, background .24s ease !important;
+        }
+        .sidebar-btn::before {
+            width: 4px !important;
+            background: linear-gradient(180deg, #ffffff, #7edcff, #08aaff) !important;
+            box-shadow: 0 0 18px rgba(126,220,255,.95) !important;
+        }
+        .sidebar-btn::after,
+        .sidebar-special-btn::after,
+        .sidebar-settings-btn::after {
+            content: '' !important;
+            position: absolute !important;
+            top: -20% !important;
+            left: -145% !important;
+            width: 58% !important;
+            height: 140% !important;
+            transform: skewX(-22deg) !important;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), rgba(255,255,255,.92), rgba(126,220,255,.36), transparent) !important;
+            transition: left .62s ease !important;
+            pointer-events: none !important;
+        }
+        .sidebar-btn:hover,
+        .sidebar-special-btn:hover,
+        .sidebar-settings-btn:hover {
+            transform: translateX(4px) translateY(-1px) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,.72) !important;
+            background: linear-gradient(135deg, rgba(255,255,255,.28), rgba(53,200,255,.20), rgba(0,104,230,.28)) !important;
+            box-shadow:
+                0 16px 34px rgba(0,35,96,.30),
+                0 0 24px rgba(53,200,255,.26),
+                inset 0 1px 0 rgba(255,255,255,.48) !important;
+        }
+        .sidebar-btn:hover::after,
+        .sidebar-special-btn:hover::after,
+        .sidebar-settings-btn:hover::after {
+            left: 165% !important;
+        }
+        .sidebar-btn.active {
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,.88) !important;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.36), rgba(126,220,255,.24) 42%, rgba(0,97,225,.34)) !important;
+            box-shadow:
+                0 16px 38px rgba(0,33,91,.32),
+                0 0 30px rgba(53,200,255,.30),
+                inset 0 1px 0 rgba(255,255,255,.60),
+                inset 0 0 24px rgba(255,255,255,.08) !important;
+        }
+        .sidebar-btn i,
+        .sidebar-special-btn i,
+        .sidebar-settings-btn i {
+            color: #eafcff !important;
+            filter: drop-shadow(0 0 9px rgba(126,220,255,.78)) !important;
+        }
+        .sidebar-btn:hover i,
+        .sidebar-btn.active i,
+        .sidebar-special-btn:hover i,
+        .sidebar-settings-btn:hover i {
+            color: #ffffff !important;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 18px rgba(53,200,255,.72)) !important;
+        }
+        #sidebar > div:last-child {
+            background: linear-gradient(180deg, rgba(5,35,83,.18), rgba(4,29,69,.58)) !important;
+            border-top-color: rgba(185,235,255,.28) !important;
+        }
+
+        /* Header utama menjadi putih dan modern */
+        header {
+            background: rgba(255,255,255,.94) !important;
+            color: #172033 !important;
+            border-bottom: 1px solid #dceaf7 !important;
+            box-shadow: 0 8px 26px rgba(15,42,78,.08) !important;
+        }
+        header h2 { color: #172033 !important; }
+        header [class*="text-emerald-"] { color: var(--sb-blue-700) !important; }
+        header [class*="bg-emerald-"] { background-color: var(--sb-blue-50) !important; }
+        header [class*="border-emerald-"] { border-color: var(--sb-blue-200) !important; }
+        #live-clock {
+            color: var(--sb-blue-600) !important;
+            text-shadow: 0 0 12px rgba(0,136,255,.24) !important;
+        }
+        #cloud-status-badge {
+            background: #f4fbff !important;
+            color: #0756b8 !important;
+            border-color: #b9ebff !important;
+            box-shadow: 0 7px 18px rgba(0,104,230,.10) !important;
+        }
+
+        /* Ubah aksen emerald lama menjadi palet biru stabilo */
+        .text-emerald-100 { color: #dff6ff !important; }
+        .text-emerald-300 { color: #7edcff !important; }
+        .text-emerald-400 { color: #35c8ff !important; }
+        .text-emerald-500 { color: #08aaff !important; }
+        .text-emerald-600 { color: #0088ff !important; }
+        .text-emerald-700 { color: #006de6 !important; }
+        .text-emerald-800 { color: #0756b8 !important; }
+        .text-emerald-900 { color: #0a438e !important; }
+        .bg-emerald-50 { background-color: #f2fbff !important; }
+        .bg-emerald-100 { background-color: #dff6ff !important; }
+        .bg-emerald-400 { background-color: #35c8ff !important; }
+        .bg-emerald-500 { background-color: #08aaff !important; }
+        .bg-emerald-600 { background-color: #0088ff !important; }
+        .bg-emerald-700 { background-color: #006de6 !important; }
+        .bg-emerald-950 { background-color: #06295b !important; }
+        .border-emerald-200 { border-color: #b9ebff !important; }
+        .border-emerald-300 { border-color: #7edcff !important; }
+        .border-emerald-400 { border-color: #35c8ff !important; }
+        .border-emerald-500 { border-color: #08aaff !important; }
+        .border-emerald-600 { border-color: #0088ff !important; }
+        .border-emerald-800 { border-color: #0756b8 !important; }
+
+        /* Gradient cards yang semula hijau menjadi biru premium */
+        .from-emerald-900 { --tw-gradient-from: #0a438e var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(10 67 142 / 0) var(--tw-gradient-to-position) !important; }
+        .to-emerald-700 { --tw-gradient-to: #006de6 var(--tw-gradient-to-position) !important; }
+        .from-emerald-500 { --tw-gradient-from: #08aaff var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(8 170 255 / 0) var(--tw-gradient-to-position) !important; }
+
+        /* Focus/hover aksen */
+        [class~="hover:bg-emerald-100"]:hover { background-color: #dff6ff !important; }
+        [class~="hover:bg-emerald-50"]:hover { background-color: #f2fbff !important; }
+        [class~="hover:bg-emerald-700"]:hover { background-color: #006de6 !important; }
+        [class~="hover:bg-emerald-800"]:hover { background-color: #0756b8 !important; }
+        [class~="focus:border-emerald-500"]:focus { border-color: #08aaff !important; }
+        [class~="focus:border-emerald-600"]:focus { border-color: #0088ff !important; }
+        [class~="peer-checked:bg-emerald-600"] { background-color: #0088ff !important; }
+
+        /* Welcome screen tetap mewah, kini biru */
+        #welcome-screen {
+            background:
+                radial-gradient(circle at 50% 35%, rgba(53,200,255,.28), transparent 29%),
+                radial-gradient(circle at 18% 82%, rgba(0,136,255,.22), transparent 34%),
+                radial-gradient(circle at 82% 18%, rgba(255,255,255,.12), transparent 25%),
+                linear-gradient(135deg, #04142f 0%, #0756b8 48%, #00aaff 100%) !important;
+        }
+        .welcome-card {
+            background: linear-gradient(180deg, rgba(4,39,92,.55), rgba(3,24,58,.58)) !important;
+            border-color: rgba(185,235,255,.34) !important;
+            box-shadow: 0 34px 100px rgba(0,24,70,.48), inset 0 0 45px rgba(53,200,255,.10) !important;
+        }
+        .welcome-logo-ring { border-color: rgba(126,220,255,.55) !important; box-shadow: 0 0 42px rgba(53,200,255,.46) !important; }
+        .welcome-logo-ring::after { border-color: rgba(185,235,255,.45) !important; }
+        .welcome-logo-wrap {
+            width: 270px !important;
+            height: 270px !important;
+            flex-basis: 270px !important;
+        }
+        .welcome-logo {
+            width: 210px !important;
+            height: 210px !important;
+            min-width: 210px !important;
+            min-height: 210px !important;
+            max-width: 210px !important;
+            max-height: 210px !important;
+            box-shadow: 0 0 30px rgba(255,255,255,.42), 0 0 85px rgba(53,200,255,.72), 0 20px 60px rgba(0,30,82,.36) !important;
+        }
+        .welcome-button {
+            background: linear-gradient(135deg, #35c8ff, #0088ff 52%, #0756b8) !important;
+            border-color: rgba(255,255,255,.46) !important;
+            box-shadow: 0 0 32px rgba(53,200,255,.38), inset 0 1px 0 rgba(255,255,255,.45) !important;
+        }
+        .welcome-button:hover {
+            box-shadow: 0 0 42px rgba(53,200,255,.56), 0 14px 30px rgba(0,37,103,.28) !important;
+        }
+        .welcome-line {
+            background: linear-gradient(90deg, transparent, #35c8ff, #ffffff, #08aaff, transparent) !important;
+            box-shadow: 0 0 18px rgba(53,200,255,.40) !important;
+        }
+
+        @media (max-width: 640px) {
+            #sidebar img[alt="Logo SMP Barapen"] {
+                width: 92px !important;
+                height: 92px !important;
+                min-width: 92px !important;
+                min-height: 92px !important;
+                max-width: 92px !important;
+                max-height: 92px !important;
+            }
+            .welcome-logo-wrap {
+                width: 205px !important;
+                height: 205px !important;
+                flex-basis: 205px !important;
+            }
+            .welcome-logo {
+                width: 158px !important;
+                height: 158px !important;
+                min-width: 158px !important;
+                min-height: 158px !important;
+                max-width: 158px !important;
+                max-height: 158px !important;
+            }
+        }
+    </style>
+
 </head>
 <body class="flex h-screen overflow-hidden text-slate-800">
 
@@ -1290,16 +1592,19 @@
             <div class="text-center space-y-4">
                 <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-yellow-50 border-2 border-amber-300 flex items-center justify-center"><i class="fa-solid fa-user-shield text-2xl text-amber-600"></i></div>
                 <div>
-                    <h3 class="font-playfair text-xl font-extrabold text-slate-800">Akses Pengaturan WA</h3>
-                    <p class="text-xs text-slate-500 mt-1">Login akun admin yang diizinkan oleh Cloudflare Worker.</p>
+                    <h3 class="font-playfair text-xl font-extrabold text-slate-800">Akses Admin</h3>
+                    <p class="text-xs text-slate-500 mt-1">Masukkan Password Admin. Password diperiksa langsung oleh Cloudflare Worker dan tidak disimpan di HTML.</p>
                 </div>
                 <form onsubmit="verifyWAPassword(event)" class="space-y-3 text-left">
-                    <label class="block text-xs font-bold text-slate-700">Email Admin</label>
-                    <input id="wa-settings-email" type="email" autocomplete="username" required placeholder="admin@sekolah.sch.id" class="w-full bg-white border-2 border-amber-300 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-amber-500">
                     <label class="block text-xs font-bold text-slate-700">Password Admin</label>
-                    <input id="wa-settings-password" type="password" autocomplete="current-password" required placeholder="Masukkan password" class="w-full bg-white border-2 border-amber-300 rounded-xl px-4 py-3 text-sm text-slate-800 font-mono focus:outline-none focus:border-amber-500">
+                    <div class="relative">
+                        <input id="wa-settings-password" type="password" autocomplete="current-password" required placeholder="Masukkan password admin" class="w-full bg-white border-2 border-amber-300 rounded-xl px-4 py-3 pr-12 text-sm text-slate-800 font-mono focus:outline-none focus:border-amber-500">
+                        <button type="button" id="toggle-admin-password" aria-label="Tampilkan atau sembunyikan password" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1" onclick="toggleAdminPasswordVisibility()">
+                            <i id="toggle-admin-password-icon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
                     <p id="wa-password-error" class="hidden text-xs text-red-600 font-semibold"></p>
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white font-extrabold text-xs shadow-lg"><i class="fa-solid fa-right-to-bracket mr-2"></i> Masuk Pengaturan</button>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white font-extrabold text-xs shadow-lg hover:shadow-xl transition"><i class="fa-solid fa-lock-open mr-2"></i> Buka Akses Admin</button>
                 </form>
             </div>
         </div>
@@ -1331,11 +1636,11 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">WhatsApp Gateway API Key (Fonnte) *</label>
-                    <input type="password" id="setting-wa-key" placeholder="Masukkan token Fonnte baru..." class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:border-emerald-500">
+                    <label class="block font-bold text-slate-700 mb-1">WhatsApp Gateway API Key (Fonnte) <span class="font-normal text-slate-400">(opsional)</span></label>
+                    <input type="password" id="setting-wa-key" placeholder="Kosongkan jika token di server masih digunakan" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
-                    <p class="text-[10px] text-slate-500 mt-1">Token disimpan di server Cloudflare, bukan di browser. Setiap token baru langsung dipakai pengiriman berikutnya.</p>
+                    <p class="text-[10px] text-slate-500 mt-1">Token disimpan di server Cloudflare, bukan di browser. Kosongkan kolom ini bila tidak ingin mengganti token yang sudah aktif.</p>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Nomor WA Kepala Sekolah *</label>
@@ -2035,17 +2340,6 @@
             }
         };
 
-        // Setelah scan: hanya server yang mengirim laporan otomatis ke Kepala Sekolah.
-        // Guru tidak mendapat pesan otomatis; laporan guru dikirim hanya setelah keyword HADIR.
-        window.sendAutomaticPresensiWA = async function(teacher, jamStr) {
-            const statusEl = document.getElementById('last-scan-wa-status');
-            if (statusEl) {
-                statusEl.classList.remove('hidden');
-                statusEl.innerHTML = '<div class="text-emerald-800 font-bold"><i class="fa-solid fa-server mr-1"></i> Presensi tersimpan. Laporan Kepala Sekolah diproses otomatis oleh server.</div>';
-            }
-            return { success: true, serverTriggered: true };
-        };
-
         window.testWAGatewayConnection = async function() {
             const testPhone = document.getElementById('setting-kepsek-wa')?.value.trim() || '';
             if (!testPhone) {
@@ -2087,9 +2381,28 @@
             profileArea.classList.remove('hidden');
         }
 
-        window.clearTodayHistory = function() {
-            if (confirm("Yakin ingin menghapus seluruh riwayat presensi hari ini?")) {
-                window.executeClearTodayHistory();
+        window.clearTodayHistory = async function() {
+            if (!adminToken) {
+                showAlertModal(
+                    'Akses Admin Diperlukan',
+                    'Untuk menghapus riwayat presensi, silakan login Admin melalui <b>Pengaturan WA Gateway</b>, lalu ulangi perintah hapus.',
+                    'warning'
+                );
+                setTimeout(() => window.requestSettingsAccess?.(), 250);
+                return;
+            }
+
+            if (!confirm("Yakin ingin menghapus seluruh riwayat presensi hari ini?")) return;
+
+            try {
+                await window.executeClearTodayHistory();
+            } catch (error) {
+                console.error('Gagal membersihkan riwayat hari ini:', error);
+                showAlertModal(
+                    'Gagal Menghapus',
+                    error?.message || 'Riwayat presensi hari ini tidak dapat dihapus.',
+                    'error'
+                );
             }
         };
 
@@ -2545,9 +2858,67 @@
                 });
                 document.getElementById('recap-stat-total').innerText=guruList.length; document.getElementById('recap-stat-hadir').innerText=grandTotalHadir; document.getElementById('recap-stat-alpha').innerText=grandTotalAlpha; const den=grandTotalHadir+grandTotalAlpha; document.getElementById('recap-stat-percent').innerText=`${den?Math.round(grandTotalHadir/den*100):0}%`;
             } else if (type === 'weekly') {
-                const baseDate=new Date(dateVal); const dayOfWeek=baseDate.getDay(); const mondayDate=new Date(baseDate); mondayDate.setDate(baseDate.getDate()-(dayOfWeek===0?6:dayOfWeek-1)); const weekDays=Array.from({length:7},(_,i)=>{const d=new Date(mondayDate);d.setDate(mondayDate.getDate()+i);return d;}); const dayNames=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-                let thHTML=`<tr class="bg-slate-100 text-slate-700 font-extrabold uppercase text-[11px] border-b border-slate-300"><th class="p-3">No</th><th class="p-3">NIP</th><th class="p-3">Nama Guru</th><th class="p-3">Jabatan</th>`; weekDays.forEach(d=>{const sun=d.getDay()===0; const cls=sun?'bg-red-500 text-white font-black':'bg-slate-100 text-slate-700'; thHTML+=`<th class="p-2 text-center border-l border-slate-200 min-w-[70px] ${cls}">${dayNames[d.getDay()]}<br><span class="text-[9px]">${d.getDate()}/${d.getMonth()+1}</span></th>`;}); thHTML+=`<th class="p-3 text-center bg-emerald-100 text-emerald-900 border-l border-emerald-300">Hadir</th><th class="p-3 text-center bg-red-100 text-red-900">Alpha</th><th class="p-3 text-center bg-amber-100 text-amber-900">% Hadir</th></tr>`; tableHead.innerHTML=thHTML;
-                let gh=0,ga=0; guruList.forEach((guru,idx)=>{let h=0,a=0; const first=getFirstScanDate(guru.nip); let tr=`<tr class="hover:bg-slate-50 transition border-b border-slate-100 font-medium"><td class="p-3 font-bold">${idx+1}</td><td class="p-3 font-mono text-xs">${guru.nip}</td><td class="p-3 font-bold text-slate-800">${guru.nama}</td><td class="p-3 text-slate-600">${guru.jabatan}</td>`; weekDays.forEach(d=>{const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; const sun=d.getDay()===0; const rec=attendance.find(x=>x.nip===guru.nip&&x.tanggal===ds); const before=!first||ds<first; const future=ds>todayWit; if(sun)tr+=`<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">LIBUR</td>`; else if(before||future)tr+=`<td class="p-2 text-center border-l border-slate-200 text-slate-300">-</td>`; else if(rec&&rec.status==='Hadir'){h++;tr+=`<td class="p-2 text-center border-l border-slate-200 bg-emerald-100 text-emerald-800 font-bold">${rec.jam}</td>`;} else {a++;tr+=`<td class="p-2 text-center border-l border-slate-200 text-slate-400">Alpha</td>`;}}); const den=h+a,p=den?Math.round(h/den*100):0;gh+=h;ga+=a;tr+=`<td class="p-3 text-center bg-emerald-50 font-bold text-emerald-800 border-l border-emerald-200">${h} Hari</td><td class="p-3 text-center bg-red-50 font-bold text-red-600">${a} Hari</td><td class="p-3 text-center bg-amber-50 font-bold text-amber-800">${p}%</td></tr>`;tbody.innerHTML+=tr;}); document.getElementById('recap-stat-total').innerText=guruList.length;document.getElementById('recap-stat-hadir').innerText=gh;document.getElementById('recap-stat-alpha').innerText=ga;const den=gh+ga;document.getElementById('recap-stat-percent').innerText=`${den?Math.round(gh/den*100):0}%`;
+                const baseDate = new Date(dateVal);
+                const dayOfWeek = baseDate.getDay();
+                const mondayDate = new Date(baseDate);
+                mondayDate.setDate(baseDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+                const weekDays = Array.from({ length: 7 }, (_, i) => {
+                    const d = new Date(mondayDate);
+                    d.setDate(mondayDate.getDate() + i);
+                    return d;
+                });
+                const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+                let thHTML = `<tr class="bg-slate-100 text-slate-700 font-extrabold uppercase text-[11px] border-b border-slate-300"><th class="p-3">No</th><th class="p-3">NIP</th><th class="p-3">Nama Guru</th><th class="p-3">Jabatan</th>`;
+                weekDays.forEach(d => {
+                    const sun = d.getDay() === 0;
+                    const cls = sun ? 'bg-red-500 text-white font-black' : 'bg-slate-100 text-slate-700';
+                    thHTML += `<th class="p-2 text-center border-l border-slate-200 min-w-[70px] ${cls}">${dayNames[d.getDay()]}<br><span class="text-[9px]">${d.getDate()}/${d.getMonth() + 1}</span></th>`;
+                });
+                thHTML += `<th class="p-3 text-center bg-emerald-100 text-emerald-900 border-l border-emerald-300">Hadir</th><th class="p-3 text-center bg-red-100 text-red-900">Alpha</th><th class="p-3 text-center bg-amber-100 text-amber-900">% Hadir</th></tr>`;
+                tableHead.innerHTML = thHTML;
+
+                let gh = 0, ga = 0;
+                guruList.forEach((guru, idx) => {
+                    let h = 0, a = 0;
+                    const first = getFirstScanDate(guru.nip);
+                    let tr = `<tr class="hover:bg-slate-50 transition border-b border-slate-100 font-medium"><td class="p-3 font-bold">${idx + 1}</td><td class="p-3 font-mono text-xs">${guru.nip}</td><td class="p-3 font-bold text-slate-800">${guru.nama}</td><td class="p-3 text-slate-600">${guru.jabatan}</td>`;
+
+                    weekDays.forEach(d => {
+                        const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                        const sun = d.getDay() === 0;
+                        const rec = attendance.find(x => x.nip === guru.nip && x.tanggal === ds);
+                        const before = !first || ds < first;
+                        const future = ds > todayWit;
+
+                        if (sun) {
+                            tr += `<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">LIBUR</td>`;
+                        } else if (before || future) {
+                            tr += `<td class="p-2 text-center border-l border-slate-200 text-slate-300">-</td>`;
+                        } else if (rec?.status === 'Hadir') {
+                            h++;
+                            tr += `<td class="p-2 text-center border-l border-slate-200 bg-emerald-100 text-emerald-800 font-bold">${rec.jam}</td>`;
+                        } else if (rec?.status === 'Tidak Hadir (Alpha)') {
+                            a++;
+                            tr += `<td class="p-2 text-center border-l border-slate-200 bg-red-50 text-red-600 font-bold">Alpha</td>`;
+                        } else {
+                            tr += `<td class="p-2 text-center border-l border-slate-200 text-slate-300">-</td>`;
+                        }
+                    });
+
+                    const den = h + a;
+                    const pct = den ? Math.round(h / den * 100) : 0;
+                    gh += h;
+                    ga += a;
+                    tr += `<td class="p-3 text-center bg-emerald-50 font-bold text-emerald-800 border-l border-emerald-200">${h} Hari</td><td class="p-3 text-center bg-red-50 font-bold text-red-600">${a} Hari</td><td class="p-3 text-center bg-amber-50 font-bold text-amber-800">${pct}%</td></tr>`;
+                    tbody.innerHTML += tr;
+                });
+
+                document.getElementById('recap-stat-total').innerText = guruList.length;
+                document.getElementById('recap-stat-hadir').innerText = gh;
+                document.getElementById('recap-stat-alpha').innerText = ga;
+                const den = gh + ga;
+                document.getElementById('recap-stat-percent').innerText = `${den ? Math.round(gh / den * 100) : 0}%`;
             } else {
                 tableHead.innerHTML=`<tr class="bg-slate-100 text-slate-700 font-extrabold uppercase text-[11px] border-b border-slate-300"><th class="p-3">No</th><th class="p-3">NIP</th><th class="p-3">Nama Guru</th><th class="p-3">Jabatan</th><th class="p-3">Tanggal (WIT)</th><th class="p-3">Jam Masuk</th><th class="p-3">Status</th></tr>`;
                 const filtered=attendance.filter(a=>a.tanggal===dateVal); const totalHadir=filtered.filter(a=>a.status==='Hadir').length; const totalAlpha=filtered.filter(a=>a.status==='Tidak Hadir (Alpha)').length; const denominator=totalHadir+totalAlpha;
@@ -2658,27 +3029,48 @@
 
         window.requestSettingsAccess = function() {
             const modal = document.getElementById('modal-wa-password');
-            const email = document.getElementById('wa-settings-email');
             const input = document.getElementById('wa-settings-password');
             const error = document.getElementById('wa-password-error');
-            if (email) email.value = '';
-            if (input) input.value = '';
+            if (input) {
+                input.value = '';
+                input.type = 'password';
+            }
+            const icon = document.getElementById('toggle-admin-password-icon');
+            if (icon) icon.className = 'fa-solid fa-eye';
             if (error) { error.classList.add('hidden'); error.innerText = ''; }
             modal?.classList.remove('hidden');
-            setTimeout(() => email?.focus(), 120);
+            setTimeout(() => input?.focus(), 120);
         };
 
         window.closeWAPasswordModal = function() { document.getElementById('modal-wa-password')?.classList.add('hidden'); };
 
+        window.toggleAdminPasswordVisibility = function() {
+            const input = document.getElementById('wa-settings-password');
+            const icon = document.getElementById('toggle-admin-password-icon');
+            if (!input) return;
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            if (icon) icon.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+            input.focus();
+        };
+
         window.verifyWAPassword = async function(event) {
             event.preventDefault();
-            const email = document.getElementById('wa-settings-email')?.value.trim() || '';
             const password = document.getElementById('wa-settings-password')?.value || '';
             const error = document.getElementById('wa-password-error');
+
+            if (!password) {
+                if (error) {
+                    error.textContent = 'Masukkan Password Admin.';
+                    error.classList.remove('hidden');
+                }
+                return;
+            }
+
             try {
                 const result = await apiFetch('/api/admin/login', {
                     method: 'POST',
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ password })
                 });
                 adminToken = result.token || '';
                 if (!adminToken) throw new Error('Token admin tidak diterima dari Worker.');
@@ -2693,7 +3085,7 @@
             } catch (e) {
                 console.error('Login admin gagal:', e);
                 if (error) {
-                    error.textContent = e?.message || 'Login gagal. Periksa email/password.';
+                    error.textContent = e?.message || 'Password Admin salah atau sesi tidak dapat dibuat.';
                     error.classList.remove('hidden');
                 }
             }
@@ -2722,13 +3114,29 @@
             const waKey = document.getElementById('setting-wa-key')?.value.trim() || '';
             const kepsekWA = document.getElementById('setting-kepsek-wa')?.value.trim() || '';
             const autoSendWA = document.getElementById('setting-auto-wa')?.checked ?? true;
-            if (!waKey) { showAlertModal('Peringatan', 'Masukkan API Key Fonnte baru.', 'warning'); return; }
-            if (!kepsekWA) { showAlertModal('Peringatan', 'Masukkan Nomor WA Kepala Sekolah.', 'warning'); return; }
+            const tokenAlreadyAvailable = window.AppState.settings?.waHasToken === true;
+
+            if (!waKey && !tokenAlreadyAvailable) {
+                showAlertModal('API Key Dibutuhkan', 'Belum ada token Fonnte aktif di server. Masukkan API Key Fonnte terlebih dahulu.', 'warning');
+                return;
+            }
+            if (!kepsekWA) {
+                showAlertModal('Peringatan', 'Masukkan Nomor WA Kepala Sekolah.', 'warning');
+                return;
+            }
+
             try {
-                await window.saveSettingsToDB({ waApiKey: waKey, kepsekWA, autoSendWA });
+                const saved = await window.saveSettingsToDB({ waApiKey: waKey, kepsekWA, autoSendWA });
                 document.getElementById('setting-wa-key').value = '';
+                window.AppState.settings.waHasToken = saved?.waHasToken === true || tokenAlreadyAvailable || !!waKey;
                 closeSettingsModal();
-                showAlertModal('Tersimpan & Langsung Aktif', 'Token Fonnte baru dan nomor Kepala Sekolah tersimpan di server. Pengiriman berikutnya langsung menggunakan token terbaru tanpa mengubah file GitHub.', 'success');
+                showAlertModal(
+                    'Tersimpan & Langsung Aktif',
+                    waKey
+                        ? 'Token Fonnte baru, nomor Kepala Sekolah, dan pengaturan WA berhasil disimpan di server.'
+                        : 'Nomor Kepala Sekolah dan pengaturan WA berhasil disimpan. Token Fonnte yang sudah aktif tetap digunakan.',
+                    'success'
+                );
             } catch (e) {
                 showAlertModal('Gagal Menyimpan', e?.message || 'Pengaturan WA gagal disimpan.', 'error');
             }
