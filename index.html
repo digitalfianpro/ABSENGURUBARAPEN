@@ -1573,8 +1573,10 @@
             if (!adminToken) {
                 throw new Error('Silakan login melalui Pengaturan WA terlebih dahulu untuk mengelola data guru.');
             }
-            const previousNip = String(teacherData.previousNip || '').trim();
-            const newNip = String(teacherData.nip || '').trim();
+            const { skipRefresh = false, ...rawTeacherData } = teacherData || {};
+            const previousNip = String(rawTeacherData.previousNip || '').replace(/\D/g, '').trim();
+            const newNip = String(rawTeacherData.nip || '').replace(/\D/g, '').trim();
+            if (!newNip || !rawTeacherData.nama) throw new Error('NIP dan nama guru wajib diisi.');
 
             const idx = window.AppState.guruList.findIndex(g => String(g.nip || '').trim() === (previousNip || newNip));
             const conflict = window.AppState.guruList.find(g => {
@@ -1587,7 +1589,7 @@
             }
 
             const oldTeacher = idx >= 0 ? window.AppState.guruList[idx] : null;
-            const mergedTeacher = { ...(oldTeacher || {}), ...teacherData, nip: newNip };
+            const mergedTeacher = { ...(oldTeacher || {}), ...rawTeacherData, nip: newNip };
             if (!mergedTeacher.foto && oldTeacher?.foto) mergedTeacher.foto = oldTeacher.foto;
             delete mergedTeacher.previousNip;
 
@@ -1596,7 +1598,7 @@
                 body: JSON.stringify({ ...mergedTeacher, previousNip })
             });
 
-            await window.refreshCloudData();
+            if (!skipRefresh) await window.refreshCloudData();
             return result.teacher || mergedTeacher;
         };
 
@@ -1607,13 +1609,17 @@
         };
 
         window.saveAttendanceToDB = async function(attendanceData) {
-            const docId = `${attendanceData.nip}_${attendanceData.tanggal}`;
+            const { skipRefresh = false, ...recordData } = attendanceData || {};
+            const cleanNip = String(recordData.nip || '').replace(/\D/g, '').trim();
+            const tanggal = String(recordData.tanggal || '').trim();
+            if (!cleanNip || !tanggal) throw new Error('NIP dan tanggal presensi wajib diisi.');
+            const docId = `${cleanNip}_${tanggal}`;
             const result = await apiFetch('/api/attendance', {
                 method: 'POST',
-                body: JSON.stringify({ id: docId, ...attendanceData })
+                body: JSON.stringify({ id: docId, ...recordData, nip: cleanNip })
             });
 
-            await window.refreshCloudData();
+            if (!skipRefresh) await window.refreshCloudData();
             return result.record;
         };
 
@@ -1822,7 +1828,11 @@
             if (activeNav) {
                 activeNav.className = "sidebar-btn active w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl transition";
             }
-            if(window.innerWidth < 768) toggleSidebar();
+            if(window.innerWidth < 768) window.toggleSidebar?.();
+            if (tabId !== 'scan-tab' && window.AppState.html5QrcodeScanner) {
+                window.AppState.html5QrcodeScanner.stop().catch(()=>{});
+                window.AppState.html5QrcodeScanner = null;
+            }
             if (tabId === 'dashboard-tab' && window.renderDashboard) renderDashboard();
             if (tabId === 'guru-tab' && window.renderGuruCards) renderGuruCards();
             if (tabId === 'rekapan-tab' && window.generateRecapData) {
@@ -1864,23 +1874,34 @@
         }
 
         window.compressImage = function(file) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
+                if (!file || !file.type?.startsWith('image/')) {
+                    reject(new Error('File bukan gambar yang valid.'));
+                    return;
+                }
                 const reader = new FileReader();
-                reader.readAsDataURL(file);
+                reader.onerror = () => reject(new Error('Foto tidak dapat dibaca.'));
                 reader.onload = event => {
                     const img = new Image();
-                    img.src = event.target.result;
+                    img.onerror = () => reject(new Error('File foto rusak atau format tidak didukung.'));
                     img.onload = () => {
+                        const MAX_SIZE = 500;
+                        const scale = Math.min(1, MAX_SIZE / Math.max(img.width, img.height));
+                        const width = Math.max(1, Math.round(img.width * scale));
+                        const height = Math.max(1, Math.round(img.height * scale));
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 400;
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.8));
-                    }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d', { alpha: false });
+                        if (!ctx) { reject(new Error('Canvas gambar tidak tersedia.')); return; }
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, width, height);
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.78));
+                    };
+                    img.src = event.target.result;
                 };
+                reader.readAsDataURL(file);
             });
         };
 
@@ -1907,11 +1928,22 @@
             }
         };
 
-        window.startCameraScanner = function() {
-            document.getElementById('camera-placeholder')?.classList.add('hidden');
-            const scanner = new Html5Qrcode("reader");
-            window.AppState.html5QrcodeScanner = scanner;
-            scanner.start({ facingMode: "environment" }, { fps: 12, qrbox: { width: 240, height: 240 } },
+        window.startCameraScanner = async function() {
+            if (!window.Html5Qrcode) {
+                showAlertModal('Scanner Tidak Tersedia', 'Library QR scanner belum termuat. Periksa koneksi internet lalu muat ulang halaman.', 'error');
+                return;
+            }
+            try {
+                if (window.AppState.html5QrcodeScanner) {
+                    try { await window.AppState.html5QrcodeScanner.stop(); } catch (_) {}
+                    window.AppState.html5QrcodeScanner.clear?.();
+                    window.AppState.html5QrcodeScanner = null;
+                }
+                document.getElementById('reader').innerHTML = '';
+                document.getElementById('camera-placeholder')?.classList.add('hidden');
+                const scanner = new Html5Qrcode("reader");
+                window.AppState.html5QrcodeScanner = scanner;
+                await scanner.start({ facingMode: "environment" }, { fps: 12, qrbox: { width: 240, height: 240 } },
                 (decodedText) => {
                     if (!window.AppState.isScanningLocked) {
                         window.AppState.isScanningLocked = true;
@@ -1919,7 +1951,16 @@
                         setTimeout(() => { window.AppState.isScanningLocked = false; }, 2500);
                     }
                 }, () => {}
-            ).catch(() => showAlertModal("Error Kamera", "Tidak dapat mengakses kamera device.", "error"));
+                ).catch(() => {
+                    window.AppState.html5QrcodeScanner = null;
+                    document.getElementById('camera-placeholder')?.classList.remove('hidden');
+                    showAlertModal("Error Kamera", "Tidak dapat mengakses kamera device. Pastikan izin kamera diberikan kepada browser.", "error");
+                });
+            } catch (err) {
+                window.AppState.html5QrcodeScanner = null;
+                document.getElementById('camera-placeholder')?.classList.remove('hidden');
+                showAlertModal('Error Kamera', err?.message || 'Scanner kamera gagal dijalankan.', 'error');
+            }
         };
 
         window.processManualScan = function() {
@@ -1941,8 +1982,12 @@
         });
 
         async function processNipScan(nip) {
-            const cleanNip = nip.replace(/[^0-9]/g, '');
-            const teacher = window.AppState.guruList.find(g => g.nip === cleanNip || g.nip === nip);
+            const cleanNip = String(nip || '').replace(/\D/g, '');
+            if (!cleanNip) {
+                showAlertModal('NIP Tidak Valid', 'Masukkan atau scan NIP guru yang valid.', 'warning');
+                return;
+            }
+            const teacher = window.AppState.guruList.find(g => String(g.nip || '').replace(/\D/g, '') === cleanNip);
 
             if (!teacher) {
                 playSound('error');
@@ -2136,13 +2181,18 @@
             try {
                 await Promise.all(targets.map(guru => window.saveAttendanceToDB({
                     nip: guru.nip, nama: guru.nama, jabatan: guru.jabatan,
-                    tanggal: todayStr, jam: '-', status: 'Tidak Hadir (Alpha)'
+                    tanggal: todayStr, jam: '-', status: 'Tidak Hadir (Alpha)', skipRefresh: true
                 })));
+                await window.refreshCloudData();
                 showAlertModal('Selesai', `<b>${targets.length} Guru</b> ditandai Tidak Hadir (Alpha). Guru yang belum pernah scan tetap tidak dihitung.`, 'success');
             } catch (error) {
                 showAlertModal('Gagal', error?.message || 'Sebagian data Alpha gagal disimpan.', 'error');
             }
         };
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;',"\"":'&quot;'}[ch]));
+        }
 
         window.renderGuruCards = function() {
             const container = document.getElementById('guru-cards-container');
@@ -2154,27 +2204,27 @@
                 const card = document.createElement('div');
                 card.className = "bg-white p-5 rounded-3xl flex flex-col justify-between space-y-4 border border-slate-200 shadow-lg hover:shadow-emerald-500/10 hover:border-emerald-400 transition transform hover:-translate-y-1";
                 
-                const imgSrc = guru.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(guru.nama)}&background=059669&color=fff&size=200`;
+                const imgSrc = guru.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(String(guru.nama || 'Guru'))}&background=059669&color=fff&size=200`;
 
                 card.innerHTML = `
                     <div class="flex items-start space-x-3.5">
                         <img src="${imgSrc}" class="w-14 h-14 rounded-full object-cover border-2 border-emerald-500 shadow-md">
                         <div class="flex-1 overflow-hidden">
-                            <h4 class="font-bold text-base text-slate-800 truncate font-playfair">${guru.nama}</h4>
-                            <p class="text-xs text-emerald-700 font-semibold truncate">${guru.jabatan}</p>
+                            <h4 class="font-bold text-base text-slate-800 truncate font-playfair">${escapeHtml(guru.nama)}</h4>
+                            <p class="text-xs text-emerald-700 font-semibold truncate">${escapeHtml(guru.jabatan)}</p>
                         </div>
                     </div>
                     <div class="space-y-1 text-xs font-mono bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                        <div class="flex justify-between text-slate-600"><span>NIP:</span><span class="font-bold text-slate-800">${guru.nip}</span></div>
-                        <div class="flex justify-between text-slate-600"><span>WA:</span><span class="font-bold text-slate-800">${guru.wa || '-'}</span></div>
+                        <div class="flex justify-between text-slate-600"><span>NIP:</span><span class="font-bold text-slate-800">${escapeHtml(guru.nip)}</span></div>
+                        <div class="flex justify-between text-slate-600"><span>WA:</span><span class="font-bold text-slate-800">${escapeHtml(guru.wa || '-')}</span></div>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-slate-100">
                         <button type="button" data-action="print-qr" data-nip="${guru.nip}" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition border border-emerald-200">
                              <i class="fa-solid fa-qrcode mr-1 text-emerald-600"></i> Cetak QR
                          </button>
                         <div class="flex space-x-1.5">
-                            <button onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-xl text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteGuru('${guru.nip}')" class="p-2 rounded-xl text-xs bg-red-50 hover:bg-red-100 text-red-600 transition"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" onclick="openModalGuru('${guru.nip}')" class="p-2 rounded-xl text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" onclick="deleteGuru('${guru.nip}')" class="p-2 rounded-xl text-xs bg-red-50 hover:bg-red-100 text-red-600 transition"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -2244,15 +2294,27 @@
                 if (existing && existing.foto) foto = existing.foto;
             }
 
-            if (!nip || !nama) return;
-            await window.saveTeacherToDB({ nip, nama, jabatan, wa, foto, previousNip });
-            closeModalGuru();
-            showAlertModal("Berhasil", "Data guru berhasil disimpan.", "success");
+            if (!nip || !nama) {
+                showAlertModal('Data Belum Lengkap', 'NIP dan Nama Lengkap wajib diisi.', 'warning');
+                return;
+            }
+            try {
+                await window.saveTeacherToDB({ nip, nama, jabatan, wa, foto, previousNip });
+                if (fotoInput) fotoInput.value = '';
+                closeModalGuru();
+                showAlertModal("Berhasil", "Data guru berhasil disimpan.", "success");
+            } catch (err) {
+                showAlertModal('Gagal Menyimpan Guru', err?.message || 'Data guru gagal disimpan.', 'error');
+            }
         };
 
-        window.deleteGuru = function(nip) {
-            if (confirm("Yakin ingin menghapus guru ini dari daftar?")) {
-                window.deleteTeacherFromDB(nip);
+        window.deleteGuru = async function(nip) {
+            if (!confirm("Yakin ingin menghapus guru ini dari daftar?")) return;
+            try {
+                await window.deleteTeacherFromDB(nip);
+                showAlertModal('Berhasil', 'Data guru berhasil dihapus.', 'success');
+            } catch (err) {
+                showAlertModal('Gagal Menghapus', err?.message || 'Data guru gagal dihapus.', 'error');
             }
         };
 
@@ -2320,10 +2382,11 @@
                     let addedCount = 0;
                     for (const row of parsed) {
                         const existing = window.AppState.guruList.find(g => String(g.nip) === row.nip);
-                        await window.saveTeacherToDB({ ...row, foto: existing?.foto || '' });
+                        await window.saveTeacherToDB({ ...row, foto: existing?.foto || '', skipRefresh: true });
                         addedCount++;
                     }
 
+                    await window.refreshCloudData();
                     showAlertModal("Import Berhasil", `Berhasil mengimpor <b>${addedCount} Data Guru</b> ke D1 Cloudflare.`, "success");
                 } catch (err) {
                     console.error('Import Excel gagal:', err);
@@ -2335,40 +2398,108 @@
             reader.readAsArrayBuffer(file);
         };
 
-        window.handleBulkPhotoUpload = async function(event) {
-            const files = event.target.files;
+        let pendingBulkPhotoFiles = [];
+
+        function extractNipFromPhotoFilename(filename) {
+            const stem = String(filename || '').replace(/\.[^.]+$/, '');
+            const digitsOnly = stem.replace(/\D/g, '');
+            if (digitsOnly) return digitsOnly;
+            return stem.trim();
+        }
+
+        function findTeacherByPhotoFilename(filename) {
+            const stem = String(filename || '').replace(/\.[^.]+$/, '').trim();
+            const digits = stem.replace(/\D/g, '');
+            const teachers = window.AppState.guruList || [];
+
+            // Prioritas 1: nama file hanya berisi NIP, misalnya 198503122010011001.jpg
+            let teacher = teachers.find(g => String(g.nip || '').replace(/\D/g, '') === digits && digits.length >= 8);
+            if (teacher) return teacher;
+
+            // Prioritas 2: nama file diawali NIP, misalnya 198503122010011001_Ahmad.jpg
+            teacher = teachers.find(g => {
+                const nip = String(g.nip || '').replace(/\D/g, '');
+                return nip && digits.startsWith(nip);
+            });
+            if (teacher) return teacher;
+
+            // Prioritas 3: kecocokan tepat setelah spasi/tanda hubung/underscore dihapus
+            const normalizedStem = stem.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return teachers.find(g => normalizedStem === String(g.nip || '').replace(/\D/g, '')) || null;
+        }
+
+        async function processPendingBulkPhotoFiles(files, inputEl) {
             if (!files || files.length === 0) return;
+
             if (!adminToken) {
-                event.target.value = '';
-                showAlertModal("Akses Admin", "Login Admin diperlukan sebelum mengunggah foto guru.", "warning");
+                pendingBulkPhotoFiles = Array.from(files);
+                if (inputEl) inputEl.value = '';
+                showAlertModal(
+                    'Login Admin Diperlukan',
+                    'Foto sudah dipilih. Silakan login Admin melalui <b>Pengaturan WA Gateway</b>. Setelah login berhasil, sinkron foto akan dilanjutkan otomatis.',
+                    'warning'
+                );
+                requestSettingsAccess();
                 return;
             }
 
+            const list = Array.from(files);
             let successCount = 0;
             let failedCount = 0;
+            const failedNames = [];
 
-            showAlertModal("Memproses", "Sedang menyinkronkan foto berdasarkan NIP...", "success");
+            showAlertModal('Memproses', `Menyinkronkan <b>${list.length} foto</b> berdasarkan NIP...`, 'warning');
 
-            for (const file of files) {
+            for (let i = 0; i < list.length; i++) {
+                const file = list[i];
                 try {
-                    const dot = file.name.lastIndexOf('.');
-                    const filenameNip = (dot > 0 ? file.name.substring(0, dot) : file.name).replace(/\D/g, '');
-                    const teacher = window.AppState.guruList.find(g => String(g.nip) === filenameNip);
-                    if (!teacher) { failedCount++; continue; }
+                    const teacher = findTeacherByPhotoFilename(file.name);
+                    if (!teacher) {
+                        failedCount++;
+                        failedNames.push(file.name);
+                        continue;
+                    }
 
                     const base64 = await window.compressImage(file);
-                    await window.saveTeacherToDB({ ...teacher, foto: base64 });
+                    await window.saveTeacherToDB({
+                        nip: teacher.nip,
+                        nama: teacher.nama,
+                        jabatan: teacher.jabatan,
+                        wa: teacher.wa || '',
+                        foto: base64,
+                        previousNip: teacher.nip,
+                        skipRefresh: true
+                    });
                     successCount++;
+
+                    const statusEl = document.getElementById('alert-message');
+                    if (statusEl) statusEl.innerHTML = `Foto <b>${i + 1}/${list.length}</b> diproses: <b>${teacher.nama}</b>`;
                 } catch (err) {
                     console.error('Gagal sinkron foto:', file.name, err);
                     failedCount++;
+                    failedNames.push(`${file.name}: ${err?.message || 'gagal disimpan'}`);
                 }
             }
 
-            event.target.value = '';
-            let msg = `<b>${successCount} Foto Guru</b> berhasil disinkronkan.`;
-            if (failedCount > 0) msg += `<br><span class="text-red-500">${failedCount} foto gagal atau nama file (NIP) tidak cocok.</span>`;
-            showAlertModal("Hasil Sync Foto", msg, successCount > 0 ? "success" : "warning");
+            pendingBulkPhotoFiles = [];
+            if (inputEl) inputEl.value = '';
+            await window.refreshCloudData();
+
+            let msg = `<b>${successCount} foto guru</b> berhasil disimpan dan langsung dipasang pada kartu guru.`;
+            if (failedCount > 0) {
+                msg += `<br><span class="text-red-600"><b>${failedCount}</b> foto gagal atau NIP tidak ditemukan.</span>`;
+                if (failedNames.length <= 5) msg += `<br><span class="text-xs">${failedNames.join('<br>')}</span>`;
+            }
+            showAlertModal(
+                successCount > 0 ? 'Sinkron Foto Berhasil' : 'Sinkron Foto Gagal',
+                msg,
+                successCount > 0 ? 'success' : 'error'
+            );
+        }
+
+        window.handleBulkPhotoUpload = async function(event) {
+            const files = event.target.files;
+            await processPendingBulkPhotoFiles(files, event.target);
         };
 
         window.updateRecapFilterUI = function() {
@@ -2555,6 +2686,10 @@
                 await window.getCurrentWaSettings();
                 closeWAPasswordModal();
                 openSettingsModal();
+                if (pendingBulkPhotoFiles.length > 0) {
+                    const filesToResume = pendingBulkPhotoFiles.slice();
+                    setTimeout(() => processPendingBulkPhotoFiles(filesToResume, null), 250);
+                }
             } catch (e) {
                 console.error('Login admin gagal:', e);
                 if (error) {
