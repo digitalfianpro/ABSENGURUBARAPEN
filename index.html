@@ -1459,6 +1459,65 @@
                             </div>
                         </div>
 
+
+                        <!-- Google Drive Backup & Sync -->
+                        <div class="rounded-3xl border border-sky-200 bg-gradient-to-br from-white via-sky-50 to-blue-50 p-5 sm:p-6 shadow-sm">
+                            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-400 text-white flex items-center justify-center shadow-lg shadow-blue-200">
+                                        <i class="fa-brands fa-google-drive text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <h4 class="font-extrabold text-slate-900 text-base">Backup & Sinkronisasi Google Drive</h4>
+                                            <span id="drive-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold border border-slate-200">
+                                                Belum diperiksa
+                                            </span>
+                                        </div>
+                                        <p id="drive-status-text" class="text-[11px] text-slate-500 mt-1">
+                                            Login admin untuk melihat status Google Drive.
+                                        </p>
+                                        <p class="text-[10px] text-slate-400 mt-1">
+                                            Backup bulanan otomatis diverifikasi terlebih dahulu. Data bulan lama di Cloudflare hanya dihapus setelah backup Drive berhasil.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full xl:w-auto">
+                                    <button onclick="syncDriveNow()" class="bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white px-4 py-3 rounded-xl text-xs font-extrabold shadow-md flex items-center justify-center gap-2 transition">
+                                        <i class="fa-solid fa-arrows-rotate"></i> Sinkron Sekarang
+                                    </button>
+                                    <button onclick="backupCurrentMonthToDrive()" class="bg-white hover:bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl text-xs font-extrabold shadow-sm flex items-center justify-center gap-2 transition">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i> Backup Bulan Dipilih
+                                    </button>
+                                    <button onclick="openDriveFolder()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-3 rounded-xl text-xs font-extrabold shadow-md flex items-center justify-center gap-2 transition">
+                                        <i class="fa-brands fa-google-drive"></i> Buka Folder Drive
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
+                                <div class="bg-white/90 rounded-2xl border border-slate-200 p-3.5">
+                                    <div class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Data Guru</div>
+                                    <div id="drive-teacher-count" class="text-lg font-black text-slate-900 mt-1">-</div>
+                                    <div class="text-[10px] text-slate-500">guru aktif di D1</div>
+                                </div>
+                                <div class="bg-white/90 rounded-2xl border border-slate-200 p-3.5">
+                                    <div class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Presensi Aktif</div>
+                                    <div id="drive-active-records" class="text-lg font-black text-slate-900 mt-1">-</div>
+                                    <div class="text-[10px] text-slate-500">record tersimpan di D1</div>
+                                </div>
+                                <div class="bg-white/90 rounded-2xl border border-slate-200 p-3.5">
+                                    <div class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Sinkron Terakhir</div>
+                                    <div id="drive-last-sync" class="text-xs font-extrabold text-slate-800 mt-1 leading-5">-</div>
+                                </div>
+                                <div class="bg-white/90 rounded-2xl border border-slate-200 p-3.5">
+                                    <div class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Backup Bulanan</div>
+                                    <div id="drive-last-backup" class="text-xs font-extrabold text-slate-800 mt-1 leading-5">-</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Filter and Actions -->
                         <div class="grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-4 items-stretch">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-5 rounded-3xl border border-slate-200">
@@ -2072,6 +2131,207 @@
             return { ...(result || {}), cloudSaved: true };
         };
 
+
+        /* =====================================================
+           GOOGLE DRIVE BACKUP & SYNC UI
+        ====================================================== */
+
+        window.BarapenDriveState = {
+            configured: false,
+            folderUrl: '',
+            masterSheetUrl: '',
+            activeSheetUrl: ''
+        };
+
+        function setDriveStatusBadge(mode, text) {
+            const badge = document.getElementById('drive-status-pill');
+            if (!badge) return;
+
+            const modes = {
+                success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                error: 'bg-red-50 text-red-700 border-red-200',
+                warning: 'bg-amber-50 text-amber-700 border-amber-200',
+                loading: 'bg-blue-50 text-blue-700 border-blue-200',
+                idle: 'bg-slate-100 text-slate-600 border-slate-200'
+            };
+
+            badge.className = `px-2.5 py-1 rounded-full text-[10px] font-extrabold border ${modes[mode] || modes.idle}`;
+            badge.textContent = text;
+        }
+
+        function renderDriveStatus(data = {}) {
+            const configured = data.configured === true;
+            const status = String(data.lastSyncStatus || '').toUpperCase();
+            const error = String(data.lastError || '').trim();
+
+            window.BarapenDriveState = {
+                configured,
+                folderUrl: String(data.folderUrl || ''),
+                masterSheetUrl: String(data.masterSheetUrl || ''),
+                activeSheetUrl: String(data.activeSheetUrl || '')
+            };
+
+            const statusText = document.getElementById('drive-status-text');
+            const teacherCount = document.getElementById('drive-teacher-count');
+            const activeRecords = document.getElementById('drive-active-records');
+            const lastSync = document.getElementById('drive-last-sync');
+            const lastBackup = document.getElementById('drive-last-backup');
+
+            if (!configured) {
+                setDriveStatusBadge('warning', 'Belum dikonfigurasi');
+                if (statusText) statusText.textContent = 'Tambahkan GOOGLE_SYNC_URL dan GOOGLE_SYNC_SECRET pada Cloudflare Worker.';
+            } else if (status === 'ERROR') {
+                setDriveStatusBadge('error', 'Sinkron bermasalah');
+                if (statusText) statusText.textContent = error || 'Sinkron Google Drive terakhir gagal.';
+            } else if (status === 'SUCCESS') {
+                setDriveStatusBadge('success', 'Drive tersambung');
+                if (statusText) statusText.textContent = 'Master guru dan presensi aktif memiliki salinan di Google Drive.';
+            } else {
+                setDriveStatusBadge('loading', 'Siap diuji');
+                if (statusText) statusText.textContent = 'Konfigurasi tersedia. Klik Sinkron Sekarang untuk membuat file Drive pertama.';
+            }
+
+            if (teacherCount) teacherCount.textContent = Number(data.teacherCount || 0).toLocaleString('id-ID');
+            if (activeRecords) activeRecords.textContent = Number(data.activeRecordCount || 0).toLocaleString('id-ID');
+            if (lastSync) lastSync.textContent = data.lastSyncAt || 'Belum pernah';
+
+            const b = data.latestBackup;
+            if (lastBackup) {
+                if (b && b.period) {
+                    const cleaned = b.cleaned_at ? ' • D1 dibersihkan' : '';
+                    lastBackup.textContent = `${b.period} • ${b.status || '-'} • ${Number(b.record_count || 0)} data${cleaned}`;
+                } else {
+                    lastBackup.textContent = 'Belum ada arsip bulanan';
+                }
+            }
+        }
+
+        window.refreshDriveStatus = async function() {
+            if (!adminToken) {
+                setDriveStatusBadge('idle', 'Login admin');
+                const text = document.getElementById('drive-status-text');
+                if (text) text.textContent = 'Login admin untuk melihat status Google Drive.';
+                return null;
+            }
+
+            try {
+                setDriveStatusBadge('loading', 'Memeriksa...');
+                const data = await apiFetch('/api/drive/status', { method: 'GET' });
+                renderDriveStatus(data || {});
+                return data;
+            } catch (error) {
+                setDriveStatusBadge('error', 'Gagal diperiksa');
+                const text = document.getElementById('drive-status-text');
+                if (text) text.textContent = error?.message || 'Status Google Drive tidak dapat dimuat.';
+                return null;
+            }
+        };
+
+        function requireDriveAdmin(actionLabel) {
+            if (adminToken) return true;
+
+            showAlertModal(
+                'Login Admin Diperlukan',
+                `Silakan login dengan Password Admin sebelum ${actionLabel}.`,
+                'warning'
+            );
+            requestSettingsAccess();
+            return false;
+        }
+
+        window.syncDriveNow = async function() {
+            if (!requireDriveAdmin('melakukan sinkronisasi Google Drive')) return;
+
+            try {
+                setDriveStatusBadge('loading', 'Sinkronisasi...');
+                showAlertModal(
+                    'Sinkronisasi Google Drive',
+                    'Master data guru dan presensi aktif sedang disalin ke Google Drive.',
+                    'warning'
+                );
+
+                const result = await apiFetch('/api/drive/sync', {
+                    method: 'POST',
+                    body: JSON.stringify({})
+                });
+
+                await refreshDriveStatus();
+
+                showAlertModal(
+                    'Sinkronisasi Berhasil',
+                    `Google Drive berhasil diperbarui.<br><b>${Number(result.teacherCount || 0)} guru</b> dan <b>${Number(result.recordCount || 0)} record presensi</b> telah disinkronkan.`,
+                    'success'
+                );
+            } catch (error) {
+                await refreshDriveStatus();
+                showAlertModal(
+                    'Sinkronisasi Gagal',
+                    error?.message || 'Google Drive belum dapat disinkronkan.',
+                    'error'
+                );
+            }
+        };
+
+        window.backupCurrentMonthToDrive = async function() {
+            if (!requireDriveAdmin('membuat backup bulanan')) return;
+
+            const period =
+                document.getElementById('recap-month-input')?.value ||
+                getWITDateString().substring(0, 7);
+
+            if (!/^\d{4}-\d{2}$/.test(period)) {
+                showAlertModal('Periode Tidak Valid', 'Pilih bulan yang ingin dibackup.', 'warning');
+                return;
+            }
+
+            try {
+                showAlertModal(
+                    'Membuat Backup',
+                    `Membuat arsip Google Sheet, Excel, dan JSON untuk periode <b>${period}</b>.<br>Backup manual ini <b>tidak menghapus</b> data D1.`,
+                    'warning'
+                );
+
+                const result = await apiFetch('/api/drive/backup', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        period,
+                        cleanup: false
+                    })
+                });
+
+                await refreshDriveStatus();
+
+                showAlertModal(
+                    'Backup Drive Berhasil',
+                    `Periode <b>${period}</b> berhasil diarsipkan ke Google Drive dengan <b>${Number(result.recordCount || 0)} record</b>.<br>Data Cloudflare tetap disimpan karena ini backup manual.`,
+                    'success'
+                );
+            } catch (error) {
+                await refreshDriveStatus();
+                showAlertModal(
+                    'Backup Gagal',
+                    error?.message || 'Arsip bulanan tidak dapat dibuat.',
+                    'error'
+                );
+            }
+        };
+
+        window.openDriveFolder = function() {
+            const url = String(window.BarapenDriveState?.folderUrl || '');
+
+            if (!url) {
+                showAlertModal(
+                    'Folder Drive Belum Tersedia',
+                    'Klik <b>Sinkron Sekarang</b> terlebih dahulu agar folder Google Drive dibuat dan alamatnya tersimpan.',
+                    'warning'
+                );
+                return;
+            }
+
+            window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
+
         try {
             const cachedWaSettings = JSON.parse(localStorage.getItem('smp_barapen_wa_settings') || 'null');
             if (cachedWaSettings) window.applyWhatsAppSettings(cachedWaSettings);
@@ -2202,6 +2462,7 @@
                 document.getElementById('recap-date-input').value = getWITDateString();
                 document.getElementById('recap-month-input').value = getWITDateString().substring(0, 7);
                 generateRecapData();
+                window.refreshDriveStatus?.();
             }
         };
 
@@ -3577,6 +3838,7 @@
                 await window.getCurrentWaSettings();
                 closeWAPasswordModal();
                 openSettingsModal();
+                window.refreshDriveStatus?.();
                 if (pendingBulkPhotoFiles.length > 0) {
                     const filesToResume = pendingBulkPhotoFiles.slice();
                     setTimeout(() => processPendingBulkPhotoFiles(filesToResume, null), 250);
