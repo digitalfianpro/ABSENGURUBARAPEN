@@ -3674,7 +3674,6 @@
                 ws.getColumn(5).width = 18;
                 ws.getColumn(6).width = 17;
                 ws.getColumn(7).width = 20;
-                ws.autoFilter = { from: `A${headerRow}`, to: `G${headerRow}` };
 
                 const legendRow = Math.max(dataStart, dataEnd + 2);
                 recapExcelAddLegend(ws, legendRow, endCol, 'daily');
@@ -3752,7 +3751,6 @@ ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '
                 ws.getColumn(12).width = 10;
                 ws.getColumn(13).width = 10;
                 ws.getColumn(14).width = 12;
-                ws.autoFilter = { from: `A${headerRow}`, to: `N${headerRow}` };
 
                 const legendRow = Math.max(dataStart, dataEnd + 2);
                 recapExcelAddLegend(ws, legendRow, endCol, 'matrix');
@@ -3842,7 +3840,6 @@ ${isSunday ? 'MIN' : short}`);
                 ws.getColumn(hadirCol).width = 9;
                 ws.getColumn(alphaCol).width = 9;
                 ws.getColumn(pctCol).width = 12;
-                ws.autoFilter = { from: `A${headerRow}`, to: ws.getCell(headerRow, endCol).address };
 
                 const legendRow = Math.max(dataStart, dataEnd + 2);
                 recapExcelAddLegend(ws, legendRow, endCol, 'matrix');
