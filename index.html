@@ -60,6 +60,8 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- ExcelJS: professional styled recap exports -->
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <!-- JSZip: memastikan tombol/filter Excel benar-benar dihapus dari file XLSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- QRCode.js Library for NIP/NIK QR Code Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -3574,6 +3576,7 @@
 
         function recapExcelFinalizeSheet(ws, endCol, lastRow, options = {}) {
             const C = recapExcelStyles();
+            recapExcelDisableFilters(ws);
             ws.views = [{
                 state: 'frozen',
                 xSplit: options.xSplit || 0,
@@ -3597,8 +3600,68 @@
             ws.headerFooter.oddFooter = '&L&8Sistem Presensi SMP Barapen&C&8Halaman &P dari &N&R&8WIT • Dokumen Sistem';
         }
 
+        function recapExcelDisableFilters(ws) {
+            // Matikan AutoFilter pada level ExcelJS terlebih dahulu.
+            // Ini diterapkan ke semua sheet rekap agar header benar-benar bersih.
+            try { ws.autoFilter = null; } catch (_) {}
+            try {
+                if (ws && ws._autoFilter) ws._autoFilter = null;
+            } catch (_) {}
+            try {
+                const tables = ws && ws.tables ? Object.values(ws.tables) : [];
+                tables.forEach(table => {
+                    if (table && table.table) table.table.autoFilter = null;
+                    if (table && table.model) table.model.autoFilter = null;
+                });
+            } catch (_) {}
+        }
+
+        async function recapStripExcelFilterButtons(buffer) {
+            // Lapisan pengaman kedua: bersihkan elemen <autoFilter> langsung
+            // dari OOXML .xlsx. Dengan ini Excel tidak memiliki sumber untuk
+            // menampilkan tombol panah filter pada baris header.
+            if (!window.JSZip) return buffer;
+
+            try {
+                const zip = await window.JSZip.loadAsync(buffer);
+                const targets = Object.keys(zip.files).filter(name =>
+                    /^xl\/worksheets\/sheet\d+\.xml$/i.test(name) ||
+                    /^xl\/tables\/table\d+\.xml$/i.test(name)
+                );
+
+                await Promise.all(targets.map(async name => {
+                    const entry = zip.file(name);
+                    if (!entry) return;
+                    let xml = await entry.async('string');
+                    const original = xml;
+
+                    xml = xml
+                        .replace(/<autoFilter\b[^>]*\/>/gi, '')
+                        .replace(/<autoFilter\b[^>]*>[\s\S]*?<\/autoFilter>/gi, '');
+
+                    if (xml !== original) zip.file(name, xml);
+                }));
+
+                return await zip.generateAsync({
+                    type: 'arraybuffer',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 6 }
+                });
+            } catch (error) {
+                console.warn('Pembersihan tombol filter Excel dilewati:', error);
+                return buffer;
+            }
+        }
+
         async function recapDownloadWorkbook(workbook, filename) {
-            const buffer = await workbook.xlsx.writeBuffer();
+            // Pastikan tidak ada AutoFilter pada Harian, Mingguan, maupun Bulanan.
+            try {
+                workbook.eachSheet(ws => recapExcelDisableFilters(ws));
+            } catch (_) {}
+
+            let buffer = await workbook.xlsx.writeBuffer();
+            buffer = await recapStripExcelFilterButtons(buffer);
+
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
