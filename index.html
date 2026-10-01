@@ -3369,101 +3369,232 @@
 
         function recapExcelStyles() {
             return {
-                BLUE: 'FF0B5FFF', BLUE2: 'FF0878ED', BLUE_DARK: 'FF113F9B', CYAN: 'FF0891B2',
-                RED: 'FFDC2626', RED_DARK: 'FFB91C1C', GREEN: 'FF15803D',
-                WHITE: 'FFFFFFFF', TEXT: 'FF172033', MUTED: 'FF64748B', BORDER: 'FFD9E2F1',
-                BLUE_LIGHT: 'FFEAF3FF', RED_LIGHT: 'FFFFE8E8', CYAN_LIGHT: 'FFE8FAFF', GRAY_LIGHT: 'FFF6F8FB',
-                GOLD_LIGHT: 'FFFFF7D6', GOLD: 'FFB7791F'
+                NAVY: 'FF071A3D', NAVY_2: 'FF0B2D64', BLUE: 'FF0B5FFF', BLUE_2: 'FF0878ED',
+                BLUE_DARK: 'FF113F9B', CYAN: 'FF0891B2', GREEN: 'FF15803D', GREEN_LIGHT: 'FFEAF8F0',
+                RED: 'FFDC2626', RED_DARK: 'FFB91C1C', RED_LIGHT: 'FFFFE8E8',
+                GOLD: 'FFD4A017', GOLD_DARK: 'FF8B6513', GOLD_LIGHT: 'FFFFF6D8',
+                WHITE: 'FFFFFFFF', TEXT: 'FF172033', MUTED: 'FF64748B', BORDER: 'FFD6E0EE',
+                BLUE_LIGHT: 'FFEAF3FF', CYAN_LIGHT: 'FFE8FAFF', GRAY_LIGHT: 'FFF6F8FB',
+                SOFT_BLUE: 'FFF8FBFF', SOFT_NAVY: 'FFE8EEF8', SOFT_GOLD: 'FFFFFBEE'
             };
         }
 
-        function recapExcelApplyBorder(cell, color = 'FFD9E2F1') {
+        function recapExcelNowWITText() {
+            return new Intl.DateTimeFormat('id-ID', {
+                timeZone: 'Asia/Jayapura',
+                weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', hour12: false
+            }).format(new Date()).replace(' pukul ', ' • ') + ' WIT';
+        }
+
+        function recapExcelApplyBorder(cell, color = 'FFD6E0EE', style = 'thin') {
             cell.border = {
-                top: { style: 'thin', color: { argb: color } },
-                left: { style: 'thin', color: { argb: color } },
-                bottom: { style: 'thin', color: { argb: color } },
-                right: { style: 'thin', color: { argb: color } }
+                top: { style, color: { argb: color } },
+                left: { style, color: { argb: color } },
+                bottom: { style, color: { argb: color } },
+                right: { style, color: { argb: color } }
             };
+        }
+
+        function recapExcelFill(cell, argb) {
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
         }
 
         function recapExcelStyleTitle(ws, endCol, title, subtitle) {
             const C = recapExcelStyles();
             ws.mergeCells(1, 1, 1, endCol);
-            ws.getCell(1, 1).value = title;
-            ws.getCell(1, 1).font = { name: 'Arial', size: 18, bold: true, color: { argb: C.WHITE } };
-            ws.getCell(1, 1).alignment = { horizontal: 'center', vertical: 'middle' };
-            ws.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.BLUE_DARK } };
-            ws.getRow(1).height = 30;
+            const titleCell = ws.getCell(1, 1);
+            titleCell.value = title;
+            titleCell.font = { name: 'Aptos Display', size: 20, bold: true, color: { argb: C.WHITE } };
+            titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            recapExcelFill(titleCell, C.NAVY);
+            ws.getRow(1).height = 38;
 
             ws.mergeCells(2, 1, 2, endCol);
-            ws.getCell(2, 1).value = subtitle;
-            ws.getCell(2, 1).font = { name: 'Arial', size: 11, italic: true, color: { argb: C.WHITE } };
-            ws.getCell(2, 1).alignment = { horizontal: 'center', vertical: 'middle' };
-            ws.getCell(2, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.BLUE } };
-            ws.getRow(2).height = 22;
+            const subCell = ws.getCell(2, 1);
+            subCell.value = subtitle;
+            subCell.font = { name: 'Aptos', size: 11, bold: true, color: { argb: C.WHITE } };
+            subCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            recapExcelFill(subCell, C.BLUE);
+            ws.getRow(2).height = 25;
+
+            ws.mergeCells(3, 1, 3, endCol);
+            const metaCell = ws.getCell(3, 1);
+            metaCell.value = `LAPORAN RESMI PRESENSI • SMP BARAPEN • Dibuat ${recapExcelNowWITText()}`;
+            metaCell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.NAVY_2 } };
+            metaCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            recapExcelFill(metaCell, C.GOLD_LIGHT);
+            metaCell.border = { bottom: { style: 'medium', color: { argb: C.GOLD } } };
+            ws.getRow(3).height = 21;
+        }
+
+        function recapExcelSummaryRanges(endCol) {
+            if (endCol <= 8) return [[1, 2], [3, 4], [5, 6], [7, endCol]];
+            const ranges = [];
+            for (let i = 0; i < 4; i++) {
+                const from = Math.floor(i * endCol / 4) + 1;
+                const to = i === 3 ? endCol : Math.floor((i + 1) * endCol / 4);
+                ranges.push([from, Math.max(from, to)]);
+            }
+            return ranges;
         }
 
         function recapExcelStyleSummary(ws, total, hadir, alpha, endCol) {
             const C = recapExcelStyles();
             const pct = hadir + alpha ? Math.round(hadir / (hadir + alpha) * 100) : 0;
             const blocks = [
-                { label: 'TOTAL GURU', value: total, fill: C.GRAY_LIGHT, color: C.TEXT },
-                { label: 'TOTAL HADIR', value: hadir, fill: C.BLUE_LIGHT, color: C.BLUE_DARK },
-                { label: 'TOTAL ALPHA', value: alpha, fill: C.RED_LIGHT, color: C.RED_DARK },
-                { label: 'KEHADIRAN', value: `${pct}%`, fill: C.CYAN_LIGHT, color: C.CYAN }
+                { label: 'JUMLAH GURU', value: total, head: C.NAVY_2, body: C.SOFT_NAVY, color: C.NAVY },
+                { label: 'TOTAL HADIR', value: hadir, head: C.BLUE, body: C.BLUE_LIGHT, color: C.BLUE_DARK },
+                { label: 'TOTAL ALPHA', value: alpha, head: C.RED, body: C.RED_LIGHT, color: C.RED_DARK },
+                { label: 'TINGKAT KEHADIRAN', value: `${pct}%`, head: C.GOLD, body: C.GOLD_LIGHT, color: C.GOLD_DARK }
             ];
-            const ranges = endCol <= 8
-                ? [[1, 2], [3, 4], [5, 6], [7, endCol]]
-                : (() => {
-                    const width = Math.max(1, Math.floor(endCol / 4));
-                    return blocks.map((_, i) => {
-                        const from = i * width + 1;
-                        const to = i === 3 ? endCol : Math.min(endCol, from + width - 1);
-                        return [from, to];
-                    });
-                })();
+            const ranges = recapExcelSummaryRanges(endCol);
+
             blocks.forEach((b, i) => {
                 const [from, to] = ranges[i];
                 if (from > endCol) return;
-                if (to > from) ws.mergeCells(4, from, 4, to);
-                const cell = ws.getCell(4, from);
-                cell.value = `${b.label}: ${b.value}`;
-                cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: b.color } };
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: b.fill } };
-                cell.alignment = { horizontal: 'center', vertical: 'middle' };
-                recapExcelApplyBorder(cell);
+                if (to > from) {
+                    ws.mergeCells(4, from, 4, to);
+                    ws.mergeCells(5, from, 5, to);
+                }
+                const label = ws.getCell(4, from);
+                label.value = b.label;
+                label.font = { name: 'Aptos', size: 8, bold: true, color: { argb: C.WHITE } };
+                label.alignment = { horizontal: 'center', vertical: 'middle' };
+                recapExcelFill(label, b.head);
+                recapExcelApplyBorder(label, C.WHITE);
+
+                const value = ws.getCell(5, from);
+                value.value = b.value;
+                value.font = { name: 'Aptos Display', size: 16, bold: true, color: { argb: b.color } };
+                value.alignment = { horizontal: 'center', vertical: 'middle' };
+                recapExcelFill(value, b.body);
+                recapExcelApplyBorder(value, C.BORDER);
             });
-            ws.getRow(4).height = 22;
+            ws.getRow(4).height = 19;
+            ws.getRow(5).height = 29;
+            ws.getRow(6).height = 8;
         }
 
         function recapExcelStyleHeader(ws, rowNo, sundayCols = new Set()) {
             const C = recapExcelStyles();
             ws.getRow(rowNo).eachCell((cell, colNumber) => {
                 const sunday = sundayCols.has(colNumber);
-                cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: C.WHITE } };
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: sunday ? C.RED : C.BLUE } };
+                cell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.WHITE } };
+                recapExcelFill(cell, sunday ? C.RED : (colNumber <= 4 ? C.NAVY_2 : C.BLUE));
                 cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-                recapExcelApplyBorder(cell, sunday ? 'FFFCA5A5' : 'FF83B4FF');
+                recapExcelApplyBorder(cell, sunday ? 'FFF7A5A5' : 'FF8CB8FF');
             });
-            ws.getRow(rowNo).height = 32;
+            ws.getRow(rowNo).height = 36;
         }
 
-        function recapExcelStyleBody(ws, startRow, endRow, endCol, sundayCols = new Set()) {
+        function recapExcelStyleBody(ws, startRow, endRow, endCol, sundayCols = new Set(), summaryStartCol = null) {
             const C = recapExcelStyles();
             for (let r = startRow; r <= endRow; r++) {
                 for (let c = 1; c <= endCol; c++) {
                     const cell = ws.getCell(r, c);
-                    cell.font = { name: 'Arial', size: 10, color: { argb: C.TEXT } };
-                    cell.alignment = { vertical: 'middle', horizontal: c === 1 || c >= 5 ? 'center' : 'left', wrapText: true };
-                    if (r % 2 === 0) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFAFCFF' } };
+                    const center = c === 1 || c >= 5;
+                    cell.font = { name: 'Aptos', size: 9, color: { argb: C.TEXT } };
+                    cell.alignment = { vertical: 'middle', horizontal: center ? 'center' : 'left', wrapText: true };
+                    recapExcelFill(cell, r % 2 === 0 ? C.SOFT_BLUE : C.WHITE);
+
+                    if (c <= 4 && r % 2 === 0) recapExcelFill(cell, 'FFF4F7FB');
                     if (sundayCols.has(c)) {
-                        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.RED_LIGHT } };
-                        cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: C.RED_DARK } };
+                        recapExcelFill(cell, C.RED_LIGHT);
+                        cell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.RED_DARK } };
+                    }
+                    if (summaryStartCol && c >= summaryStartCol) {
+                        cell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.NAVY } };
                     }
                     recapExcelApplyBorder(cell);
                 }
-                ws.getRow(r).height = 23;
+                ws.getRow(r).height = 24;
             }
+        }
+
+        function recapExcelStyleStatusCell(cell, kind) {
+            const C = recapExcelStyles();
+            cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            if (kind === 'present') {
+                recapExcelFill(cell, C.GREEN_LIGHT);
+                cell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.GREEN } };
+            } else if (kind === 'absent') {
+                recapExcelFill(cell, C.RED_LIGHT);
+                cell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.RED_DARK } };
+            } else if (kind === 'sunday') {
+                recapExcelFill(cell, C.RED);
+                cell.font = { name: 'Aptos', size: 9, bold: true, color: { argb: C.WHITE } };
+            } else {
+                cell.font = { name: 'Aptos', size: 9, color: { argb: C.MUTED } };
+            }
+        }
+
+        function recapExcelStyleSummaryColumns(ws, startRow, endRow, hadirCol, alphaCol, pctCol) {
+            const C = recapExcelStyles();
+            for (let r = startRow; r <= endRow; r++) {
+                const hadirCell = ws.getCell(r, hadirCol);
+                recapExcelFill(hadirCell, C.BLUE_LIGHT);
+                hadirCell.font = { name: 'Aptos', size: 10, bold: true, color: { argb: C.BLUE_DARK } };
+                hadirCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+                const alphaCell = ws.getCell(r, alphaCol);
+                recapExcelFill(alphaCell, C.RED_LIGHT);
+                alphaCell.font = { name: 'Aptos', size: 10, bold: true, color: { argb: C.RED_DARK } };
+                alphaCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+                const pctCell = ws.getCell(r, pctCol);
+                recapExcelFill(pctCell, C.GOLD_LIGHT);
+                pctCell.font = { name: 'Aptos', size: 10, bold: true, color: { argb: C.GOLD_DARK } };
+                pctCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            }
+        }
+
+        function recapExcelAddLegend(ws, rowNo, endCol, mode = 'matrix') {
+            const C = recapExcelStyles();
+            ws.mergeCells(rowNo, 1, rowNo, endCol);
+            const label = ws.getCell(rowNo, 1);
+            label.value = mode === 'daily'
+                ? 'KETERANGAN: HADIR = tercatat masuk • ALPHA = tidak hadir • LIBUR MINGGU = hari Minggu • - = belum ada data'
+                : 'KETERANGAN: H = Hadir • A = Alpha • M/LIBUR = Minggu • - = Belum ada data';
+            label.font = { name: 'Aptos', size: 9, bold: true, italic: true, color: { argb: C.MUTED } };
+            label.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+            recapExcelFill(label, C.GRAY_LIGHT);
+            recapExcelApplyBorder(label, C.BORDER);
+            ws.getRow(rowNo).height = 24;
+
+            ws.mergeCells(rowNo + 1, 1, rowNo + 1, endCol);
+            const note = ws.getCell(rowNo + 1, 1);
+            note.value = 'Dokumen dibuat otomatis oleh Sistem Presensi SMP Barapen • Zona waktu WIT / Asia Jayapura';
+            note.font = { name: 'Aptos', size: 8, italic: true, color: { argb: C.NAVY_2 } };
+            note.alignment = { horizontal: 'right', vertical: 'middle' };
+            recapExcelFill(note, C.SOFT_GOLD);
+            note.border = { top: { style: 'thin', color: { argb: C.GOLD } } };
+            ws.getRow(rowNo + 1).height = 18;
+        }
+
+        function recapExcelFinalizeSheet(ws, endCol, lastRow, options = {}) {
+            const C = recapExcelStyles();
+            ws.views = [{
+                state: 'frozen',
+                xSplit: options.xSplit || 0,
+                ySplit: options.headerRow || 7,
+                showGridLines: false
+            }];
+            ws.properties.defaultRowHeight = 20;
+            ws.properties.tabColor = { argb: options.tabColor || C.BLUE };
+            ws.pageSetup = {
+                orientation: 'landscape',
+                fitToPage: true,
+                fitToWidth: 1,
+                fitToHeight: 0,
+                paperSize: 9,
+                horizontalCentered: true,
+                margins: { left: 0.18, right: 0.18, top: 0.42, bottom: 0.42, header: 0.18, footer: 0.18 },
+                printTitlesRow: `1:${options.headerRow || 7}`,
+                printArea: `A1:${ws.getCell(lastRow, endCol).address}`
+            };
+            ws.headerFooter.oddHeader = '&L&BSMP BARAPEN&R&8LAPORAN PRESENSI';
+            ws.headerFooter.oddFooter = '&L&8Sistem Presensi SMP Barapen&C&8Halaman &P dari &N&R&8WIT • Dokumen Sistem';
         }
 
         async function recapDownloadWorkbook(workbook, filename) {
@@ -3485,15 +3616,26 @@
             return false;
         }
 
+        function recapPrepareWorkbook(title, subject) {
+            const wb = new ExcelJS.Workbook();
+            wb.creator = 'SMP Barapen';
+            wb.lastModifiedBy = 'Sistem Presensi SMP Barapen';
+            wb.created = new Date();
+            wb.modified = new Date();
+            wb.title = title;
+            wb.subject = subject;
+            wb.description = 'Laporan presensi resmi SMP Barapen - Waktu Indonesia Timur (WIT)';
+            wb.keywords = 'SMP Barapen, presensi, guru, laporan, rekap';
+            return wb;
+        }
+
         window.downloadDailyRecap = async function() {
             if (!recapEnsureExcelJS()) return;
-            const dateVal = getWITDateString();
+            const dateVal = document.getElementById('recap-date-input')?.value || getWITDateString();
             try {
                 const C = recapExcelStyles();
-                const wb = new ExcelJS.Workbook();
-                wb.creator = 'SMP Barapen';
-                wb.created = new Date();
-                const ws = wb.addWorksheet('Rekap Harian', { views: [{ state: 'frozen', ySplit: 6 }] });
+                const wb = recapPrepareWorkbook('Rekap Presensi Harian SMP Barapen', `Rekap harian ${dateVal}`);
+                const ws = wb.addWorksheet('Rekap Harian');
                 const teachers = [...(window.AppState.guruList || [])].sort((a, b) => String(a.nama || '').localeCompare(String(b.nama || ''), 'id'));
                 const map = recapAttendanceMap();
                 const isSunday = recapParseYMD(dateVal).getDay() === 0;
@@ -3507,28 +3649,39 @@
                     return [i + 1, String(g.nip || ''), g.nama || '', g.jabatan || '', dateVal.split('-').reverse().join('/'), jam === '-' ? '-' : `${jam} WIT`, status];
                 });
 
-                recapExcelStyleTitle(ws, 7, 'REKAP PRESENSI HARIAN SMP BARAPEN', `${recapFormatDateID(dateVal)} • Waktu Indonesia Timur (WIT)`);
-                recapExcelStyleSummary(ws, teachers.length, hadir, alpha, 7);
-                ws.addRow([]);
+                const endCol = 7, headerRow = 7, dataStart = 8;
+                recapExcelStyleTitle(ws, endCol, 'REKAP PRESENSI HARIAN', `SMP BARAPEN • ${recapFormatDateID(dateVal)} • Waktu Indonesia Timur (WIT)`);
+                recapExcelStyleSummary(ws, teachers.length, hadir, alpha, endCol);
                 ws.addRow(['No', 'NIP', 'Nama Guru', 'Jabatan / Mapel', 'Tanggal (WIT)', 'Jam Masuk', 'Status']);
-                recapExcelStyleHeader(ws, 6);
+                recapExcelStyleHeader(ws, headerRow);
                 rows.forEach(r => ws.addRow(r));
-                recapExcelStyleBody(ws, 7, 6 + rows.length, 7);
+                const dataEnd = dataStart + rows.length - 1;
+                if (rows.length) recapExcelStyleBody(ws, dataStart, dataEnd, endCol);
 
-                // NIP always text; no scientific notation.
-                for (let r = 7; r <= 6 + rows.length; r++) {
+                for (let r = dataStart; r <= dataEnd; r++) {
                     ws.getCell(r, 2).numFmt = '@';
                     const statusCell = ws.getCell(r, 7);
-                    if (statusCell.value === 'HADIR') { statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.BLUE_LIGHT } }; statusCell.font = { bold: true, color: { argb: C.BLUE_DARK } }; }
-                    else if (statusCell.value === 'ALPHA') { statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.RED_LIGHT } }; statusCell.font = { bold: true, color: { argb: C.RED_DARK } }; }
-                    else if (statusCell.value === 'LIBUR MINGGU') { statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.RED } }; statusCell.font = { bold: true, color: { argb: C.WHITE } }; }
+                    if (statusCell.value === 'HADIR') recapExcelStyleStatusCell(statusCell, 'present');
+                    else if (statusCell.value === 'ALPHA') recapExcelStyleStatusCell(statusCell, 'absent');
+                    else if (statusCell.value === 'LIBUR MINGGU') recapExcelStyleStatusCell(statusCell, 'sunday');
+                    else recapExcelStyleStatusCell(statusCell, 'empty');
                 }
-                ws.columns = [{ width: 6 }, { width: 23 }, { width: 32 }, { width: 28 }, { width: 17 }, { width: 16 }, { width: 18 }];
-                ws.autoFilter = { from: 'A6', to: 'G6' };
-                ws.pageSetup = { orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0, paperSize: 9, margins: { left: 0.25, right: 0.25, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 } };
-                ws.headerFooter.oddFooter = '&LRekap Presensi SMP Barapen&C&P / &N&RWIT';
+
+                ws.getColumn(1).width = 7;
+                ws.getColumn(2).width = 24;
+                ws.getColumn(3).width = 34;
+                ws.getColumn(4).width = 30;
+                ws.getColumn(5).width = 18;
+                ws.getColumn(6).width = 17;
+                ws.getColumn(7).width = 20;
+                ws.autoFilter = { from: `A${headerRow}`, to: `G${headerRow}` };
+
+                const legendRow = Math.max(dataStart, dataEnd + 2);
+                recapExcelAddLegend(ws, legendRow, endCol, 'daily');
+                recapExcelFinalizeSheet(ws, endCol, legendRow + 1, { headerRow, tabColor: C.BLUE });
+
                 await recapDownloadWorkbook(wb, `Rekap_Harian_SMP_Barapen_${dateVal}.xlsx`);
-                showAlertModal('Download Berhasil', 'Rekapan hari ini berhasil dibuat dengan format Excel profesional.', 'success');
+                showAlertModal('Download Berhasil', 'Rekapan harian berhasil dibuat dengan desain laporan profesional dan siap cetak.', 'success');
             } catch (e) {
                 console.error(e);
                 showAlertModal('Gagal Membuat Excel', e?.message || 'Rekapan harian gagal dibuat.', 'error');
@@ -3540,12 +3693,13 @@
             const anchor = document.getElementById('recap-date-input')?.value || getWITDateString();
             try {
                 const C = recapExcelStyles();
-                const wb = new ExcelJS.Workbook();
-                wb.creator = 'SMP Barapen';
-                const ws = wb.addWorksheet('Rekap Mingguan', { views: [{ state: 'frozen', xSplit: 4, ySplit: 6 }] });
+                const days = recapGetWeek(anchor);
+                const startStr = recapYMD(days[0]);
+                const endStr = recapYMD(days[6]);
+                const wb = recapPrepareWorkbook('Rekap Presensi Mingguan SMP Barapen', `Rekap mingguan ${startStr} s.d. ${endStr}`);
+                const ws = wb.addWorksheet('Rekap Mingguan');
                 const teachers = [...(window.AppState.guruList || [])].sort((a, b) => String(a.nama || '').localeCompare(String(b.nama || ''), 'id'));
                 const map = recapAttendanceMap();
-                const days = recapGetWeek(anchor);
                 const today = getWITDateString();
                 const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
                 let grandH = 0, grandA = 0;
@@ -3556,7 +3710,7 @@
                         const ds = recapYMD(d);
                         const s = recapStatusForDate(g, ds, map, today);
                         if (s.kind === 'sunday') values.push('LIBUR');
-                        else if (s.kind === 'present') { values.push(s.rec?.jam ? `${s.rec.jam} WIT` : 'H'); h++; }
+                        else if (s.kind === 'present') { values.push(s.rec?.jam ? `${s.rec.jam} WIT` : 'HADIR'); h++; }
                         else if (s.kind === 'absent') { values.push('A'); a++; }
                         else values.push('-');
                     });
@@ -3566,32 +3720,46 @@
                     return values;
                 });
 
-                const endCol = 14;
-                const startStr = recapYMD(days[0]), endStr = recapYMD(days[6]);
-                recapExcelStyleTitle(ws, endCol, 'REKAP PRESENSI MINGGUAN SMP BARAPEN', `${recapFormatDateID(startStr, false)} s.d. ${recapFormatDateID(endStr, false)} • WIT`);
+                const endCol = 14, headerRow = 7, dataStart = 8;
+                recapExcelStyleTitle(ws, endCol, 'REKAP PRESENSI MINGGUAN', `SMP BARAPEN • ${recapFormatDateID(startStr, false)} s.d. ${recapFormatDateID(endStr, false)} • WIT`);
                 recapExcelStyleSummary(ws, teachers.length, grandH, grandA, endCol);
-                ws.addRow([]);
-                const headers = ['No', 'NIP', 'Nama Guru', 'Jabatan / Mapel', ...days.map(d => `${dayNames[d.getDay()]}\n${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`), 'Hadir', 'Alpha', '% Hadir'];
+                const headers = ['No', 'NIP', 'Nama Guru', 'Jabatan / Mapel', ...days.map(d => `${dayNames[d.getDay()]}
+${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`), 'Hadir', 'Alpha', '% Hadir'];
                 ws.addRow(headers);
                 const sundayCols = new Set();
                 days.forEach((d, i) => { if (d.getDay() === 0) sundayCols.add(5 + i); });
-                recapExcelStyleHeader(ws, 6, sundayCols);
+                recapExcelStyleHeader(ws, headerRow, sundayCols);
                 rows.forEach(r => ws.addRow(r));
-                recapExcelStyleBody(ws, 7, 6 + rows.length, endCol, sundayCols);
-                for (let r = 7; r <= 6 + rows.length; r++) {
+                const dataEnd = dataStart + rows.length - 1;
+                if (rows.length) recapExcelStyleBody(ws, dataStart, dataEnd, endCol, sundayCols, 12);
+
+                for (let r = dataStart; r <= dataEnd; r++) {
                     ws.getCell(r, 2).numFmt = '@';
                     for (let c = 5; c <= 11; c++) {
                         const cell = ws.getCell(r, c);
-                        if (cell.value === 'A') { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.RED_LIGHT } }; cell.font = { bold: true, color: { argb: C.RED_DARK } }; }
-                        else if (cell.value !== '-' && cell.value !== 'LIBUR') { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.BLUE_LIGHT } }; cell.font = { bold: true, color: { argb: C.BLUE_DARK } }; }
+                        if (sundayCols.has(c) || cell.value === 'LIBUR') recapExcelStyleStatusCell(cell, 'sunday');
+                        else if (cell.value === 'A') recapExcelStyleStatusCell(cell, 'absent');
+                        else if (cell.value !== '-') recapExcelStyleStatusCell(cell, 'present');
                     }
                 }
-                ws.columns = [{ width: 6 }, { width: 23 }, { width: 30 }, { width: 26 }, ...Array(7).fill({ width: 15 }), { width: 10 }, { width: 10 }, { width: 11 }];
-                ws.autoFilter = { from: 'A6', to: 'N6' };
-                ws.pageSetup = { orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0, paperSize: 9, margins: { left: 0.2, right: 0.2, top: 0.45, bottom: 0.45, header: 0.2, footer: 0.2 } };
-                ws.headerFooter.oddFooter = '&LRekap Mingguan SMP Barapen&C&P / &N&RWIT';
+                if (rows.length) recapExcelStyleSummaryColumns(ws, dataStart, dataEnd, 12, 13, 14);
+
+                ws.getColumn(1).width = 7;
+                ws.getColumn(2).width = 23;
+                ws.getColumn(3).width = 31;
+                ws.getColumn(4).width = 27;
+                for (let c = 5; c <= 11; c++) ws.getColumn(c).width = 15;
+                ws.getColumn(12).width = 10;
+                ws.getColumn(13).width = 10;
+                ws.getColumn(14).width = 12;
+                ws.autoFilter = { from: `A${headerRow}`, to: `N${headerRow}` };
+
+                const legendRow = Math.max(dataStart, dataEnd + 2);
+                recapExcelAddLegend(ws, legendRow, endCol, 'matrix');
+                recapExcelFinalizeSheet(ws, endCol, legendRow + 1, { headerRow, xSplit: 4, tabColor: C.BLUE_2 });
+
                 await recapDownloadWorkbook(wb, `Rekap_Mingguan_SMP_Barapen_${startStr}_sd_${endStr}.xlsx`);
-                showAlertModal('Download Berhasil', 'Rekapan mingguan berhasil dibuat. Kolom hari Minggu ditandai merah.', 'success');
+                showAlertModal('Download Berhasil', 'Rekapan mingguan berhasil dibuat dengan desain profesional, ringkasan statistik, dan penanda Minggu yang jelas.', 'success');
             } catch (e) {
                 console.error(e);
                 showAlertModal('Gagal Membuat Excel', e?.message || 'Rekapan mingguan gagal dibuat.', 'error');
@@ -3605,9 +3773,8 @@
                 const C = recapExcelStyles();
                 const [yyyy, mm] = monthVal.split('-').map(Number);
                 const daysInMonth = new Date(yyyy, mm, 0).getDate();
-                const wb = new ExcelJS.Workbook();
-                wb.creator = 'SMP Barapen';
-                const ws = wb.addWorksheet('Rekap Bulanan', { views: [{ state: 'frozen', xSplit: 4, ySplit: 6 }] });
+                const wb = recapPrepareWorkbook('Rekap Presensi Bulanan SMP Barapen', `Rekap bulanan ${monthVal}`);
+                const ws = wb.addWorksheet('Rekap Bulanan');
                 const teachers = [...(window.AppState.guruList || [])].sort((a, b) => String(a.nama || '').localeCompare(String(b.nama || ''), 'id'));
                 const map = recapAttendanceMap();
                 const today = getWITDateString();
@@ -3630,57 +3797,59 @@
                 });
 
                 const endCol = 4 + daysInMonth + 3;
-                recapExcelStyleTitle(ws, endCol, 'REKAP PRESENSI BULANAN SMP BARAPEN', `${recapMonthLabel(monthVal)} • Waktu Indonesia Timur (WIT)`);
+                const headerRow = 7, dataStart = 8;
+                const hadirCol = 5 + daysInMonth;
+                const alphaCol = 6 + daysInMonth;
+                const pctCol = 7 + daysInMonth;
+                recapExcelStyleTitle(ws, endCol, 'REKAP PRESENSI BULANAN', `SMP BARAPEN • ${recapMonthLabel(monthVal)} • Waktu Indonesia Timur (WIT)`);
                 recapExcelStyleSummary(ws, teachers.length, grandH, grandA, endCol);
-                ws.addRow([]);
+
                 const headers = ['No', 'NIP', 'Nama Guru', 'Jabatan / Mapel'];
                 const sundayCols = new Set();
                 for (let d = 1; d <= daysInMonth; d++) {
                     const obj = new Date(yyyy, mm - 1, d, 12);
                     const isSunday = obj.getDay() === 0;
                     const short = new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(obj).replace('.', '').toUpperCase();
-                    headers.push(`${d}\n${isSunday ? 'MIN' : short}`);
+                    headers.push(`${d}
+${isSunday ? 'MIN' : short}`);
                     if (isSunday) sundayCols.add(4 + d);
                 }
                 headers.push('Hadir', 'Alpha', '% Hadir');
                 ws.addRow(headers);
-                recapExcelStyleHeader(ws, 6, sundayCols);
+                recapExcelStyleHeader(ws, headerRow, sundayCols);
                 rows.forEach(r => ws.addRow(r));
-                recapExcelStyleBody(ws, 7, 6 + rows.length, endCol, sundayCols);
+                const dataEnd = dataStart + rows.length - 1;
+                if (rows.length) recapExcelStyleBody(ws, dataStart, dataEnd, endCol, sundayCols, hadirCol);
 
-                for (let r = 7; r <= 6 + rows.length; r++) {
+                for (let r = dataStart; r <= dataEnd; r++) {
                     ws.getCell(r, 2).numFmt = '@';
                     for (let d = 1; d <= daysInMonth; d++) {
                         const c = 4 + d;
                         const cell = ws.getCell(r, c);
-                        if (cell.value === 'H') { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.BLUE_LIGHT } }; cell.font = { bold: true, color: { argb: C.BLUE_DARK } }; }
-                        else if (cell.value === 'A') { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.RED_LIGHT } }; cell.font = { bold: true, color: { argb: C.RED_DARK } }; }
+                        if (sundayCols.has(c) || cell.value === 'M') recapExcelStyleStatusCell(cell, 'sunday');
+                        else if (cell.value === 'H') recapExcelStyleStatusCell(cell, 'present');
+                        else if (cell.value === 'A') recapExcelStyleStatusCell(cell, 'absent');
+                        else recapExcelStyleStatusCell(cell, 'empty');
                     }
                 }
+                if (rows.length) recapExcelStyleSummaryColumns(ws, dataStart, dataEnd, hadirCol, alphaCol, pctCol);
 
-                ws.getColumn(1).width = 6;
-                ws.getColumn(2).width = 23;
-                ws.getColumn(3).width = 30;
-                ws.getColumn(4).width = 26;
-                for (let c = 5; c <= 4 + daysInMonth; c++) ws.getColumn(c).width = 5.3;
-                ws.getColumn(5 + daysInMonth).width = 9;  // Hadir
-                ws.getColumn(6 + daysInMonth).width = 9;  // Alpha
-                ws.getColumn(7 + daysInMonth).width = 11; // % Hadir
-                ws.autoFilter = { from: 'A6', to: ws.getCell(6, endCol).address };
-                ws.pageSetup = { orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0, paperSize: 9, margins: { left: 0.15, right: 0.15, top: 0.4, bottom: 0.4, header: 0.15, footer: 0.15 } };
-                ws.headerFooter.oddFooter = '&LRekap Bulanan SMP Barapen&C&P / &N&RWIT';
+                ws.getColumn(1).width = 7;
+                ws.getColumn(2).width = 22;
+                ws.getColumn(3).width = 29;
+                ws.getColumn(4).width = 25;
+                for (let c = 5; c <= 4 + daysInMonth; c++) ws.getColumn(c).width = 5.2;
+                ws.getColumn(hadirCol).width = 9;
+                ws.getColumn(alphaCol).width = 9;
+                ws.getColumn(pctCol).width = 12;
+                ws.autoFilter = { from: `A${headerRow}`, to: ws.getCell(headerRow, endCol).address };
 
-                const legendRow = 8 + rows.length;
-                ws.mergeCells(legendRow, 1, legendRow, Math.min(endCol, 12));
-                const legendCell = ws.getCell(legendRow, 1);
-                legendCell.value = 'Keterangan: H = Hadir   |   A = Alpha   |   M = Minggu/Libur   |   - = Belum ada data';
-                legendCell.font = { italic: true, bold: true, color: { argb: C.MUTED } };
-                legendCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: C.GRAY_LIGHT } };
-                legendCell.alignment = { vertical: 'middle' };
-                ws.getRow(legendRow).height = 22;
+                const legendRow = Math.max(dataStart, dataEnd + 2);
+                recapExcelAddLegend(ws, legendRow, endCol, 'matrix');
+                recapExcelFinalizeSheet(ws, endCol, legendRow + 1, { headerRow, xSplit: 4, tabColor: C.GOLD });
 
                 await recapDownloadWorkbook(wb, `Rekap_Bulanan_SMP_Barapen_${monthVal}.xlsx`);
-                showAlertModal('Download Berhasil', 'Rekapan bulanan berhasil dibuat dengan hari Minggu berwarna merah.', 'success');
+                showAlertModal('Download Berhasil', 'Rekapan bulanan berhasil dibuat dengan desain premium, statistik yang jelas, dan format siap cetak.', 'success');
             } catch (e) {
                 console.error(e);
                 showAlertModal('Gagal Membuat Excel', e?.message || 'Rekapan bulanan gagal dibuat.', 'error');
